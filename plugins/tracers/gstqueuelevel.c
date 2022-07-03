@@ -28,6 +28,7 @@
 #include "gstctf.h"
 #include <gst/gst.h>
 #include <gst/video/video.h>
+// #include <gst/video/video-info.h>
 #include <stdio.h>
 
 
@@ -104,11 +105,12 @@ do_queue_level(GstTracer *self, guint64 ts, GstPad *pad, GstBuffer *buffer)
   gchar *size_time_string;
   gchar *max_size_time_string;
   const gchar *element_name;
-  //yuval check
-  // GstVideoInfo *info;
-  // GstMapInfo map;
 
-  // GstCaps *caps;
+  // // yuval check
+  GstVideoInfo *info;
+  GstMapInfo map;
+
+  GstCaps *caps;
   // cv::Mat mat;
   // caps = gst_pad_get_current_caps(pad);
 
@@ -116,9 +118,7 @@ do_queue_level(GstTracer *self, guint64 ts, GstPad *pad, GstBuffer *buffer)
   // gst_buffer_map(buffer, &map, GST_MAP_READWRITE);
   // gst_video_info_from_caps(info, caps);
   // printf("height: %d", info->height);
-
-
-  //end of yuval check
+  // //end of yuval check
 
   element = get_parent_element(pad);
 
@@ -126,6 +126,13 @@ do_queue_level(GstTracer *self, guint64 ts, GstPad *pad, GstBuffer *buffer)
   {
     goto out;
   }
+  caps = gst_pad_get_current_caps(pad);
+
+  info = gst_video_info_new();
+  gst_buffer_map(buffer, &map, GST_MAP_READWRITE);
+  gst_video_info_from_caps(info, caps);
+  printf("height: %d\n", info->height);
+  //end of yuval check
 
   element_name = GST_OBJECT_NAME(element);
 
