@@ -1110,10 +1110,8 @@ void do_print_queue_level_event(event_id id, const gchar *elementname,
   {
     /* Write the TCP header */
     TCP_EVENT_HEADER_WRITE(TCP_DATASTREAM_ID, event_size, mem);
-    // g_output_stream_write(ctf_descriptor->output_stream,
-    //                       ctf_descriptor->mem, event_size + TCP_HEADER_SIZE, NULL, &error);
-        g_output_stream_write(ctf_descriptor->output_stream,
-                          (char*)"yuval", 5, NULL, &error);
+    g_output_stream_write(ctf_descriptor->output_stream,
+                          ctf_descriptor->mem, event_size + TCP_HEADER_SIZE, NULL, &error);
   }
 
   g_mutex_unlock(&ctf_descriptor->mutex);
