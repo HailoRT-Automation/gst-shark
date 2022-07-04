@@ -36,7 +36,8 @@
 #define MAX_DIRNAME_LEN (30)
 
 /* Default port */
-#define SOCKET_PORT (1000)
+#define SOCKET_PORT (12345)
+// #define SOCKET_PROTOCOL G_SOCKET_PROTOCOL_TCP
 #define SOCKET_PROTOCOL G_SOCKET_PROTOCOL_TCP
 #define CTF_MEM_SIZE (1048576) // 1M = 1024*1024
 #define CTF_UUID_SIZE (16)
@@ -287,7 +288,7 @@ ctf_create_struct(void)
   ctf->datastream = NULL;
 
   /* TCP connection variables */
-  ctf->host_name = NULL;
+  ctf->host_name = (char *)"127.33.44.2";
   ctf->port_number = SOCKET_PORT;
 
   ctf->socket_client = NULL;
@@ -737,7 +738,11 @@ ctf_tcp_init(void)
   socket_connection = g_socket_client_connect_to_host(socket_client,
                                                       ctf_descriptor->host_name, ctf_descriptor->port_number, NULL, &error);
 
-  printf("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$\n");
+  if (error != NULL)
+  {
+    printf("%s",error->message);
+    g_clear_error(&error);
+  }
   /* Verify connection */
   if (NULL == socket_connection)
   {
@@ -811,6 +816,7 @@ void add_metadata_event_struct(const gchar *metadata_event)
   if (FALSE == ctf_descriptor->tcp_output_disable)
   {
     TCP_EVENT_HEADER_WRITE(TCP_METADATA_ID, event_size, mem);
+
 
     g_output_stream_write(ctf_descriptor->output_stream,
                           ctf_descriptor->mem, event_size + TCP_HEADER_SIZE, NULL, &error);
@@ -1104,9 +1110,10 @@ void do_print_queue_level_event(event_id id, const gchar *elementname,
   {
     /* Write the TCP header */
     TCP_EVENT_HEADER_WRITE(TCP_DATASTREAM_ID, event_size, mem);
-
-    g_output_stream_write(ctf_descriptor->output_stream,
-                          ctf_descriptor->mem, event_size + TCP_HEADER_SIZE, NULL, &error);
+    // g_output_stream_write(ctf_descriptor->output_stream,
+    //                       ctf_descriptor->mem, event_size + TCP_HEADER_SIZE, NULL, &error);
+        g_output_stream_write(ctf_descriptor->output_stream,
+                          (char*)"yuval", 5, NULL, &error);
   }
 
   g_mutex_unlock(&ctf_descriptor->mutex);
