@@ -31,6 +31,7 @@
 // #include <gst/video/video-info.h>
 #include <stdio.h>
 
+
 GST_DEBUG_CATEGORY_STATIC(gst_queue_level_debug);
 #define GST_CAT_DEFAULT gst_queue_level_debug
 
@@ -131,7 +132,7 @@ do_queue_level(GstTracer *self, guint64 ts, GstPad *pad, GstBuffer *buffer)
   gst_buffer_map(buffer, &map, GST_MAP_READWRITE);
   gst_video_info_from_caps(info, caps);
   // printf("height: %d\n", info->height);
-  // end of yuval check
+  //end of yuval check
 
   element_name = GST_OBJECT_NAME(element);
 
