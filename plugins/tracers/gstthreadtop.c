@@ -36,7 +36,6 @@ GST_DEBUG_CATEGORY_STATIC (gst_thread_top_debug);
 #define GST_CAT_DEFAULT gst_thread_top_debug
 
 
-
 void gst_thread_top_init (GstThreadTop * cpu_usage)
 {
   gint cpu_num = 0;
@@ -57,106 +56,103 @@ void gst_thread_top_init (GstThreadTop * cpu_usage)
 void
 gst_cpu_usage_compute (GstThreadTop * cpu_usage)
 {
-  gfloat *cpu_load;
-  gint cpu_num;
-  gint cpu_id;
-  FILE *fd;
+  // gfloat *cpu_load;
+  // gint cpu_num;
+  // gint cpu_id;
+  // FILE *fd;
 
-  gint *user;
-  gint *user_aux;
-  gint *nice;
-  gint *nice_aux;
-  gint *system;
-  gint *system_aux;
-  gint *idle;
-  gint *idle_aux;
+  // gint *user;
+  // gint *user_aux;
+  // gint *nice;
+  // gint *nice_aux;
+  // gint *system;
+  // gint *system_aux;
+  // gint *idle;
+  // gint *idle_aux;
 
-  gchar cpu_name[CPU_NAME_MAX_SIZE];
-  gint iowait;                  /* Time waiting for I/O to complete */
-  gint irq;                     /* Time servicing interrupts        */
-  gint softirq;                 /* Time servicing softirqs          */
-  gint steal;                   /* Time spent in other OSes when in virtualized env */
-  gint quest;                   /* Time spent running a virtual CPU for guest OS    */
-  gint quest_nice;              /* Time spent running niced guest */
-  gfloat num_value;
-  gfloat den_value;
-  gboolean cpu_array_sel;
-  gint ret;
+  // gchar cpu_name[CPU_NAME_MAX_SIZE];
+  // gint iowait;                  /* Time waiting for I/O to complete */
+  // gint irq;                     /* Time servicing interrupts        */
+  // gint softirq;                 /* Time servicing softirqs          */
+  // gint steal;                   /* Time spent in other OSes when in virtualized env */
+  // gint quest;                   /* Time spent running a virtual CPU for guest OS    */
+  // gint quest_nice;              /* Time spent running niced guest */
+  // gfloat num_value;
+  // gfloat den_value;
+  // gboolean cpu_array_sel;
+  // gint ret;
 
-  g_return_if_fail (cpu_usage);
+  // g_return_if_fail (cpu_usage);
 
-  user = cpu_usage->user;
-  user_aux = cpu_usage->user_aux;
-  nice = cpu_usage->nice;
-  nice_aux = cpu_usage->nice_aux;
-  system = cpu_usage->system;
-  system_aux = cpu_usage->system_aux;
-  idle = cpu_usage->idle;
-  idle_aux = cpu_usage->idle_aux;
+  // user = cpu_usage->user;
+  // user_aux = cpu_usage->user_aux;
+  // nice = cpu_usage->nice;
+  // nice_aux = cpu_usage->nice_aux;
+  // system = cpu_usage->system;
+  // system_aux = cpu_usage->system_aux;
+  // idle = cpu_usage->idle;
+  // idle_aux = cpu_usage->idle_aux;
 
-  cpu_array_sel = cpu_usage->cpu_array_sel;
-  cpu_load = cpu_usage->cpu_load;
-  cpu_num = cpu_usage->cpu_num;
+  // cpu_array_sel = cpu_usage->cpu_array_sel;
+  // cpu_load = cpu_usage->cpu_load;
+  // cpu_num = cpu_usage->cpu_num;
 
+  // /* Compute the load for each core */
+  // fd = g_fopen ("/proc/stat", "r");
+  // if (cpu_array_sel == 0) {
+  //   ret = fscanf (fd, "%" S (CPU_NAME_MAX_SIZE) "s %d %d %d %d %d %d %d %d %d %d",
+  //       cpu_name, &user[0], &nice[0], &system[0], &idle[0], &iowait, &irq,
+  //       &softirq, &steal, &quest, &quest_nice);
+  //   for (cpu_id = 0; cpu_id < cpu_num; ++cpu_id) {
+  //     ret =
+  //         fscanf (fd,
+  //         "%" S (CPU_NAME_MAX_SIZE) "s %d %d %d %d %d %d %d %d %d %d", cpu_name,
+  //         &user[cpu_id], &nice[cpu_id], &system[cpu_id], &idle[cpu_id], &iowait,
+  //         &irq, &softirq, &steal, &quest, &quest_nice);
+  //   }
+  //   /* Compute the utilization for each core */
+  //   for (cpu_id = 0; cpu_id < cpu_num; ++cpu_id) {
+  //     num_value =
+  //         ((user[cpu_id] + nice[cpu_id] + system[cpu_id]) - (user_aux[cpu_id] +
+  //             nice_aux[cpu_id] + system_aux[cpu_id]));
+  //     den_value =
+  //         ((user[cpu_id] + nice[cpu_id] + system[cpu_id] + idle[cpu_id]) -
+  //         (user_aux[cpu_id] + nice_aux[cpu_id] + system_aux[cpu_id] +
+  //             idle_aux[cpu_id]));
+  //     cpu_load[cpu_id] = 100 * (num_value / den_value);
+  //   }
+  //   cpu_array_sel = 1;
+  // } else {
+  //   ret =
+  //       fscanf (fd, "%" S (CPU_NAME_MAX_SIZE) "s %d %d %d %d %d %d %d %d %d %d",
+  //       cpu_name, &user_aux[0], &nice_aux[0], &system_aux[0], &idle_aux[0],
+  //       &iowait, &irq, &softirq, &steal, &quest, &quest_nice);
+  //   for (cpu_id = 0; cpu_id < cpu_num; ++cpu_id) {
+  //     ret =
+  //         fscanf (fd,
+  //         "%" S (CPU_NAME_MAX_SIZE) "s %d %d %d %d %d %d %d %d %d %d", cpu_name,
+  //         &user_aux[cpu_id], &nice_aux[cpu_id], &system_aux[cpu_id],
+  //         &idle_aux[cpu_id], &iowait, &irq, &softirq, &steal, &quest,
+  //         &quest_nice);
+  //   }
+  //   /* Compute the utilization for each core */
+  //   for (cpu_id = 0; cpu_id < cpu_num; ++cpu_id) {
+  //     num_value =
+  //         ((user_aux[cpu_id] + nice_aux[cpu_id] + system_aux[cpu_id]) -
+  //         (user[cpu_id] + nice[cpu_id] + system[cpu_id]));
+  //     den_value =
+  //         ((user_aux[cpu_id] + nice_aux[cpu_id] + system_aux[cpu_id] +
+  //             idle_aux[cpu_id]) - (user[cpu_id] + nice[cpu_id] +
+  //             system[cpu_id] + idle[cpu_id]));
+  //     cpu_load[cpu_id] = 100 * (num_value / den_value);
+  //   }
+  //   cpu_array_sel = 0;
+  // }
 
+  // (void) ret;
 
-  /* Compute the load for each core */
-  fd = g_fopen ("/proc/stat", "r");
-  if (cpu_array_sel == 0) {
-    ret =
-        fscanf (fd, "%" S (CPU_NAME_MAX_SIZE) "s %d %d %d %d %d %d %d %d %d %d",
-        cpu_name, &user[0], &nice[0], &system[0], &idle[0], &iowait, &irq,
-        &softirq, &steal, &quest, &quest_nice);
-    for (cpu_id = 0; cpu_id < cpu_num; ++cpu_id) {
-      ret =
-          fscanf (fd,
-          "%" S (CPU_NAME_MAX_SIZE) "s %d %d %d %d %d %d %d %d %d %d", cpu_name,
-          &user[cpu_id], &nice[cpu_id], &system[cpu_id], &idle[cpu_id], &iowait,
-          &irq, &softirq, &steal, &quest, &quest_nice);
-    }
-    /* Compute the utilization for each core */
-    for (cpu_id = 0; cpu_id < cpu_num; ++cpu_id) {
-      num_value =
-          ((user[cpu_id] + nice[cpu_id] + system[cpu_id]) - (user_aux[cpu_id] +
-              nice_aux[cpu_id] + system_aux[cpu_id]));
-      den_value =
-          ((user[cpu_id] + nice[cpu_id] + system[cpu_id] + idle[cpu_id]) -
-          (user_aux[cpu_id] + nice_aux[cpu_id] + system_aux[cpu_id] +
-              idle_aux[cpu_id]));
-      cpu_load[cpu_id] = 100 * (num_value / den_value);
-    }
-    cpu_array_sel = 1;
-  } else {
-    ret =
-        fscanf (fd, "%" S (CPU_NAME_MAX_SIZE) "s %d %d %d %d %d %d %d %d %d %d",
-        cpu_name, &user_aux[0], &nice_aux[0], &system_aux[0], &idle_aux[0],
-        &iowait, &irq, &softirq, &steal, &quest, &quest_nice);
-    for (cpu_id = 0; cpu_id < cpu_num; ++cpu_id) {
-      ret =
-          fscanf (fd,
-          "%" S (CPU_NAME_MAX_SIZE) "s %d %d %d %d %d %d %d %d %d %d", cpu_name,
-          &user_aux[cpu_id], &nice_aux[cpu_id], &system_aux[cpu_id],
-          &idle_aux[cpu_id], &iowait, &irq, &softirq, &steal, &quest,
-          &quest_nice);
-    }
-    /* Compute the utilization for each core */
-    for (cpu_id = 0; cpu_id < cpu_num; ++cpu_id) {
-      num_value =
-          ((user_aux[cpu_id] + nice_aux[cpu_id] + system_aux[cpu_id]) -
-          (user[cpu_id] + nice[cpu_id] + system[cpu_id]));
-      den_value =
-          ((user_aux[cpu_id] + nice_aux[cpu_id] + system_aux[cpu_id] +
-              idle_aux[cpu_id]) - (user[cpu_id] + nice[cpu_id] +
-              system[cpu_id] + idle[cpu_id]));
-      cpu_load[cpu_id] = 100 * (num_value / den_value);
-    }
-    cpu_array_sel = 0;
-  }
-
-  (void) ret;
-
-  cpu_usage->cpu_array_sel = cpu_array_sel;
-  fclose (fd);
+  // cpu_usage->cpu_array_sel = cpu_array_sel;
+  // fclose (fd);
 }
 
 
@@ -232,9 +228,9 @@ thread_top_thread_func (GstPeriodicTracer * tracer)
   gst_cpu_usage_compute (cpu_usage);
 
   for (cpu_id = 0; cpu_id < cpu_load_len; ++cpu_id) {
-    gst_tracer_record_log (tr_cpuusage, cpu_id, cpu_load[cpu_id]);
+    gst_tracer_record_log (tr_threadtop, cpu_id, cpu_load[cpu_id]);
   }
-  do_print_cpuusage_event (THREATOP_EVENT_ID, cpu_load_len, cpu_load);
+  do_print_cpuusage_event (THREADTOP_EVENT_ID, cpu_load_len, cpu_load);
 
   return TRUE;
 }

@@ -25,7 +25,10 @@
 
 G_BEGIN_DECLS
 #define CPU_NUM_MAX  8
+#define CPU_NAME_MAX_SIZE 8
 #define GST_TYPE_THREAD_TOP_TRACER (gst_thread_top_tracer_get_type())
+#define CPU_USAGE_ARRAY(cpuusage_struct)  (cpuusage_struct->cpu_load)
+#define CPU_USAGE_ARRAY_LENGTH(cpuusage_struct)  (cpuusage_struct->cpu_num)
 G_DECLARE_FINAL_TYPE (GstThreadTopTracer, gst_thread_top_tracer, GST, THREAD_TOP_TRACER, GstPeriodicTracer)
 
 typedef struct
@@ -46,6 +49,6 @@ typedef struct
 } GstThreadTop;
 
 void gst_thread_top_init (GstThreadTop * cpu_usage);
-gst_cpu_usage_compute (GstThreadTop * cpu_usage);
+void gst_cpu_usage_compute (GstThreadTop * cpu_usage);
 G_END_DECLS
 #endif /* __GST_THREAD_TOP_TRACER_H__ */
