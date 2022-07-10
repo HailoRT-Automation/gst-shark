@@ -880,7 +880,6 @@ void do_print_threadmonitor_event(event_id id, guint32 cpu_num, gfloat *cpuload)
   gint cpu_idx;
 
   event_size = cpu_num * sizeof(gfloat) + CTF_HEADER_SIZE;
-
   if (event_exceeds_mem_size(event_size))
   {
     return;

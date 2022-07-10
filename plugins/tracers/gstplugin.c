@@ -27,6 +27,7 @@
 #include <unistd.h>
 #include "gstgraphic.h"
 #include "gstcpuusage.h"
+#include "gstthreadmonitor.h"
 #include "gstproctime.h"
 #include "gstinterlatency.h"
 #include "gstscheduletime.h"
@@ -42,6 +43,10 @@ plugin_init (GstPlugin * plugin)
 #ifdef GST_CPUUSAGE_ENABLE
   if (!gst_tracer_register (plugin, "cpuusage",
           gst_cpu_usage_tracer_get_type ())) {
+    return FALSE;
+  }
+  if (!gst_tracer_register (plugin, "threadmonitor",
+          gst_thread_monitor_tracer_get_type ())) {
     return FALSE;
   }
 #endif
