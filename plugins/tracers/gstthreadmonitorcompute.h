@@ -33,23 +33,13 @@ G_BEGIN_DECLS
     typedef struct
 {
   /* CPU core number */
-  gint cpu_num;
-  gfloat cpu_load[CPU_NUM_MAX];
-
-  gint user[CPU_NUM_MAX];       /* Time spent in user mode */
-  gint user_aux[CPU_NUM_MAX];   /* Time spent in user mode */
-  gint nice[CPU_NUM_MAX];       /* Time spent in user mode with low priority */
-  gint nice_aux[CPU_NUM_MAX];   /* Time spent in user mode with low priority */
-  gint system[CPU_NUM_MAX];     /* Time spent in user mode with low priority */
-  gint system_aux[CPU_NUM_MAX]; /* Time spent in user mode with low priority */
-  gint idle[CPU_NUM_MAX];       /* Time spent in system mode */
-  gint idle_aux[CPU_NUM_MAX];   /* Time spent in system mode */
-  gboolean cpu_array_sel;
+  gfloat thread_cpu_usage;
+  gfloat thread_memory_usage;
 } GstThreadMonitor;
 
 void gst_thread_monitor_init (GstThreadMonitor * cpu_usage);
 
-void gst_thread_monitor_compute (GstThreadMonitor * cpu_usage);
+void gst_thread_monitor_compute (GstThreadMonitor * thread_monitor);
 
 G_END_DECLS
 #endif //__GST_THREAD_MONITOR_COMPUTE_H__

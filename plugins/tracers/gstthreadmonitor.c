@@ -27,6 +27,7 @@
 #include <glib/gstdio.h>
 #include <unistd.h>
 #include <string.h>
+#include <sys/types.h>
 
 #include "gstthreadmonitor.h"
 #include "gstthreadmonitorcompute.h"
@@ -38,7 +39,8 @@ GST_DEBUG_CATEGORY_STATIC (gst_thread_monitor_debug);
 struct _GstThreadMonitorTracer
 {
   GstPeriodicTracer parent;
-  GstThreadMonitor cpu_usage;
+  GstThreadMonitor thread_monitor;
+  uint pid;
 };
 
 #define _do_init \
@@ -84,30 +86,32 @@ reset_counters (GstPeriodicTracer * tracer)
 
   self = GST_THREAD_MONITOR_TRACER (tracer);
 
-  gst_thread_monitor_init (&(self->cpu_usage));
+  gst_thread_monitor_init (&(self->thread_monitor));
 }
 
 static gboolean
 thread_monitor_thread_func (GstPeriodicTracer * tracer)
 {
   GstThreadMonitorTracer *self;
-  GstThreadMonitor *cpu_usage;
-  gfloat *cpu_load;
-  gint cpu_id;
+  GstThreadMonitor *thread_monitor;
+  gfloat *cpu_load = NULL;
+  // gint cpu_id;
   gint cpu_load_len;
 
   self = GST_THREAD_MONITOR_TRACER (tracer);
 
-  cpu_usage = &self->cpu_usage;
+  thread_monitor = &self->thread_monitor;
 
-  cpu_load = THREAD_MONITOR_ARRAY (cpu_usage);
-  cpu_load_len = THREAD_MONITOR_ARRAY_LENGTH (cpu_usage);
+  // cpu_load = THREAD_MONITOR_ARRAY (cpu_usage);
+  *cpu_load = 0.5;
+  // cpu_load_len = THREAD_MONITOR_ARRAY_LENGTH (cpu_usage);
+  cpu_load_len = 12;
 
-  gst_thread_monitor_compute (cpu_usage);
+  gst_thread_monitor_compute (thread_monitor);
 
-  for (cpu_id = 0; cpu_id < cpu_load_len; ++cpu_id) {
-    gst_tracer_record_log (tr_threadmonitor, cpu_id, cpu_load[cpu_id]);
-  }
+  // for (cpu_id = 0; cpu_id < cpu_load_len; ++cpu_id) {
+  //   gst_tracer_record_log (tr_threadmonitor, cpu_id, cpu_load[cpu_id]);
+  // }
   do_print_threadmonitor_event (THREADMONITOR_EVENT_ID, cpu_load_len, cpu_load);
 
   return TRUE;
@@ -116,7 +120,7 @@ thread_monitor_thread_func (GstPeriodicTracer * tracer)
 static void
 create_metadata_event (GstPeriodicTracer * tracer)
 {
-  GstThreadMonitorTracer *self;
+  // GstThreadMonitorTracer *self;
   gint cpu_num;
   gchar *mem;
   gchar *mem_start;
@@ -126,9 +130,9 @@ create_metadata_event (GstPeriodicTracer * tracer)
   gint msg_id;
   gint number_of_bytes;
 
-  self = GST_THREAD_MONITOR_TRACER (tracer);
-  cpu_num = self->cpu_usage.cpu_num;
-
+  // self = GST_THREAD_MONITOR_TRACER (tracer);
+  // cpu_num = self->cpu_usage.cpu_num;
+  cpu_num = 12;
   event_header =
       g_strdup_printf (threadmonitor_metadata_event_header, THREADMONITOR_EVENT_ID, 0);
 
@@ -199,11 +203,13 @@ gst_thread_monitor_tracer_class_init (GstThreadMonitorTracerClass * klass)
 static void
 gst_thread_monitor_tracer_init (GstThreadMonitorTracer * self)
 {
-  GstThreadMonitor *cpu_usage;
 
-  cpu_usage = &self->cpu_usage;
-  gst_thread_monitor_init (cpu_usage);
-  cpu_usage->cpu_array_sel = FALSE;
+  GstThreadMonitor *thread_monitor;
+
+  thread_monitor = &self->thread_monitor;
+  self->pid = getpid();
+  gst_thread_monitor_init (thread_monitor);
+  // cpu_usage->cpu_array_sel = FALSE;
 
   /* Register a dummy hook so that the tracer remains alive */
   gst_tracing_register_hook (GST_TRACER (self), "bin-add-post",
