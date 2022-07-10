@@ -18,45 +18,45 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 /**
- * SECTION:gstcpuusage
+ * SECTION:gstthreadmonitor
  * @short_description: log cpu usage stats
  *
- * A tracing module that take cpuusage() snapshots and logs them.
+ * A tracing module that take threadmonitor() snapshots and logs them.
  */
 
 #include <glib/gstdio.h>
 #include <unistd.h>
 #include <string.h>
 
-#include "gstcpuusage.h"
-#include "gstcpuusagecompute.h"
+#include "gstthreadmonitor.h"
+#include "gstthreadmonitorcompute.h"
 #include "gstctf.h"
 
-GST_DEBUG_CATEGORY_STATIC (gst_cpu_usage_debug);
-#define GST_CAT_DEFAULT gst_cpu_usage_debug
+GST_DEBUG_CATEGORY_STATIC (gst_thread_monitor_debug);
+#define GST_CAT_DEFAULT gst_thread_monitor_debug
 
-struct _GstCPUUsageTracer
+struct _GstThreadMonitorTracer
 {
   GstPeriodicTracer parent;
-  GstCPUUsage cpu_usage;
+  GstThreadMonitor cpu_usage;
 };
 
 #define _do_init \
-    GST_DEBUG_CATEGORY_INIT (gst_cpu_usage_debug, "cpuusage", 0, "cpuusage tracer");
+    GST_DEBUG_CATEGORY_INIT (gst_thread_monitor_debug, "threadmonitor", 0, "threadmonitor tracer");
 
-G_DEFINE_TYPE_WITH_CODE (GstCPUUsageTracer, gst_cpu_usage_tracer,
+G_DEFINE_TYPE_WITH_CODE (GstThreadMonitorTracer, gst_thread_monitor_tracer,
     GST_TYPE_PERIODIC_TRACER, _do_init);
 
-static GstTracerRecord *tr_cpuusage;
+static GstTracerRecord *tr_threadmonitor;
 
-static const gchar cpuusage_metadata_event_header[] = "\
+static const gchar threadmonitor_metadata_event_header[] = "\
 event {\n\
-    name = cpuusage;\n\
+    name = threadmonitor;\n\
     id = %d;\n\
     stream_id = %d;\n\
     fields := struct {\n";
 
-static const gchar cpuusage_metadata_event_footer[] = "\
+static const gchar threadmonitor_metadata_event_footer[] = "\
     };\n\
 };\n\
 \n";
@@ -64,14 +64,14 @@ static const gchar cpuusage_metadata_event_footer[] = "\
 static const gchar floating_point_event_field[] =
     "        floating_point { exp_dig = %lu; mant_dig = %d; byte_order = le; align = 8; } _cpu%d;\n";
 
-static void cpuusage_dummy_bin_add_post (GObject * obj, GstClockTime ts,
+static void threadmonitor_dummy_bin_add_post (GObject * obj, GstClockTime ts,
     GstBin * bin, GstElement * element, gboolean result);
-static gboolean cpu_usage_thread_func (GstPeriodicTracer * tracer);
+static gboolean thread_monitor_thread_func (GstPeriodicTracer * tracer);
 static void create_metadata_event (GstPeriodicTracer * tracer);
 static void reset_counters (GstPeriodicTracer * tracer);
 
 static void
-cpuusage_dummy_bin_add_post (GObject * obj, GstClockTime ts,
+threadmonitor_dummy_bin_add_post (GObject * obj, GstClockTime ts,
     GstBin * bin, GstElement * element, gboolean result)
 {
   return;
@@ -80,35 +80,35 @@ cpuusage_dummy_bin_add_post (GObject * obj, GstClockTime ts,
 static void
 reset_counters (GstPeriodicTracer * tracer)
 {
-  GstCPUUsageTracer *self;
+  GstThreadMonitorTracer *self;
 
-  self = GST_CPU_USAGE_TRACER (tracer);
+  self = GST_THREAD_MONITOR_TRACER (tracer);
 
-  gst_cpu_usage_init (&(self->cpu_usage));
+  gst_thread_monitor_init (&(self->cpu_usage));
 }
 
 static gboolean
-cpu_usage_thread_func (GstPeriodicTracer * tracer)
+thread_monitor_thread_func (GstPeriodicTracer * tracer)
 {
-  GstCPUUsageTracer *self;
-  GstCPUUsage *cpu_usage;
+  GstThreadMonitorTracer *self;
+  GstThreadMonitor *cpu_usage;
   gfloat *cpu_load;
   gint cpu_id;
   gint cpu_load_len;
 
-  self = GST_CPU_USAGE_TRACER (tracer);
+  self = GST_THREAD_MONITOR_TRACER (tracer);
 
   cpu_usage = &self->cpu_usage;
 
-  cpu_load = CPU_USAGE_ARRAY (cpu_usage);
-  cpu_load_len = CPU_USAGE_ARRAY_LENGTH (cpu_usage);
+  cpu_load = THREAD_MONITOR_ARRAY (cpu_usage);
+  cpu_load_len = THREAD_MONITOR_ARRAY_LENGTH (cpu_usage);
 
-  gst_cpu_usage_compute (cpu_usage);
+  gst_thread_monitor_compute (cpu_usage);
 
   for (cpu_id = 0; cpu_id < cpu_load_len; ++cpu_id) {
-    gst_tracer_record_log (tr_cpuusage, cpu_id, cpu_load[cpu_id]);
+    gst_tracer_record_log (tr_threadmonitor, cpu_id, cpu_load[cpu_id]);
   }
-  do_print_cpuusage_event (CPUUSAGE_EVENT_ID, cpu_load_len, cpu_load);
+  do_print_threadmonitor_event (THREADMONITOR_EVENT_ID, cpu_load_len, cpu_load);
 
   return TRUE;
 }
@@ -116,7 +116,7 @@ cpu_usage_thread_func (GstPeriodicTracer * tracer)
 static void
 create_metadata_event (GstPeriodicTracer * tracer)
 {
-  GstCPUUsageTracer *self;
+  GstThreadMonitorTracer *self;
   gint cpu_num;
   gchar *mem;
   gchar *mem_start;
@@ -126,11 +126,11 @@ create_metadata_event (GstPeriodicTracer * tracer)
   gint msg_id;
   gint number_of_bytes;
 
-  self = GST_CPU_USAGE_TRACER (tracer);
+  self = GST_THREAD_MONITOR_TRACER (tracer);
   cpu_num = self->cpu_usage.cpu_num;
 
   event_header =
-      g_strdup_printf (cpuusage_metadata_event_header, CPUUSAGE_EVENT_ID, 0);
+      g_strdup_printf (threadmonitor_metadata_event_header, THREADMONITOR_EVENT_ID, 0);
 
   str_size = strlen (event_header);
 
@@ -139,7 +139,7 @@ create_metadata_event (GstPeriodicTracer * tracer)
    */
   mem_size =
       str_size + cpu_num * sizeof (floating_point_event_field) +
-      sizeof (cpuusage_metadata_event_footer);
+      sizeof (threadmonitor_metadata_event_footer);
   mem_start = g_malloc (mem_size);
   mem = mem_start;
 
@@ -163,7 +163,7 @@ create_metadata_event (GstPeriodicTracer * tracer)
   }
 
   /* Add event footer */
-  g_strlcpy (mem, cpuusage_metadata_event_footer, mem_size);
+  g_strlcpy (mem, threadmonitor_metadata_event_footer, mem_size);
 
   /* Add event in metadata file */
   add_metadata_event_struct (mem_start);
@@ -173,17 +173,17 @@ create_metadata_event (GstPeriodicTracer * tracer)
 }
 
 static void
-gst_cpu_usage_tracer_class_init (GstCPUUsageTracerClass * klass)
+gst_thread_monitor_tracer_class_init (GstThreadMonitorTracerClass * klass)
 {
   GstPeriodicTracerClass *tracer_class;
 
   tracer_class = GST_PERIODIC_TRACER_CLASS (klass);
 
-  tracer_class->timer_callback = GST_DEBUG_FUNCPTR (cpu_usage_thread_func);
+  tracer_class->timer_callback = GST_DEBUG_FUNCPTR (thread_monitor_thread_func);
   tracer_class->reset = GST_DEBUG_FUNCPTR (reset_counters);
   tracer_class->write_header = GST_DEBUG_FUNCPTR (create_metadata_event);
 
-  tr_cpuusage = gst_tracer_record_new ("cpuusage.class",
+  tr_threadmonitor = gst_tracer_record_new ("threadmonitor.class",
       "number", GST_TYPE_STRUCTURE, gst_structure_new ("value",
           "type", G_TYPE_GTYPE, G_TYPE_UINT,
           "description", G_TYPE_STRING, "Core number",
@@ -197,15 +197,15 @@ gst_cpu_usage_tracer_class_init (GstCPUUsageTracerClass * klass)
 }
 
 static void
-gst_cpu_usage_tracer_init (GstCPUUsageTracer * self)
+gst_thread_monitor_tracer_init (GstThreadMonitorTracer * self)
 {
-  GstCPUUsage *cpu_usage;
+  GstThreadMonitor *cpu_usage;
 
   cpu_usage = &self->cpu_usage;
-  gst_cpu_usage_init (cpu_usage);
+  gst_thread_monitor_init (cpu_usage);
   cpu_usage->cpu_array_sel = FALSE;
 
   /* Register a dummy hook so that the tracer remains alive */
   gst_tracing_register_hook (GST_TRACER (self), "bin-add-post",
-      G_CALLBACK (cpuusage_dummy_bin_add_post));
+      G_CALLBACK (threadmonitor_dummy_bin_add_post));
 }

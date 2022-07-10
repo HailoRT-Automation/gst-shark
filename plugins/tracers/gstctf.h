@@ -28,6 +28,7 @@ typedef enum
 {
   INIT_EVENT_ID,
   CPUUSAGE_EVENT_ID,
+  THREADMONITOR_EVENT_ID,
   PROCTIME_EVENT_ID,
   INTERLATENCY_EVENT_ID,
   FPS_EVENT_ID,
@@ -42,6 +43,7 @@ gboolean gst_ctf_init (void);
 void gst_ctf_close (void);
 void add_metadata_event_struct (const gchar * metadata_event);
 void do_print_cpuusage_event (event_id id, guint32 cpunum, gfloat * cpuload);
+void do_print_threadmonitor_event (event_id id, guint32 cpunum, gfloat * cpuload);
 void do_print_proctime_event (event_id id, gchar * elementname, guint64 time);
 void do_print_framerate_event (event_id id, gchar * elementname, guint64 fps);
 void do_print_interlatency_event (event_id id,

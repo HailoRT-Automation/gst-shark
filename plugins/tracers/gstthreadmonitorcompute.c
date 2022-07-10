@@ -24,8 +24,8 @@
 
 #include <gst/gst.h>
 #include <glib/gstdio.h>
-#include "gstcpuusage.h"
-#include "gstcpuusagecompute.h"
+#include "gstthreadmonitor.h"
+#include "gstthreadmonitorcompute.h"
 
 #include <unistd.h>
 #include <string.h>
@@ -35,13 +35,13 @@
 #define XS(arg) #arg
 
 void
-gst_cpu_usage_init (GstCPUUsage * cpu_usage)
+gst_thread_monitor_init (GstThreadMonitor * cpu_usage)
 {
   gint cpu_num = 0;
 
   g_return_if_fail (cpu_usage);
 
-  memset (cpu_usage, 0, sizeof (GstCPUUsage));
+  memset (cpu_usage, 0, sizeof (GstThreadMonitor));
   cpu_usage->cpu_array_sel = FALSE;
 
   if ((cpu_num = sysconf (_SC_NPROCESSORS_CONF)) == -1) {
@@ -53,7 +53,7 @@ gst_cpu_usage_init (GstCPUUsage * cpu_usage)
 }
 
 void
-gst_cpu_usage_compute (GstCPUUsage * cpu_usage)
+gst_thread_monitor_compute (GstThreadMonitor * cpu_usage)
 {
   gfloat *cpu_load;
   gint cpu_num;

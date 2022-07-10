@@ -871,6 +871,53 @@ void do_print_cpuusage_event(event_id id, guint32 cpu_num, gfloat *cpuload)
   g_mutex_unlock(&ctf_descriptor->mutex);
 }
 
+void do_print_threadmonitor_event(event_id id, guint32 cpu_num, gfloat *cpuload)
+{
+  GError *error;
+  guint8 *mem;
+  guint8 *event_mem;
+  gsize event_size;
+  gint cpu_idx;
+
+  event_size = cpu_num * sizeof(gfloat) + CTF_HEADER_SIZE;
+
+  if (event_exceeds_mem_size(event_size))
+  {
+    return;
+  }
+
+  mem = ctf_descriptor->mem;
+  event_mem = mem + TCP_HEADER_SIZE;
+
+  /* Lock mem, datastream and output_stream resources */
+  g_mutex_lock(&ctf_descriptor->mutex);
+  /* Add CTF header */
+  CTF_EVENT_WRITE_HEADER(id, event_mem);
+  /* Write CPU load for each CPU */
+  for (cpu_idx = 0; cpu_idx < cpu_num; ++cpu_idx)
+  {
+    /* Write CPU load */
+    CTF_EVENT_WRITE_FLOAT(cpuload[cpu_idx], event_mem);
+  }
+
+  if (FALSE == ctf_descriptor->file_output_disable)
+  {
+    event_mem = mem + TCP_HEADER_SIZE;
+    fwrite(event_mem, sizeof(gchar), event_size, ctf_descriptor->datastream);
+  }
+
+  if (FALSE == ctf_descriptor->tcp_output_disable)
+  {
+    /* Write the TCP header */
+    TCP_EVENT_HEADER_WRITE(TCP_DATASTREAM_ID, event_size, mem);
+
+    g_output_stream_write(ctf_descriptor->output_stream,
+                          ctf_descriptor->mem, event_size + TCP_HEADER_SIZE, NULL, &error);
+  }
+
+  g_mutex_unlock(&ctf_descriptor->mutex);
+}
+
 void do_print_proctime_event(event_id id, gchar *elementname, guint64 time)
 {
   GError *error;

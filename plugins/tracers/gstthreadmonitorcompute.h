@@ -18,18 +18,18 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-#ifndef __GST_CPU_USAGE_COMPUTE_H__
-#define __GST_CPU_USAGE_COMPUTE_H__
+#ifndef __GST_THREAD_MONITOR_COMPUTE_H__
+#define __GST_THREAD_MONITOR_COMPUTE_H__
 
 #include <gst/gst.h>
 
 G_BEGIN_DECLS
 #define CPU_NUM_MAX  8
 /* Returns a reference to the array the contains the cpu usage computed */
-#define CPU_USAGE_ARRAY(cpuusage_struct)  (cpuusage_struct->cpu_load)
-/* Returns how many element contains the cpu_usage array
+#define THREAD_MONITOR_ARRAY(cpuusage_struct)  (cpuusage_struct->cpu_load)
+/* Returns how many element contains the thread_monitor array
  * This value also represents the number of cpus in the system */
-#define CPU_USAGE_ARRAY_LENGTH(cpuusage_struct)  (cpuusage_struct->cpu_num)
+#define THREAD_MONITOR_ARRAY_LENGTH(cpuusage_struct)  (cpuusage_struct->cpu_num)
     typedef struct
 {
   /* CPU core number */
@@ -45,11 +45,11 @@ G_BEGIN_DECLS
   gint idle[CPU_NUM_MAX];       /* Time spent in system mode */
   gint idle_aux[CPU_NUM_MAX];   /* Time spent in system mode */
   gboolean cpu_array_sel;
-} GstCPUUsage;
+} GstThreadMonitor;
 
-void gst_cpu_usage_init (GstCPUUsage * cpu_usage);
+void gst_thread_monitor_init (GstThreadMonitor * cpu_usage);
 
-void gst_cpu_usage_compute (GstCPUUsage * cpu_usage);
+void gst_thread_monitor_compute (GstThreadMonitor * cpu_usage);
 
 G_END_DECLS
-#endif //__GST_CPU_USAGE_COMPUTE_H__
+#endif //__GST_THREAD_MONITOR_COMPUTE_H__
