@@ -3,6 +3,7 @@ lib_LTLIBRARIES = libgstshark.la
 libgstshark_la_SOURCES = \
 	gstdot.c \
 	gstcpuusagecompute.c \
+	gstthreadmonitorcompute.c \
 	gstproctimecompute.c \
 	gstctf.c \
 	gstparser.c
@@ -28,6 +29,7 @@ libgstsharktracers_la_SOURCES = \
 	gstsharktracer.c \
 	gstgraphic.c \
 	gstcpuusage.c \
+	gstthreadmonitor.c \
 	gstproctime.c \
 	gstinterlatency.c \
 	gstscheduletime.c \
@@ -57,6 +59,8 @@ noinst_HEADERS = \
 	gstdot.h \
 	gstcpuusage.h \
 	gstcpuusagecompute.h \
+	gstthreadmonitor.h \
+	gstthreadmonitorcompute.h \
 	gstgraphic.h \
 	gstproctime.h \
 	gstproctimecompute.h \
