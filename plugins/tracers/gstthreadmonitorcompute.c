@@ -19,7 +19,7 @@
  */
 
 #ifdef HAVE_CONFIG_H
-#  include "config.h"
+#include "config.h"
 #endif
 
 #include <gst/gst.h>
@@ -30,32 +30,45 @@
 #include <unistd.h>
 #include <string.h>
 
-#define CPU_NAME_MAX_SIZE 8
-#define S(arg) XS(arg)
-#define XS(arg) #arg
+// #define CPU_NAME_MAX_SIZE 8
+// #define S(arg) XS(arg)
+// #define XS(arg) #arg
 
-void
-gst_thread_monitor_init (GstThreadMonitor * thread_monitor)
+void gst_thread_monitor_init(GstThreadMonitor *thread_monitor)
 {
-  g_return_if_fail (thread_monitor);
-  memset (thread_monitor, 0, sizeof (GstThreadMonitor));
+  g_return_if_fail(thread_monitor);
+  memset(thread_monitor, 0, sizeof(GstThreadMonitor));
 }
 
-void
-gst_thread_monitor_compute (GstThreadMonitor * thread_monitor)
+void gst_thread_monitor_compute(GstThreadMonitor *thread_monitor)
 {
-  // gfloat *thread_cpu_usage;
-  // gfloat *thread_memory_usage;
+  // gchar *thread_name;
+  // gchar * thread_cpu_usage;
+  // gchar * thread_memory_usage;
 
-  // gint ret;
+  // FILE *fp;
+  // gchar *command;
 
-  // g_return_if_fail (cpu_usage);
+  // // gint ret;
+
+  // char path[4096];
+  // g_return_if_fail(thread_monitor);
+
+  // command = g_strdup_printf("top -H -p %d -n 1 |  sed -n '/PID/,/^$/p' | tail -n +2| awk '{print $13,$10,$11}' | grep src", getpid());
+
+  // fp = popen(command, "r");
+  // while (fgets(path, PATH_MAX, fp) != NULL)
+  // {
+  //   // split the line and put the first part in thread_name
+  //   thread_name = g_strsplit(path, " ", 14)[13];
+  //   thread_cpu_usage = g_strsplit(path, " ", 14)[10];
+  //   thread_memory_usage = g_strsplit(path, " ", 14)[11];
+  //   printf("%s", path);
+  //   printf("THREAD NAME: %s\n THREAD CPU USAGE: %s\n THREAD MEMORY USAGE: %s\n", thread_name, thread_cpu_usage, thread_memory_usage);
+  // }
 
   // thread_cpu_usage = cpu_usage->thread_cpu_usage;
   // thread_memory_usage = cpu_usage->thread_memory_usage;
-
-
-
 
   // /* Compute the load for each core */
   // fd = g_fopen ("/proc/stat", "r");

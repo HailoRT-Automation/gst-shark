@@ -24,13 +24,13 @@
 #include <gst/gst.h>
 
 G_BEGIN_DECLS
-#define CPU_NUM_MAX  8
+// #define CPU_NUM_MAX  8
 /* Returns a reference to the array the contains the cpu usage computed */
-#define THREAD_MONITOR_ARRAY(cpuusage_struct)  (cpuusage_struct->cpu_load)
+// #define THREAD_MONITOR_ARRAY(cpuusage_struct)  (cpuusage_struct->cpu_load)
 /* Returns how many element contains the thread_monitor array
  * This value also represents the number of cpus in the system */
-#define THREAD_MONITOR_ARRAY_LENGTH(cpuusage_struct)  (cpuusage_struct->cpu_num)
-    typedef struct
+// #define THREAD_MONITOR_ARRAY_LENGTH(cpuusage_struct)  (cpuusage_struct->cpu_num)
+typedef struct
 {
   /* CPU core number */
   gfloat thread_cpu_usage;

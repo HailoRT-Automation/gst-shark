@@ -80,8 +80,39 @@ gst_cpu_usage_compute (GstCPUUsage * cpu_usage)
   gfloat den_value;
   gboolean cpu_array_sel;
   gint ret;
+  // g_return_if_fail (cpu_usage);
 
-  g_return_if_fail (cpu_usage);
+
+
+  gchar *thread_name;
+  gchar * thread_cpu_usage;
+  gchar * thread_memory_usage;
+
+  FILE *fp;
+  gchar *command;
+
+  // gint ret;
+
+  char path[4096];
+  g_return_if_fail(cpu_usage);
+
+  command = g_strdup_printf("top -H -p %d -n 1 |  sed -n '/PID/,/^$/p' | tail -n +2| awk '{print $13,$10,$11}'", getpid());
+
+  fp = popen(command, "r");
+  while (fgets(path, PATH_MAX, fp) != NULL)
+  {
+    // split the line and put the first part in thread_name
+    thread_name = g_strsplit(path, " ", 14)[1];
+    thread_cpu_usage = g_strsplit(path, " ", 14)[2];
+    thread_memory_usage = g_strsplit(path, " ", 14)[3];
+    printf("$$$$$$$$$$$$$$$$$$$$$$$$$\n");
+    printf("THREAD NAME: %s\n THREAD CPU USAGE: %s\n THREAD MEMORY USAGE: %s\n", thread_name, thread_cpu_usage, thread_memory_usage);
+  }
+
+
+
+
+  
 
   user = cpu_usage->user;
   user_aux = cpu_usage->user_aux;
