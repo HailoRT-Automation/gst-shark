@@ -89,7 +89,7 @@ void gst_cpu_usage_compute(GstCPUUsage *cpu_usage)
   FILE *fp;
   gchar *command;
   // char *token;
-  // char **tokens;
+  char **tokens;
 
   // gint ret;
 
@@ -97,7 +97,8 @@ void gst_cpu_usage_compute(GstCPUUsage *cpu_usage)
   g_return_if_fail(cpu_usage);
 
   // command = g_strdup_printf("top -H -p %d -n 1 |  sed -n '/PID/,/^$/p' | tail -n +2| awk '{print $13,$10,$11}'", getpid());
-  command = g_strdup_printf("top -H -p %d -n 1 |  sed -n '/PID/,/^$/p' | tail -n +2 | sed 's/  */ /g' |  awk '{print $1,$2}'", getpid());
+  // command = g_strdup_printf("top -H -p %d -n 1 |  sed -n '/PID/,/^$/p' | tail -n +2 | grep src | sed 's/  */ /g'", getpid());
+  command = g_strdup_printf("top -H -p %d -n 1 | sed -n '/PID/,/^$/p' | tail -n +2 | tr -s ' ' | awk '{print $10,$13}'", getpid());
 
   fp = popen(command, "r");
   while (fgets(path, PATH_MAX, fp) != NULL)
@@ -105,11 +106,11 @@ void gst_cpu_usage_compute(GstCPUUsage *cpu_usage)
     // print line
     printf("%s\n", path);
 
-    // tokens = g_strsplit(path, " ", 12);
-    // for (i = 0; i < 12; i++)
-    // {
-    //   printf("token: %s\n", tokens[i]);
-    // }
+    tokens = g_strsplit(path, " ", 13);
+    for (i = 0; i < 12; i++)
+    {
+      printf("token: %s\n", tokens[i]);
+    }
 
     // split line to 12 words
     // token = strtok(path, " ");
