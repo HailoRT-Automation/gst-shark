@@ -40,91 +40,89 @@ void gst_thread_monitor_init(GstThreadMonitor *thread_monitor)
   memset(thread_monitor, 0, sizeof(GstThreadMonitor));
 }
 
-void gst_thread_monitor_compute(GstThreadMonitor *thread_monitor)
+void gst_thread_monitor_compute(GstThreadMonitor *thread_monitor, gchar *thread_name, gchar *thread_cpu_usage,
+                                gchar *thread_memory_usage)
 {
-  // gchar *thread_name;
-  // gchar * thread_cpu_usage;
-  // gchar * thread_memory_usage;
-
-  // FILE *fp;
+  FILE *fp;
   // gchar *command;
+  gchar *colums_command;
+  char **tokens;
+  // char **columns;
+  gchar *token;
+  gint thread_name_loc;
+  gint thread_cpu_usage_loc;
+  gint thread_memory_usage_loc;
 
-  // // gint ret;
+  char path[4096];
+  gint num_columns = 0;
+  g_return_if_fail(thread_monitor);
 
-  // char path[4096];
-  // g_return_if_fail(thread_monitor);
+  colums_command = g_strdup_printf("top -H -p %d -n 1 | grep PID | tr -s ' '", getpid());
+  g_strstrip(colums_command);
+  fp = popen(colums_command, "r");
 
-  // command = g_strdup_printf("top -H -p %d -n 1 |  sed -n '/PID/,/^$/p' | tail -n +2| awk '{print $13,$10,$11}' | grep src", getpid());
+  if (fp == NULL)
+  {
+    GST_WARNING("Failed to run command");
+    return;
+  }
+  while (fgets(path, PATH_MAX, fp) != NULL)
+  {
+    // get number of words in path
+    token = strtok(path, " ");
+    while (token != NULL)
+    {
+      num_columns++;
+      token = strtok(NULL, " ");
+    }
+  }
+  tokens = g_strsplit(path, " ",num_columns);
+  
+  thread_name_loc = -1;
+  thread_cpu_usage_loc = -1;
+  thread_memory_usage_loc = -1;
+  for (int i = 0; i < num_columns; i++)
+  {
+    if (strcmp(tokens[i], "COMMAND") == 0)
+    {
+      thread_name_loc = i;
+    }
+    else if (strcmp(tokens[i], "%CPU") == 0)
+    {
+      thread_cpu_usage_loc = i;
+    }
+    else if (strcmp(tokens[i], "%MEM") == 0)
+    {
+      thread_memory_usage_loc = i;
+    }
+  }
+  
+  pclose(fp);
+  g_free(colums_command);
+
+  //print the locations
+  printf("thread_name_loc: %d\n", thread_name_loc);
+  printf("thread_cpu_usage_loc: %d\n", thread_cpu_usage_loc);
+  printf("thread_memory_usage_loc: %d\n", thread_memory_usage_loc);
+
+
+
+  // command = g_strdup_printf("top -H -p %d -n 1 | sed -n '/PID/,/^$/p' | tail -n +2 | tr -s ' ' | grep src | awk '{print $12,$9,$10}'", getpid());
 
   // fp = popen(command, "r");
+  // if (fp == NULL)
+  // {
+  //   GST_WARNING("Failed to run command");
+  //   return;
+  // }
   // while (fgets(path, PATH_MAX, fp) != NULL)
   // {
-  //   // split the line and put the first part in thread_name
-  //   thread_name = g_strsplit(path, " ", 14)[13];
-  //   thread_cpu_usage = g_strsplit(path, " ", 14)[10];
-  //   thread_memory_usage = g_strsplit(path, " ", 14)[11];
-  //   printf("%s", path);
+  //   tokens = g_strsplit(path, " ", 3);
+  //   thread_name = tokens[0];
+  //   thread_cpu_usage = tokens[1];
+  //   thread_memory_usage = tokens[2];
   //   printf("THREAD NAME: %s\n THREAD CPU USAGE: %s\n THREAD MEMORY USAGE: %s\n", thread_name, thread_cpu_usage, thread_memory_usage);
   // }
-
-  // thread_cpu_usage = cpu_usage->thread_cpu_usage;
-  // thread_memory_usage = cpu_usage->thread_memory_usage;
-
-  // /* Compute the load for each core */
-  // fd = g_fopen ("/proc/stat", "r");
-  // if (cpu_array_sel == 0) {
-  //   ret =
-  //       fscanf (fd, "%" S (CPU_NAME_MAX_SIZE) "s %d %d %d %d %d %d %d %d %d %d",
-  //       cpu_name, &user[0], &nice[0], &system[0], &idle[0], &iowait, &irq,
-  //       &softirq, &steal, &quest, &quest_nice);
-  //   for (cpu_id = 0; cpu_id < cpu_num; ++cpu_id) {
-  //     ret =
-  //         fscanf (fd,
-  //         "%" S (CPU_NAME_MAX_SIZE) "s %d %d %d %d %d %d %d %d %d %d", cpu_name,
-  //         &user[cpu_id], &nice[cpu_id], &system[cpu_id], &idle[cpu_id], &iowait,
-  //         &irq, &softirq, &steal, &quest, &quest_nice);
-  //   }
-  //   /* Compute the utilization for each core */
-  //   for (cpu_id = 0; cpu_id < cpu_num; ++cpu_id) {
-  //     num_value =
-  //         ((user[cpu_id] + nice[cpu_id] + system[cpu_id]) - (user_aux[cpu_id] +
-  //             nice_aux[cpu_id] + system_aux[cpu_id]));
-  //     den_value =
-  //         ((user[cpu_id] + nice[cpu_id] + system[cpu_id] + idle[cpu_id]) -
-  //         (user_aux[cpu_id] + nice_aux[cpu_id] + system_aux[cpu_id] +
-  //             idle_aux[cpu_id]));
-  //     cpu_load[cpu_id] = 100 * (num_value / den_value);
-  //   }
-  //   cpu_array_sel = 1;
-  // } else {
-  //   ret =
-  //       fscanf (fd, "%" S (CPU_NAME_MAX_SIZE) "s %d %d %d %d %d %d %d %d %d %d",
-  //       cpu_name, &user_aux[0], &nice_aux[0], &system_aux[0], &idle_aux[0],
-  //       &iowait, &irq, &softirq, &steal, &quest, &quest_nice);
-  //   for (cpu_id = 0; cpu_id < cpu_num; ++cpu_id) {
-  //     ret =
-  //         fscanf (fd,
-  //         "%" S (CPU_NAME_MAX_SIZE) "s %d %d %d %d %d %d %d %d %d %d", cpu_name,
-  //         &user_aux[cpu_id], &nice_aux[cpu_id], &system_aux[cpu_id],
-  //         &idle_aux[cpu_id], &iowait, &irq, &softirq, &steal, &quest,
-  //         &quest_nice);
-  //   }
-  //   /* Compute the utilization for each core */
-  //   for (cpu_id = 0; cpu_id < cpu_num; ++cpu_id) {
-  //     num_value =
-  //         ((user_aux[cpu_id] + nice_aux[cpu_id] + system_aux[cpu_id]) -
-  //         (user[cpu_id] + nice[cpu_id] + system[cpu_id]));
-  //     den_value =
-  //         ((user_aux[cpu_id] + nice_aux[cpu_id] + system_aux[cpu_id] +
-  //             idle_aux[cpu_id]) - (user[cpu_id] + nice[cpu_id] +
-  //             system[cpu_id] + idle[cpu_id]));
-  //     cpu_load[cpu_id] = 100 * (num_value / den_value);
-  //   }
-  //   cpu_array_sel = 0;
-  // }
-
-  // (void) ret;
-
-  // cpu_usage->cpu_array_sel = cpu_array_sel;
-  // fclose (fd);
+  pclose(fp);
+  // g_free(command);
 }
