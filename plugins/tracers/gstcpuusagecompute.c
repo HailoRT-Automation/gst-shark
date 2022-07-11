@@ -19,7 +19,7 @@
  */
 
 #ifdef HAVE_CONFIG_H
-#  include "config.h"
+#include "config.h"
 #endif
 
 #include <gst/gst.h>
@@ -34,26 +34,25 @@
 #define S(arg) XS(arg)
 #define XS(arg) #arg
 
-void
-gst_cpu_usage_init (GstCPUUsage * cpu_usage)
+void gst_cpu_usage_init(GstCPUUsage *cpu_usage)
 {
   gint cpu_num = 0;
 
-  g_return_if_fail (cpu_usage);
+  g_return_if_fail(cpu_usage);
 
-  memset (cpu_usage, 0, sizeof (GstCPUUsage));
+  memset(cpu_usage, 0, sizeof(GstCPUUsage));
   cpu_usage->cpu_array_sel = FALSE;
 
-  if ((cpu_num = sysconf (_SC_NPROCESSORS_CONF)) == -1) {
-    GST_WARNING ("failed to get number of cpus");
+  if ((cpu_num = sysconf(_SC_NPROCESSORS_CONF)) == -1)
+  {
+    GST_WARNING("failed to get number of cpus");
     cpu_num = 1;
   }
 
   cpu_usage->cpu_num = cpu_num;
 }
 
-void
-gst_cpu_usage_compute (GstCPUUsage * cpu_usage)
+void gst_cpu_usage_compute(GstCPUUsage *cpu_usage)
 {
   gfloat *cpu_load;
   gint cpu_num;
@@ -70,49 +69,64 @@ gst_cpu_usage_compute (GstCPUUsage * cpu_usage)
   gint *idle_aux;
 
   gchar cpu_name[CPU_NAME_MAX_SIZE];
-  gint iowait;                  /* Time waiting for I/O to complete */
-  gint irq;                     /* Time servicing interrupts        */
-  gint softirq;                 /* Time servicing softirqs          */
-  gint steal;                   /* Time spent in other OSes when in virtualized env */
-  gint quest;                   /* Time spent running a virtual CPU for guest OS    */
-  gint quest_nice;              /* Time spent running niced guest */
+  gint iowait;     /* Time waiting for I/O to complete */
+  gint irq;        /* Time servicing interrupts        */
+  gint softirq;    /* Time servicing softirqs          */
+  gint steal;      /* Time spent in other OSes when in virtualized env */
+  gint quest;      /* Time spent running a virtual CPU for guest OS    */
+  gint quest_nice; /* Time spent running niced guest */
   gfloat num_value;
   gfloat den_value;
   gboolean cpu_array_sel;
   gint ret;
+  int i;
   // g_return_if_fail (cpu_usage);
 
-
-
-  gchar *thread_name;
-  gchar * thread_cpu_usage;
-  gchar * thread_memory_usage;
+  // gchar *thread_name;
+  // gchar *thread_cpu_usage;
+  // gchar *thread_memory_usage;
 
   FILE *fp;
   gchar *command;
+  // char *token;
+  // char **tokens;
 
   // gint ret;
 
   char path[4096];
   g_return_if_fail(cpu_usage);
 
-  command = g_strdup_printf("top -H -p %d -n 1 |  sed -n '/PID/,/^$/p' | tail -n +2| awk '{print $13,$10,$11}'", getpid());
+  // command = g_strdup_printf("top -H -p %d -n 1 |  sed -n '/PID/,/^$/p' | tail -n +2| awk '{print $13,$10,$11}'", getpid());
+  command = g_strdup_printf("top -H -p %d -n 1 |  sed -n '/PID/,/^$/p' | tail -n +2 | sed 's/  */ /g' |  awk '{print $1,$2}'", getpid());
 
   fp = popen(command, "r");
   while (fgets(path, PATH_MAX, fp) != NULL)
   {
+    // print line
+    printf("%s\n", path);
+
+    // tokens = g_strsplit(path, " ", 12);
+    // for (i = 0; i < 12; i++)
+    // {
+    //   printf("token: %s\n", tokens[i]);
+    // }
+
+    // split line to 12 words
+    // token = strtok(path, " ");
+    // while (token != NULL)
+    // {
+    //   printf("$$$$$$$$$$$$$$$$$$$$$\n");
+    //   printf("next token: %s\n", token);
+
+    //   token = strtok(NULL, " ");
+    // }
     // split the line and put the first part in thread_name
-    thread_name = g_strsplit(path, " ", 14)[1];
-    thread_cpu_usage = g_strsplit(path, " ", 14)[2];
-    thread_memory_usage = g_strsplit(path, " ", 14)[3];
-    printf("$$$$$$$$$$$$$$$$$$$$$$$$$\n");
-    printf("THREAD NAME: %s\n THREAD CPU USAGE: %s\n THREAD MEMORY USAGE: %s\n", thread_name, thread_cpu_usage, thread_memory_usage);
+    // thread_name = g_strsplit(path, " ", 12)[11];
+    // thread_cpu_usage = g_strsplit(path, " ",12)[8];
+    // thread_memory_usage = g_strsplit(path, " ", 12)[9];
+    // printf("$$$$$$$$$$$$$$$$$$$$$$$$$\n");
+    // printf("THREAD NAME: %s\n THREAD CPU USAGE: %s\n THREAD MEMORY USAGE: %s\n", thread_name, thread_cpu_usage, thread_memory_usage);
   }
-
-
-
-
-  
 
   user = cpu_usage->user;
   user_aux = cpu_usage->user_aux;
@@ -127,63 +141,69 @@ gst_cpu_usage_compute (GstCPUUsage * cpu_usage)
   cpu_load = cpu_usage->cpu_load;
   cpu_num = cpu_usage->cpu_num;
 
-
-
   /* Compute the load for each core */
-  fd = g_fopen ("/proc/stat", "r");
-  if (cpu_array_sel == 0) {
+  fd = g_fopen("/proc/stat", "r");
+  if (cpu_array_sel == 0)
+  {
     ret =
-        fscanf (fd, "%" S (CPU_NAME_MAX_SIZE) "s %d %d %d %d %d %d %d %d %d %d",
-        cpu_name, &user[0], &nice[0], &system[0], &idle[0], &iowait, &irq,
-        &softirq, &steal, &quest, &quest_nice);
-    for (cpu_id = 0; cpu_id < cpu_num; ++cpu_id) {
+        fscanf(fd, "%" S(CPU_NAME_MAX_SIZE) "s %d %d %d %d %d %d %d %d %d %d",
+               cpu_name, &user[0], &nice[0], &system[0], &idle[0], &iowait, &irq,
+               &softirq, &steal, &quest, &quest_nice);
+    for (cpu_id = 0; cpu_id < cpu_num; ++cpu_id)
+    {
       ret =
-          fscanf (fd,
-          "%" S (CPU_NAME_MAX_SIZE) "s %d %d %d %d %d %d %d %d %d %d", cpu_name,
-          &user[cpu_id], &nice[cpu_id], &system[cpu_id], &idle[cpu_id], &iowait,
-          &irq, &softirq, &steal, &quest, &quest_nice);
+          fscanf(fd,
+                 "%" S(CPU_NAME_MAX_SIZE) "s %d %d %d %d %d %d %d %d %d %d", cpu_name,
+                 &user[cpu_id], &nice[cpu_id], &system[cpu_id], &idle[cpu_id], &iowait,
+                 &irq, &softirq, &steal, &quest, &quest_nice);
     }
     /* Compute the utilization for each core */
-    for (cpu_id = 0; cpu_id < cpu_num; ++cpu_id) {
+    for (cpu_id = 0; cpu_id < cpu_num; ++cpu_id)
+    {
       num_value =
           ((user[cpu_id] + nice[cpu_id] + system[cpu_id]) - (user_aux[cpu_id] +
-              nice_aux[cpu_id] + system_aux[cpu_id]));
+                                                             nice_aux[cpu_id] + system_aux[cpu_id]));
       den_value =
           ((user[cpu_id] + nice[cpu_id] + system[cpu_id] + idle[cpu_id]) -
-          (user_aux[cpu_id] + nice_aux[cpu_id] + system_aux[cpu_id] +
-              idle_aux[cpu_id]));
+           (user_aux[cpu_id] + nice_aux[cpu_id] + system_aux[cpu_id] +
+            idle_aux[cpu_id]));
       cpu_load[cpu_id] = 100 * (num_value / den_value);
     }
     cpu_array_sel = 1;
-  } else {
+  }
+  else
+  {
     ret =
-        fscanf (fd, "%" S (CPU_NAME_MAX_SIZE) "s %d %d %d %d %d %d %d %d %d %d",
-        cpu_name, &user_aux[0], &nice_aux[0], &system_aux[0], &idle_aux[0],
-        &iowait, &irq, &softirq, &steal, &quest, &quest_nice);
-    for (cpu_id = 0; cpu_id < cpu_num; ++cpu_id) {
+        fscanf(fd, "%" S(CPU_NAME_MAX_SIZE) "s %d %d %d %d %d %d %d %d %d %d",
+               cpu_name, &user_aux[0], &nice_aux[0], &system_aux[0], &idle_aux[0],
+               &iowait, &irq, &softirq, &steal, &quest, &quest_nice);
+    for (cpu_id = 0; cpu_id < cpu_num; ++cpu_id)
+    {
       ret =
-          fscanf (fd,
-          "%" S (CPU_NAME_MAX_SIZE) "s %d %d %d %d %d %d %d %d %d %d", cpu_name,
-          &user_aux[cpu_id], &nice_aux[cpu_id], &system_aux[cpu_id],
-          &idle_aux[cpu_id], &iowait, &irq, &softirq, &steal, &quest,
-          &quest_nice);
+          fscanf(fd,
+                 "%" S(CPU_NAME_MAX_SIZE) "s %d %d %d %d %d %d %d %d %d %d", cpu_name,
+                 &user_aux[cpu_id], &nice_aux[cpu_id], &system_aux[cpu_id],
+                 &idle_aux[cpu_id], &iowait, &irq, &softirq, &steal, &quest,
+                 &quest_nice);
     }
     /* Compute the utilization for each core */
-    for (cpu_id = 0; cpu_id < cpu_num; ++cpu_id) {
+    for (cpu_id = 0; cpu_id < cpu_num; ++cpu_id)
+    {
       num_value =
           ((user_aux[cpu_id] + nice_aux[cpu_id] + system_aux[cpu_id]) -
-          (user[cpu_id] + nice[cpu_id] + system[cpu_id]));
+           (user[cpu_id] + nice[cpu_id] + system[cpu_id]));
       den_value =
           ((user_aux[cpu_id] + nice_aux[cpu_id] + system_aux[cpu_id] +
-              idle_aux[cpu_id]) - (user[cpu_id] + nice[cpu_id] +
-              system[cpu_id] + idle[cpu_id]));
+            idle_aux[cpu_id]) -
+           (user[cpu_id] + nice[cpu_id] +
+            system[cpu_id] + idle[cpu_id]));
       cpu_load[cpu_id] = 100 * (num_value / den_value);
     }
     cpu_array_sel = 0;
   }
 
-  (void) ret;
+  (void)ret;
 
   cpu_usage->cpu_array_sel = cpu_array_sel;
-  fclose (fd);
+  fclose(fd);
 }
