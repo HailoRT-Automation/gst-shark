@@ -82,51 +82,33 @@ void gst_cpu_usage_compute(GstCPUUsage *cpu_usage)
   // int i;
   // g_return_if_fail (cpu_usage);
 
-  // gchar *thread_name;
-  // gchar *thread_cpu_usage;
-  // gchar *thread_memory_usage;
+  gchar *thread_name;
+  gchar *thread_cpu_usage;
+  gchar *thread_memory_usage;
 
   FILE *fp;
   gchar *command;
   // char *token;
-  // char **tokens;
+  char **tokens;
 
   // gint ret;
 
   char path[4096];
   g_return_if_fail(cpu_usage);
 
-  // command = g_strdup_printf("top -H -p %d -n 1 |  sed -n '/PID/,/^$/p' | tail -n +2| awk '{print $13,$10,$11}'", getpid());
-  // command = g_strdup_printf("top -H -p %d -n 1 |  sed -n '/PID/,/^$/p' | tail -n +2 | grep src | sed 's/  */ /g'", getpid());
-  command = g_strdup_printf("top -H -p %d -n 1 | sed -n '/PID/,/^$/p' | tail -n +2 | tr -s ' ' | awk '{print $10,$13}'", getpid());
+  command = g_strdup_printf("top -H -p %d -n 1 | sed -n '/PID/,/^$/p' | tail -n +2 | tr -s ' ' | grep src | awk '{print $12,$9,$10}'", getpid());
 
   fp = popen(command, "r");
   while (fgets(path, PATH_MAX, fp) != NULL)
   {
     // print line
-    printf("%s\n", path);
+    // printf("%s\n", path);
 
-    // tokens = g_strsplit(path, " ", 13);
-    // for (i = 0; i < 12; i++)
-    // {
-    //   printf("token: %s\n", tokens[i]);
-    // }
-
-    // split line to 12 words
-    // token = strtok(path, " ");
-    // while (token != NULL)
-    // {
-    //   printf("$$$$$$$$$$$$$$$$$$$$$\n");
-    //   printf("next token: %s\n", token);
-
-    //   token = strtok(NULL, " ");
-    // }
-    // split the line and put the first part in thread_name
-    // thread_name = g_strsplit(path, " ", 12)[11];
-    // thread_cpu_usage = g_strsplit(path, " ",12)[8];
-    // thread_memory_usage = g_strsplit(path, " ", 12)[9];
-    // printf("$$$$$$$$$$$$$$$$$$$$$$$$$\n");
-    // printf("THREAD NAME: %s\n THREAD CPU USAGE: %s\n THREAD MEMORY USAGE: %s\n", thread_name, thread_cpu_usage, thread_memory_usage);
+    tokens = g_strsplit(path, " ", 3);
+    thread_name = tokens[0];
+    thread_cpu_usage =tokens[1];
+    thread_memory_usage = tokens[2];
+    printf("THREAD NAME: %s\n THREAD CPU USAGE: %s\n THREAD MEMORY USAGE: %s\n", thread_name, thread_cpu_usage, thread_memory_usage);
   }
 
   user = cpu_usage->user;
