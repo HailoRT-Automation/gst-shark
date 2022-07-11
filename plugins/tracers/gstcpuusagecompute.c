@@ -79,7 +79,7 @@ void gst_cpu_usage_compute(GstCPUUsage *cpu_usage)
   gfloat den_value;
   gboolean cpu_array_sel;
   gint ret;
-  int i;
+  // int i;
   // g_return_if_fail (cpu_usage);
 
   // gchar *thread_name;
@@ -89,7 +89,7 @@ void gst_cpu_usage_compute(GstCPUUsage *cpu_usage)
   FILE *fp;
   gchar *command;
   // char *token;
-  char **tokens;
+  // char **tokens;
 
   // gint ret;
 
@@ -106,11 +106,11 @@ void gst_cpu_usage_compute(GstCPUUsage *cpu_usage)
     // print line
     printf("%s\n", path);
 
-    tokens = g_strsplit(path, " ", 13);
-    for (i = 0; i < 12; i++)
-    {
-      printf("token: %s\n", tokens[i]);
-    }
+    // tokens = g_strsplit(path, " ", 13);
+    // for (i = 0; i < 12; i++)
+    // {
+    //   printf("token: %s\n", tokens[i]);
+    // }
 
     // split line to 12 words
     // token = strtok(path, " ");
