@@ -871,7 +871,7 @@ void do_print_cpuusage_event(event_id id, guint32 cpu_num, gfloat *cpuload)
   g_mutex_unlock(&ctf_descriptor->mutex);
 }
 
-void do_print_threadmonitor_event(event_id id, guint32 cpu_num, gfloat *cpuload)
+void do_print_threadmonitor_event(event_id id)
 {
   GError *error;
   guint8 *mem;
@@ -879,7 +879,7 @@ void do_print_threadmonitor_event(event_id id, guint32 cpu_num, gfloat *cpuload)
   gsize event_size;
   gint cpu_idx;
 
-  event_size = cpu_num * sizeof(gfloat) + CTF_HEADER_SIZE;
+  event_size = 12 * sizeof(gfloat) + CTF_HEADER_SIZE;
   if (event_exceeds_mem_size(event_size))
   {
     return;
@@ -893,10 +893,10 @@ void do_print_threadmonitor_event(event_id id, guint32 cpu_num, gfloat *cpuload)
   /* Add CTF header */
   CTF_EVENT_WRITE_HEADER(id, event_mem);
   /* Write CPU load for each CPU */
-  for (cpu_idx = 0; cpu_idx < cpu_num; ++cpu_idx)
+  for (cpu_idx = 0; cpu_idx < 12; ++cpu_idx)
   {
     /* Write CPU load */
-    CTF_EVENT_WRITE_FLOAT(cpuload[cpu_idx], event_mem);
+    CTF_EVENT_WRITE_FLOAT(0.5, event_mem);
   }
 
   if (FALSE == ctf_descriptor->file_output_disable)

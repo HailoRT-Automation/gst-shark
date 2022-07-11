@@ -94,26 +94,23 @@ thread_monitor_thread_func(GstPeriodicTracer *tracer)
 {
   GstThreadMonitorTracer *self;
   GstThreadMonitor *thread_monitor;
-  gfloat *cpu_load = NULL;
   // gint cpu_id;
-  gint cpu_load_len;
 
   self = GST_THREAD_MONITOR_TRACER(tracer);
 
   thread_monitor = &self->thread_monitor;
 
   // cpu_load = THREAD_MONITOR_ARRAY (cpu_usage);
-  *cpu_load = 0.5;
+  // *cpu_load = 0.5;
   // cpu_load_len = THREAD_MONITOR_ARRAY_LENGTH (cpu_usage);
-  cpu_load_len = 12;
 
   gst_thread_monitor_compute(thread_monitor);
 
   // for (cpu_id = 0; cpu_id < cpu_load_len; ++cpu_id) {
   //   gst_tracer_record_log (tr_threadmonitor, cpu_id, cpu_load[cpu_id]);
   // }
-  gst_tracer_record_log(tr_threadmonitor, 1, 0.5);
-  do_print_threadmonitor_event(THREADMONITOR_EVENT_ID, cpu_load_len, cpu_load);
+  gst_tracer_record_log(tr_threadmonitor,"this is the thread name" ,1, 0.5);
+  do_print_threadmonitor_event(THREADMONITOR_EVENT_ID);
 
   return TRUE;
 }
