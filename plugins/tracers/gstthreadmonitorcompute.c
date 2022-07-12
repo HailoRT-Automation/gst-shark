@@ -56,12 +56,6 @@ void gst_thread_monitor_compute(GstTracerRecord *tr_threadmonitor, GstThreadMoni
   char *line = NULL;
   char *columns = NULL;
   ssize_t read;
-
-  // char path[4096];
-  // char *path_stripped;
-
-  // char output_top[4096];
-  // char *output_top_stripped;
   char *stripped_line;
 
   // char columns[4096];
@@ -89,21 +83,6 @@ void gst_thread_monitor_compute(GstTracerRecord *tr_threadmonitor, GstThreadMoni
       token = strtok(NULL, " ");
     }
   }
-  // while (fgets(path, PATH_MAX, fp) != NULL)
-  // {
-  //   // printf("path: %s\n", path);
-  //   path_stripped = g_strstrip(path);
-  //   // printf("stripped:%s\n", path_stripped);
-  //   strcpy(columns, path_stripped);
-  //   // get number of words in path
-  //   token = strtok(path_stripped, " ");
-  //   while (token != NULL)
-  //   {
-  //     num_columns++;
-  //     token = strtok(NULL, " ");
-  //   }
-  // }
-
   tokens = g_strsplit(columns, " ", num_columns);
 
   thread_name_loc = -1;
@@ -124,11 +103,6 @@ void gst_thread_monitor_compute(GstTracerRecord *tr_threadmonitor, GstThreadMoni
       thread_memory_usage_loc = i;
     }
   }
-  // print all loc
-  //  printf("thread_name_loc: %d\n", thread_name_loc);
-  //  printf("thread_cpu_usage_loc: %d\n", thread_cpu_usage_loc);
-  //  printf("thread_memory_usage_loc: %d\n", thread_memory_usage_loc);
-
   free(columns);
   pclose(fp);
   g_free(colums_command);
@@ -143,15 +117,16 @@ void gst_thread_monitor_compute(GstTracerRecord *tr_threadmonitor, GstThreadMoni
   }
   // printf("*************PRINTING RECORDS******************\n");
   counter = 0;
-  // line = NULL;
-  // while (fgets(output_top, 200, fp) != NULL)
+
+
+  printf("PID: %d\n", getpid());
   while ((read = getline(&line, &len, fp)) != -1)
   {
     // print read
     // printf("Retrieved line of length %zu:\n", read);
     counter++;
     stripped_line = g_strstrip(line);
-    // printf("stripped_line:%s\n", stripped_line);
+    printf("stripped_line:%s\n", stripped_line);
     tokens = g_strsplit(stripped_line, " ", num_columns);
     *thread_name = tokens[thread_name_loc];
     *thread_cpu_usage = tokens[thread_cpu_usage_loc];
@@ -161,9 +136,10 @@ void gst_thread_monitor_compute(GstTracerRecord *tr_threadmonitor, GstThreadMoni
     *thread_name = NULL;
     *thread_cpu_usage = NULL;
     *thread_memory_usage = NULL;
+    line=NULL;
   }
   // print counter
-  // printf("COUNTER:%d\n", counter);
+  printf("COUNTER:%d\n", counter);
   pclose(fp);
   g_free(command);
 }
