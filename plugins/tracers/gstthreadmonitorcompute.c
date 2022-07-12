@@ -111,7 +111,7 @@ void gst_thread_monitor_compute(GstThreadMonitor *thread_monitor, gchar **thread
   printf("thread_cpu_usage_loc: %d\n", thread_cpu_usage_loc);
   printf("thread_memory_usage_loc: %d\n", thread_memory_usage_loc);
 
-  command = g_strdup_printf("top -H -p %d -n 1 | sed -n '/PID/,/^$/p' | tail -n +2 | tr -s ' ' | grep src", getpid());
+  command = g_strdup_printf("top -H -p %d -n 1 | sed -n '/PID/,/^$/p' | tail -n +2 | tr -s ' ' | grep src | sed -e 's/\x1b\[[0-9;]*m//g'", getpid());
 
   fp = popen(command, "r");
   if (fp == NULL)
