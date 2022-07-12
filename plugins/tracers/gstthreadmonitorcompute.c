@@ -61,6 +61,7 @@ void gst_thread_monitor_compute(GstTracerRecord *tr_threadmonitor, GstThreadMoni
 
   // char output_top[4096];
   // char *output_top_stripped;
+  char* stripped_line;
 
   char columns[4096];
   gint num_columns = 0;
@@ -134,18 +135,18 @@ void gst_thread_monitor_compute(GstTracerRecord *tr_threadmonitor, GstThreadMoni
     //print read
     printf("Retrieved line of length %zu:\n", read);
     counter++;
-    // output_top_stripped = g_strstrip(output_top);
-    // printf("output_top_stripped:%s\n", output_top_stripped);
-    // tokens = g_strsplit(output_top_stripped, " ", num_columns);
-    // *thread_name = tokens[thread_name_loc];
-    // *thread_cpu_usage = tokens[thread_cpu_usage_loc];
-    // *thread_memory_usage = tokens[thread_memory_usage_loc];
+    stripped_line = g_strstrip(line);
+    printf("stripped_line:%s\n", stripped_line);
+    tokens = g_strsplit(stripped_line, " ", num_columns);
+    *thread_name = tokens[thread_name_loc];
+    *thread_cpu_usage = tokens[thread_cpu_usage_loc];
+    *thread_memory_usage = tokens[thread_memory_usage_loc];
 
     // // printf("THREAD NAME: %s\n", *thread_name);
-    // gst_tracer_record_log(tr_threadmonitor, *thread_name, atof(*thread_cpu_usage), atof(*thread_memory_usage));
-    // *thread_name = NULL;
-    // *thread_cpu_usage = NULL;
-    // *thread_memory_usage = NULL;
+    gst_tracer_record_log(tr_threadmonitor, *thread_name, atof(*thread_cpu_usage), atof(*thread_memory_usage));
+    *thread_name = NULL;
+    *thread_cpu_usage = NULL;
+    *thread_memory_usage = NULL;
   }
   // print counter
   printf("COUNTER:%d\n", counter);
