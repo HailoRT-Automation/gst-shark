@@ -72,16 +72,18 @@ void gst_thread_monitor_compute(GstThreadMonitor *thread_monitor, gchar **thread
   {
     printf("path: %s\n", path);
     path_stripped = g_strstrip(path);
-    printf("stripped: %s\n", path_stripped);
-    strcpy(columns, path);
+    printf("stripped:%s\n", path_stripped);
+    strcpy(columns, path_stripped);
     // get number of words in path
-    token = strtok(path, " ");
+    token = strtok(path_stripped, " ");
     while (token != NULL)
     {
       num_columns++;
       token = strtok(NULL, " ");
     }
   }
+  //print num columns
+  printf("num_columns: %d\n", num_columns);
   tokens = g_strsplit(columns, " ", num_columns);
 
   thread_name_loc = -1;
@@ -121,14 +123,15 @@ void gst_thread_monitor_compute(GstThreadMonitor *thread_monitor, gchar **thread
   }
   while (fgets(path, PATH_MAX, fp) != NULL)
   {
-    tokens = g_strsplit(path, " ", num_columns);
+    path_stripped = g_strstrip(path);
+    tokens = g_strsplit(path_stripped, " ", num_columns);
     for (int i = 0; i < num_columns; i++)
     {
       printf("token%i: %s\n", i, tokens[i]);
     }
-    *thread_name = tokens[thread_name_loc - 1];
-    *thread_cpu_usage = tokens[thread_cpu_usage_loc - 1];
-    *thread_memory_usage = tokens[thread_memory_usage_loc - 1];
+    *thread_name = tokens[thread_name_loc];
+    *thread_cpu_usage = tokens[thread_cpu_usage_loc];
+    *thread_memory_usage = tokens[thread_memory_usage_loc];
     // convert thread_cpu_usage to float
     // convert thread_memory_usage to float
     printf("THREAD NAME: %s THREAD CPU USAGE: %s THREAD MEMORY USAGE: %s\n", *thread_name, *thread_cpu_usage, *thread_memory_usage);
