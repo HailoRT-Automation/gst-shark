@@ -142,7 +142,6 @@ void gst_thread_monitor_compute(GstTracerRecord *tr_threadmonitor, GstThreadMoni
     *thread_cpu_usage = tokens[thread_cpu_usage_loc];
     *thread_memory_usage = tokens[thread_memory_usage_loc];
 
-    // // printf("THREAD NAME: %s\n", *thread_name);
     gst_tracer_record_log(tr_threadmonitor, *thread_name, atof(*thread_cpu_usage), atof(*thread_memory_usage));
     *thread_name = NULL;
     *thread_cpu_usage = NULL;
