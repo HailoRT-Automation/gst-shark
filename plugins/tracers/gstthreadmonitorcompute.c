@@ -107,11 +107,6 @@ void gst_thread_monitor_compute(GstTracerRecord *tr_threadmonitor, GstThreadMoni
   pclose(fp);
   g_free(colums_command);
 
-  // print the locations
-  // printf("thread_name_loc: %d\n", thread_name_loc);
-  // printf("thread_cpu_usage_loc: %d\n", thread_cpu_usage_loc);
-  // printf("thread_memory_usage_loc: %d\n", thread_memory_usage_loc);
-
   command = g_strdup_printf("top -H -p %d -n 1 | sed -n '/PID/,/^$/p' | tail -n +2 | tr -s ' ' | grep src | sed -e 's/\x1b\[[0-9;]*m//g'", getpid());
 
   fp = popen(command, "r");
@@ -123,25 +118,18 @@ void gst_thread_monitor_compute(GstTracerRecord *tr_threadmonitor, GstThreadMoni
   while (fgets(path, PATH_MAX, fp) != NULL)
   {
     path_stripped = g_strstrip(path);
+    printf("path stripped: %s",path_stripped);
     tokens = g_strsplit(path_stripped, " ", num_columns);
-    // for (int i = 0; i < num_columns; i++)
-    // {
-    //   printf("token%i: %s\n", i, tokens[i]);
-    // }
     *thread_name = tokens[thread_name_loc];
     *thread_cpu_usage = tokens[thread_cpu_usage_loc];
     *thread_memory_usage = tokens[thread_memory_usage_loc];
 
-    //print thread_name
-    printf("THREAD NAME: %s\n", *thread_name);
+    // printf("THREAD NAME: %s\n", *thread_name);
 
-    gst_tracer_record_log(tr_threadmonitor, *thread_name, atof(*thread_cpu_usage), atof(*thread_memory_usage));
+    // gst_tracer_record_log(tr_threadmonitor, *thread_name, atof(*thread_cpu_usage), atof(*thread_memory_usage));
     *thread_name = NULL;
     *thread_cpu_usage = NULL;
     *thread_memory_usage = NULL;
-    // convert thread_cpu_usage to float
-    // convert thread_memory_usage to float
-    // printf("THREAD NAME: %s THREAD CPU USAGE: %s THREAD MEMORY USAGE: %s\n", *thread_name, *thread_cpu_usage, *thread_memory_usage);
   }
   pclose(fp);
   g_free(command);
