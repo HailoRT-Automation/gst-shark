@@ -39,8 +39,8 @@ typedef struct
 
 void gst_thread_monitor_init (GstThreadMonitor * cpu_usage);
 
-void gst_thread_monitor_compute(GstThreadMonitor *thread_monitor, gchar *thread_name, gchar *thread_cpu_usage,
-                                gchar *thread_memory_usage);
+void gst_thread_monitor_compute(GstThreadMonitor *thread_monitor, gchar **thread_name, gchar **thread_cpu_usage,
+                                gchar **thread_memory_usage);
 
 G_END_DECLS
 #endif //__GST_THREAD_MONITOR_COMPUTE_H__
