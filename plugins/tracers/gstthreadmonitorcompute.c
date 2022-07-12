@@ -121,7 +121,7 @@ void gst_thread_monitor_compute(GstTracerRecord *tr_threadmonitor, GstThreadMoni
   }
   printf("*************PRINTING RECORDS******************\n");
   counter = 0;
-  while (fgets(output_top, PATH_MAX, fp) != NULL)
+  while (fgets(output_top, 200, fp) != NULL)
   {
     counter++;
     output_top_stripped = g_strstrip(output_top);
