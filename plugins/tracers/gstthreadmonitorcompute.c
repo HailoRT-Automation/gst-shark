@@ -47,7 +47,6 @@ void gst_thread_monitor_compute(GstThreadMonitor *thread_monitor, gchar **thread
   gchar *command;
   gchar *colums_command;
   char **tokens;
-  // char **columns;
   gchar *token;
   gint thread_name_loc;
   gint thread_cpu_usage_loc;
@@ -134,7 +133,7 @@ void gst_thread_monitor_compute(GstThreadMonitor *thread_monitor, gchar **thread
     *thread_memory_usage = tokens[thread_memory_usage_loc];
     // convert thread_cpu_usage to float
     // convert thread_memory_usage to float
-    printf("THREAD NAME: %s THREAD CPU USAGE: %s THREAD MEMORY USAGE: %s\n", *thread_name, *thread_cpu_usage, *thread_memory_usage);
+    // printf("THREAD NAME: %s THREAD CPU USAGE: %s THREAD MEMORY USAGE: %s\n", *thread_name, *thread_cpu_usage, *thread_memory_usage);
   }
   pclose(fp);
   g_free(command);

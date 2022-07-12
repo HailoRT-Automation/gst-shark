@@ -105,7 +105,8 @@ thread_monitor_thread_func(GstPeriodicTracer *tracer)
   self = GST_THREAD_MONITOR_TRACER(tracer);
   thread_monitor = &self->thread_monitor;
   gst_thread_monitor_compute(thread_monitor, &thread_name, &thread_cpu_usage, &thread_memory_usage);
-  // gst_tracer_record_log(tr_threadmonitor, thread_name, thread_cpu_usage, thread_memory_usage);
+
+  gst_tracer_record_log(tr_threadmonitor, thread_name, atof(thread_cpu_usage), atof(thread_memory_usage));
   do_print_threadmonitor_event(THREADMONITOR_EVENT_ID);
 
   return TRUE;
