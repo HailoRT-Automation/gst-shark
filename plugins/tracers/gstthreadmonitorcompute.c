@@ -40,7 +40,7 @@ void gst_thread_monitor_init(GstThreadMonitor *thread_monitor)
   memset(thread_monitor, 0, sizeof(GstThreadMonitor));
 }
 
-void gst_thread_monitor_compute(GstThreadMonitor *thread_monitor, gchar **thread_name, gchar **thread_cpu_usage,
+void gst_thread_monitor_compute(GstTracerRecord *tr_threadmonitor,GstThreadMonitor *thread_monitor, gchar **thread_name, gchar **thread_cpu_usage,
                                 gchar **thread_memory_usage)
 {
   FILE *fp;
@@ -131,6 +131,7 @@ void gst_thread_monitor_compute(GstThreadMonitor *thread_monitor, gchar **thread
     *thread_name = tokens[thread_name_loc];
     *thread_cpu_usage = tokens[thread_cpu_usage_loc];
     *thread_memory_usage = tokens[thread_memory_usage_loc];
+    gst_tracer_record_log(tr_threadmonitor, thread_name, atof(*thread_cpu_usage), atof(*thread_memory_usage));
     // convert thread_cpu_usage to float
     // convert thread_memory_usage to float
     // printf("THREAD NAME: %s THREAD CPU USAGE: %s THREAD MEMORY USAGE: %s\n", *thread_name, *thread_cpu_usage, *thread_memory_usage);
