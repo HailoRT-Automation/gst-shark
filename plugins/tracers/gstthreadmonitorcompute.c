@@ -44,7 +44,7 @@ void gst_thread_monitor_compute(GstThreadMonitor *thread_monitor, gchar *thread_
                                 gchar *thread_memory_usage)
 {
   FILE *fp;
-  // gchar *command;
+  gchar *command;
   gchar *colums_command;
   char **tokens;
   // char **columns;
@@ -54,11 +54,11 @@ void gst_thread_monitor_compute(GstThreadMonitor *thread_monitor, gchar *thread_
   gint thread_memory_usage_loc;
 
   char path[4096];
+  char columns[4096];
   gint num_columns = 0;
   g_return_if_fail(thread_monitor);
 
   colums_command = g_strdup_printf("top -H -p %d -n 1 | grep PID | tr -s ' '", getpid());
-  g_strstrip(colums_command);
   fp = popen(colums_command, "r");
 
   if (fp == NULL)
@@ -68,6 +68,8 @@ void gst_thread_monitor_compute(GstThreadMonitor *thread_monitor, gchar *thread_
   }
   while (fgets(path, PATH_MAX, fp) != NULL)
   {
+    printf("path: %s\n", path);
+    strcpy(columns, path);
     // get number of words in path
     token = strtok(path, " ");
     while (token != NULL)
@@ -76,8 +78,8 @@ void gst_thread_monitor_compute(GstThreadMonitor *thread_monitor, gchar *thread_
       token = strtok(NULL, " ");
     }
   }
-  tokens = g_strsplit(path, " ",num_columns);
-  
+  tokens = g_strsplit(columns, " ", num_columns);
+
   thread_name_loc = -1;
   thread_cpu_usage_loc = -1;
   thread_memory_usage_loc = -1;
@@ -96,33 +98,35 @@ void gst_thread_monitor_compute(GstThreadMonitor *thread_monitor, gchar *thread_
       thread_memory_usage_loc = i;
     }
   }
-  
+
   pclose(fp);
   g_free(colums_command);
 
-  //print the locations
+  // print the locations
   printf("thread_name_loc: %d\n", thread_name_loc);
   printf("thread_cpu_usage_loc: %d\n", thread_cpu_usage_loc);
   printf("thread_memory_usage_loc: %d\n", thread_memory_usage_loc);
 
+  command = g_strdup_printf("top -H -p %d -n 1 | sed -n '/PID/,/^$/p' | tail -n +2 | tr -s ' ' | grep src", getpid());
 
-
-  // command = g_strdup_printf("top -H -p %d -n 1 | sed -n '/PID/,/^$/p' | tail -n +2 | tr -s ' ' | grep src | awk '{print $12,$9,$10}'", getpid());
-
-  // fp = popen(command, "r");
-  // if (fp == NULL)
-  // {
-  //   GST_WARNING("Failed to run command");
-  //   return;
-  // }
-  // while (fgets(path, PATH_MAX, fp) != NULL)
-  // {
-  //   tokens = g_strsplit(path, " ", 3);
-  //   thread_name = tokens[0];
-  //   thread_cpu_usage = tokens[1];
-  //   thread_memory_usage = tokens[2];
-  //   printf("THREAD NAME: %s\n THREAD CPU USAGE: %s\n THREAD MEMORY USAGE: %s\n", thread_name, thread_cpu_usage, thread_memory_usage);
-  // }
+  fp = popen(command, "r");
+  if (fp == NULL)
+  {
+    GST_WARNING("Failed to run command");
+    return;
+  }
+  while (fgets(path, PATH_MAX, fp) != NULL)
+  {
+    tokens = g_strsplit(path, " ", num_columns);
+    // for(int i = 0; i < num_columns; i++)
+    // {
+    //   printf("token%i: %s\n", i,tokens[i]);
+    // }
+    thread_name = tokens[thread_name_loc-1];
+    thread_cpu_usage = tokens[thread_cpu_usage_loc-1];
+    thread_memory_usage = tokens[thread_memory_usage_loc-1];
+    printf("THREAD NAME: %s\n THREAD CPU USAGE: %s\n THREAD MEMORY USAGE: %s\n", thread_name, thread_cpu_usage, thread_memory_usage);
+  }
   pclose(fp);
-  // g_free(command);
+  g_free(command);
 }
