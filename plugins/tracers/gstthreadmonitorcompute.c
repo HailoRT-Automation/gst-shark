@@ -124,10 +124,10 @@ void gst_thread_monitor_compute(GstThreadMonitor *thread_monitor, gchar **thread
   {
     path_stripped = g_strstrip(path);
     tokens = g_strsplit(path_stripped, " ", num_columns);
-    for (int i = 0; i < num_columns; i++)
-    {
-      printf("token%i: %s\n", i, tokens[i]);
-    }
+    // for (int i = 0; i < num_columns; i++)
+    // {
+    //   printf("token%i: %s\n", i, tokens[i]);
+    // }
     *thread_name = tokens[thread_name_loc];
     *thread_cpu_usage = tokens[thread_cpu_usage_loc];
     *thread_memory_usage = tokens[thread_memory_usage_loc];
