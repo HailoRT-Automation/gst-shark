@@ -79,37 +79,6 @@ void gst_cpu_usage_compute(GstCPUUsage *cpu_usage)
   gfloat den_value;
   gboolean cpu_array_sel;
   gint ret;
-  // int i;
-  // g_return_if_fail (cpu_usage);
-
-  gchar *thread_name;
-  gchar *thread_cpu_usage;
-  gchar *thread_memory_usage;
-
-  FILE *fp;
-  gchar *command;
-  // char *token;
-  char **tokens;
-
-  // gint ret;
-
-  char path[4096];
-  g_return_if_fail(cpu_usage);
-
-  command = g_strdup_printf("top -H -p %d -n 1 | sed -n '/PID/,/^$/p' | tail -n +2 | tr -s ' ' | grep src | awk '{print $12,$9,$10}'", getpid());
-
-  fp = popen(command, "r");
-  while (fgets(path, PATH_MAX, fp) != NULL)
-  {
-    // print line
-    // printf("%s\n", path);
-
-    tokens = g_strsplit(path, " ", 3);
-    thread_name = tokens[0];
-    thread_cpu_usage =tokens[1];
-    thread_memory_usage = tokens[2];
-    printf("THREAD NAME: %s\n THREAD CPU USAGE: %s\n THREAD MEMORY USAGE: %s\n", thread_name, thread_cpu_usage, thread_memory_usage);
-  }
 
   user = cpu_usage->user;
   user_aux = cpu_usage->user_aux;
