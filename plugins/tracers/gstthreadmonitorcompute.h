@@ -32,14 +32,14 @@ G_BEGIN_DECLS
 // #define THREAD_MONITOR_ARRAY_LENGTH(cpuusage_struct)  (cpuusage_struct->cpu_num)
 typedef struct
 {
-  /* CPU core number */
-  gfloat thread_cpu_usage;
-  gfloat thread_memory_usage;
+  guint thread_name_loc;
+  guint thread_cpu_usage_loc;
+  guint thread_memory_usage_loc;
 } GstThreadMonitor;
 
-void gst_thread_monitor_init (GstThreadMonitor * cpu_usage);
+void gst_thread_monitor_init(GstThreadMonitor *cpu_usage);
 
-void gst_thread_monitor_compute(GstTracerRecord *tr_threadmonitor,GstThreadMonitor *thread_monitor, gchar **thread_name, gchar **thread_cpu_usage,
+void gst_thread_monitor_compute(GstTracerRecord *tr_threadmonitor, GstThreadMonitor *thread_monitor, gchar **thread_name, gchar **thread_cpu_usage,
                                 gchar **thread_memory_usage);
 
 G_END_DECLS
