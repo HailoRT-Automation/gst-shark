@@ -47,17 +47,17 @@ void gst_thread_monitor_compute(GstTracerRecord *tr_threadmonitor, GstThreadMoni
   gchar *command;
   char **tokens;
 
-  gint thread_name_loc;
-  gint thread_cpu_usage_loc;
-  gint thread_memory_usage_loc;
+  // gint thread_name_loc;
+  // gint thread_cpu_usage_loc;
+  // gint thread_memory_usage_loc;
   int counter;
   size_t len = 0;
   char *line = NULL;
   ssize_t read;
-  char *stripped_line;
+  // int k;
 
   // char columns[4096];
-  gint num_columns = 0;
+  // gint num_columns = 0;
 
   // char *columns = NULL;
   // gchar *token;
@@ -114,12 +114,13 @@ void gst_thread_monitor_compute(GstTracerRecord *tr_threadmonitor, GstThreadMoni
   // printf("thread_cpu_usage_loc: %d\n", thread_cpu_usage_loc);
   // printf("thread_memory_usage_loc: %d\n", thread_memory_usage_loc);
 
-  thread_name_loc = 11;
-  thread_cpu_usage_loc = 8;
-  thread_memory_usage_loc = 9;
+  // thread_name_loc = 11;
+  // thread_cpu_usage_loc = 8;
+  // thread_memory_usage_loc = 9;
 
-  command = g_strdup_printf("top -H -p %d -n 1 | sed -n '/PID/,/^$/p' | tail -n +2 | tr -s ' ' | grep src | sed -e 's/\x1b\[[0-9;]*m//g'", getpid());
-
+  // command = g_strdup_printf("top -H -p %d -n 1 | sed -n '/PID/,/^$/p' | tail -n +2 | tr -s ' ' | grep src | sed -e 's/\x1b\[[0-9;]*m//g'", getpid());
+  command = g_strdup_printf("top -H -b -p %d -n 1 | sed -n '/PID/,/^$/p' | tail -n +2 | tr -s ' ' | grep src | sed -e 's/\x1b\[[0-9;]*m//g' | awk '{print $12,$9,$10}'", getpid());
+  // command = g_strdup_printf("cat /local/workspace/tappas/top_output_3");
   fp = popen(command, "r");
   if (fp == NULL)
   {
@@ -132,15 +133,17 @@ void gst_thread_monitor_compute(GstTracerRecord *tr_threadmonitor, GstThreadMoni
   // printf("PID: %d\n", getpid());
   while ((read = getline(&line, &len, fp)) != -1)
   {
-    // print read
-    // printf("Retrieved line of length %zu:\n", read);
+    // line[0]=' ';
+    line = line + 3;
+    printf("***PID %d\n",getpid());
+    printf("***PRINTING ASCI\n");
+
+
     counter++;
-    stripped_line = g_strstrip(line);
-    // printf("stripped_line:%s\n", stripped_line);
-    tokens = g_strsplit(stripped_line, " ", num_columns);
-    *thread_name = tokens[thread_name_loc];
-    *thread_cpu_usage = tokens[thread_cpu_usage_loc];
-    *thread_memory_usage = tokens[thread_memory_usage_loc];
+    tokens = g_strsplit(line, " ", 3);
+    *thread_name = tokens[0];
+    *thread_cpu_usage = tokens[1];
+    *thread_memory_usage = tokens[2];
 
     gst_tracer_record_log(tr_threadmonitor, *thread_name, atof(*thread_cpu_usage), atof(*thread_memory_usage));
     *thread_name = NULL;
@@ -152,7 +155,7 @@ void gst_thread_monitor_compute(GstTracerRecord *tr_threadmonitor, GstThreadMoni
 
   // printf("Retrieved line of length %zu:\n", read);
   // print counter
-  // printf("COUNTER:%d\n", counter);
+  printf("COUNTER:%d\n", counter);
   pclose(fp);
   g_free(command);
 }
