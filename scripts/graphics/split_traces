@@ -1,12 +1,17 @@
 #!/bin/bash
 
+traces_dir=$1
+
 #get current directory
 current_dir=`pwd`
+
+#save first argument to split_traces_dir
+split_traces_dir=$current_dir/$traces_dir
 
 # split_traces_dir=$current_dir/splitted_traces
 
 #add timestamp to split_traces_dir
-split_traces_dir=$current_dir/traces_`date +%Y%m%d%H%M%S`
+# split_traces_dir=$current_dir/traces_`date +%Y%m%d%H%M%S`
 
 mkdir -p $split_traces_dir
 
