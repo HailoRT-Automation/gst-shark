@@ -107,10 +107,10 @@ do_queue_level(GstTracer *self, guint64 ts, GstPad *pad, GstBuffer *buffer)
   const gchar *element_name;
 
   // // yuval check
-  GstVideoInfo *info;
-  GstMapInfo map;
+  // GstVideoInfo *info;
+  // GstMapInfo map;
 
-  GstCaps *caps;
+  // GstCaps *caps;
   // cv::Mat mat;
   // caps = gst_pad_get_current_caps(pad);
 
@@ -126,11 +126,11 @@ do_queue_level(GstTracer *self, guint64 ts, GstPad *pad, GstBuffer *buffer)
   {
     goto out;
   }
-  caps = gst_pad_get_current_caps(pad);
+  // caps = gst_pad_get_current_caps(pad);
 
-  info = gst_video_info_new();
-  gst_buffer_map(buffer, &map, GST_MAP_READWRITE);
-  gst_video_info_from_caps(info, caps);
+  // info = gst_video_info_new();
+  // gst_buffer_map(buffer, &map, GST_MAP_READWRITE);
+  // gst_video_info_from_caps(info, caps);
   // printf("height: %d\n", info->height);
   //end of yuval check
 

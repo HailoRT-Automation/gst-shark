@@ -115,6 +115,8 @@ parser_queuelevel=("queuelevel")
 rm -f tracer.pdf
 
 # Create readable file
+echo "CTF DIR:"
+echo $CTF_DIR
 babeltrace $CTF_DIR > datastream.log
 
 # if a filter was provided, apply the filter

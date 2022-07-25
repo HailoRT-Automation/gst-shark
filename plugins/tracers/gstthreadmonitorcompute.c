@@ -143,7 +143,6 @@ void gst_thread_monitor_compute(GstTracerRecord *tr_threadmonitor, GstThreadMoni
     len = 0;
   }
 
-  printf("COUNTER:%d\n", counter);
   pclose(fp);
   g_free(command);
 }
