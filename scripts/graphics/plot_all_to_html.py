@@ -27,14 +27,14 @@ def plot_queuelevel(queuelevel_log):
 
 def plot_thread_cpuusage(thread_cpuusage_log):
     df = pd.read_csv(thread_cpuusage_log, sep=' ', header=None)
-    df = df.iloc[:, [0, 19, 21]]
+    df = df.iloc[:, [0, 19, 20]]
     # rename columns
     df.columns = ['s_time', 'thread_name', 's_cpu_usage']
 
     df['thread_name'] = df['thread_name'].apply(
         lambda s: s.replace("name=(string)", ""))
     df['s_cpu_usage'] = df['s_cpu_usage'].apply(lambda s: s.replace(
-        "usage=(double)", "")).apply(lambda s: s.replace(",", ""))
+        "cpu_usage=(double)", "")).apply(lambda s: s.replace(",", ""))
     df['time'] = pd.to_datetime(df['s_time'])
     df['cpu_usage'] = pd.to_numeric(df['s_cpu_usage'])
     fig = px.line(df, x="time", y="cpu_usage", color="thread_name")
