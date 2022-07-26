@@ -26,6 +26,7 @@
 #include <glib/gstdio.h>
 #include "gstthreadmonitor.h"
 #include "gstthreadmonitorcompute.h"
+#include "gstctf.h"
 
 #include <unistd.h>
 #include <string.h>
@@ -98,10 +99,10 @@ void gst_thread_monitor_init(GstThreadMonitor *thread_monitor)
     GST_WARNING("Failed to find columns");
     return;
   }
-  //save columns locations and add 1 to each location because it it will be in use in awk, and awk starts at 1
-  thread_monitor->thread_name_loc = thread_name_loc+1; 
-  thread_monitor->thread_cpu_usage_loc = thread_cpu_usage_loc+1;
-  thread_monitor->thread_memory_usage_loc = thread_memory_usage_loc+1;
+  // save columns locations and add 1 to each location because it it will be in use in awk, and awk starts at 1
+  thread_monitor->thread_name_loc = thread_name_loc + 1;
+  thread_monitor->thread_cpu_usage_loc = thread_cpu_usage_loc + 1;
+  thread_monitor->thread_memory_usage_loc = thread_memory_usage_loc + 1;
   free(columns);
   pclose(fp);
   g_free(colums_command);
@@ -117,7 +118,7 @@ void gst_thread_monitor_compute(GstTracerRecord *tr_threadmonitor, GstThreadMoni
   size_t len = 0;
   char *line = NULL;
   ssize_t read;
- 
+
   command = g_strdup_printf("top -H -b -p %d -n 1 | sed -n '/PID/,/^$/p' | tail -n +2 | tr -s ' ' | grep src | sed -e 's/\x1b\[[0-9;]*m//g' | awk '{print $%d,$%d,$%d}'", getpid(), thread_monitor->thread_name_loc, thread_monitor->thread_cpu_usage_loc, thread_monitor->thread_memory_usage_loc);
   fp = popen(command, "r");
   if (fp == NULL)
