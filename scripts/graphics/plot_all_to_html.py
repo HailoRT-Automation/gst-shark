@@ -200,6 +200,6 @@ def main():
             f.write(plot_framerate(
                 traces_dir + '/framerate.log').to_html(full_html=False, include_plotlyjs='cdn'))
 
-
+    print(f"{traces_dir}/graphs.html created")
 if __name__ == "__main__":
     main()
