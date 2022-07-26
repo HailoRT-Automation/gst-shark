@@ -284,11 +284,11 @@ DUMPBIN =
 ECHO_C = 
 ECHO_N = -n
 ECHO_T = 
-EGREP = /bin/grep -E
+EGREP = //bin/grep -E
 ERROR_CFLAGS =  -Werror
 EXEEXT = 
 FFLAGS = 
-FGREP = /bin/grep -F
+FGREP = //bin/grep -F
 GCOV = 
 GCOV_CFLAGS = 
 GCOV_LIBS = 
@@ -302,7 +302,7 @@ GLIB_LIBS = -lgobject-2.0 -lgmodule-2.0 -pthread -lglib-2.0
 GLIB_MKENUMS = glib-mkenums
 GLIB_PREFIX = /usr
 GLIB_REQ = 2.44.0
-GREP = /bin/grep
+GREP = //bin/grep
 GSTREAMER_CFLAGS = -pthread -I/usr/include/gstreamer-1.0 -I/usr/include/glib-2.0 -I/usr/lib/x86_64-linux-gnu/glib-2.0/include
 GSTREAMER_LIBS = -lgstreamer-1.0 -lgobject-2.0 -lglib-2.0
 GST_AGE = 705
@@ -313,7 +313,7 @@ GST_CHECK_CFLAGS = -pthread -I/usr/include/gstreamer-1.0 -I/usr/include/glib-2.0
 GST_CHECK_LIBS = -lgstcheck-1.0 -lm -lgstreamer-1.0 -lgobject-2.0 -lglib-2.0
 GST_CURRENT = 705
 GST_LEVEL_DEFAULT = GST_LEVEL_ERROR
-GST_LIBS = -lgstvideo-1.0 -lgstreamer-1.0 -lgobject-2.0 -lglib-2.0
+GST_LIBS = -lgstreamer-1.0 -lgobject-2.0 -lglib-2.0
 GST_LIBVERSION = 705:0:705
 GST_LT_LDFLAGS =  -version-info 705:0:705
 GST_PKG_CONFIG_PATH = $(top_builddir)/pkgconfig
@@ -385,7 +385,7 @@ LT_SYS_LIBRARY_PATH =
 MAINT = 
 MAKEINFO = ${SHELL} /local/workspace/tappas/sources/gst-shark/missing makeinfo
 MANIFEST_TOOL = :
-MKDIR_P = /bin/mkdir -p
+MKDIR_P = //bin/mkdir -p
 NM = /usr/bin/nm -B
 NMEDIT = 
 OBJDUMP = objdump
@@ -403,7 +403,7 @@ PACKAGE_VERSION_MAJOR = 0
 PACKAGE_VERSION_MICRO = 5
 PACKAGE_VERSION_MINOR = 7
 PACKAGE_VERSION_NANO = 1
-PACKAGE_VERSION_RELEASE = 0.20220630.163114
+PACKAGE_VERSION_RELEASE = 0.20220725.142959
 PATH_SEPARATOR = :
 PKG_CONFIG = /usr/bin/pkg-config
 PLUGINDIR = /usr/lib/x86_64-linux-gnu/gstreamer-1.0
@@ -415,7 +415,7 @@ PYTHON_PLATFORM = linux2
 PYTHON_PREFIX = ${prefix}
 PYTHON_VERSION = 2.7
 RANLIB = ranlib
-SED = /bin/sed
+SED = //bin/sed
 SET_MAKE = 
 SHELL = /bin/bash
 STRIP = strip
@@ -514,7 +514,7 @@ libgstsharktracers_la_SOURCES = \
 	gstsharktracer.c \
 	gstgraphic.c \
 	gstcpuusage.c \
-	gsttreadmonitor.c \
+	gstthreadmonitor.c \
 	gstproctime.c \
 	gstinterlatency.c \
 	gstscheduletime.c \
@@ -678,15 +678,14 @@ distclean-compile:
 	-rm -f *.tab.c
 
 include ./$(DEPDIR)/libgstshark_la-gstcpuusagecompute.Plo
-# include ./$(DEPDIR)/libgstshark_la-gstthreadmonitorcompute.Plo
 include ./$(DEPDIR)/libgstshark_la-gstctf.Plo
 include ./$(DEPDIR)/libgstshark_la-gstdot.Plo
 include ./$(DEPDIR)/libgstshark_la-gstparser.Plo
 include ./$(DEPDIR)/libgstshark_la-gstproctimecompute.Plo
+include ./$(DEPDIR)/libgstshark_la-gstthreadmonitorcompute.Plo
 include ./$(DEPDIR)/libgstsharktracers_la-gstbitrate.Plo
 include ./$(DEPDIR)/libgstsharktracers_la-gstbuffer.Plo
 include ./$(DEPDIR)/libgstsharktracers_la-gstcpuusage.Plo
-# include ./$(DEPDIR)/libgstsharktracers_la-gstthreadmonitor.Plo
 include ./$(DEPDIR)/libgstsharktracers_la-gstframerate.Plo
 include ./$(DEPDIR)/libgstsharktracers_la-gstgraphic.Plo
 include ./$(DEPDIR)/libgstsharktracers_la-gstinterlatency.Plo
@@ -696,6 +695,7 @@ include ./$(DEPDIR)/libgstsharktracers_la-gstproctime.Plo
 include ./$(DEPDIR)/libgstsharktracers_la-gstqueuelevel.Plo
 include ./$(DEPDIR)/libgstsharktracers_la-gstscheduletime.Plo
 include ./$(DEPDIR)/libgstsharktracers_la-gstsharktracer.Plo
+include ./$(DEPDIR)/libgstsharktracers_la-gstthreadmonitor.Plo
 
 .c.o:
 	$(AM_V_CC)depbase=`echo $@ | sed 's|[^/]*$$|$(DEPDIR)/&|;s|\.o$$||'`;\
@@ -734,7 +734,6 @@ libgstshark_la-gstcpuusagecompute.lo: gstcpuusagecompute.c
 #	$(AM_V_CC)source='gstcpuusagecompute.c' object='libgstshark_la-gstcpuusagecompute.lo' libtool=yes \
 #	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
 #	$(AM_V_CC_no)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libgstshark_la_CFLAGS) $(CFLAGS) -c -o libgstshark_la-gstcpuusagecompute.lo `test -f 'gstcpuusagecompute.c' || echo '$(srcdir)/'`gstcpuusagecompute.c
-
 
 libgstshark_la-gstthreadmonitorcompute.lo: gstthreadmonitorcompute.c
 	$(AM_V_CC)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libgstshark_la_CFLAGS) $(CFLAGS) -MT libgstshark_la-gstthreadmonitorcompute.lo -MD -MP -MF $(DEPDIR)/libgstshark_la-gstthreadmonitorcompute.Tpo -c -o libgstshark_la-gstthreadmonitorcompute.lo `test -f 'gstthreadmonitorcompute.c' || echo '$(srcdir)/'`gstthreadmonitorcompute.c
@@ -793,8 +792,11 @@ libgstsharktracers_la-gstcpuusage.lo: gstcpuusage.c
 #	$(AM_V_CC_no)$(LIBTOOL) $(AM_V_lt) --tag=CC $(libgstsharktracers_la_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libgstsharktracers_la_CFLAGS) $(CFLAGS) -c -o libgstsharktracers_la-gstcpuusage.lo `test -f 'gstcpuusage.c' || echo '$(srcdir)/'`gstcpuusage.c
 
 libgstsharktracers_la-gstthreadmonitor.lo: gstthreadmonitor.c
-	$(AM_V_CC)$(LIBTOOL) $(AM_V_lt) --tag=CC $(libgstsharktracers_la_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libgstsharktracers_la_CFLAGS) $(CFLAGS) -MT libgstsharktracers_la-gstgstthreadmonitor.lo -MD -MP -MF $(DEPDIR)/libgstsharktracers_la-gstthreadmonitor.Tpo -c -o libgstsharktracers_la-gstthreadmonitor.lo `test -f 'gstthreadmonitor.c' || echo '$(srcdir)/'`gstthreadmonitor.c
+	$(AM_V_CC)$(LIBTOOL) $(AM_V_lt) --tag=CC $(libgstsharktracers_la_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libgstsharktracers_la_CFLAGS) $(CFLAGS) -MT libgstsharktracers_la-gstthreadmonitor.lo -MD -MP -MF $(DEPDIR)/libgstsharktracers_la-gstthreadmonitor.Tpo -c -o libgstsharktracers_la-gstthreadmonitor.lo `test -f 'gstthreadmonitor.c' || echo '$(srcdir)/'`gstthreadmonitor.c
 	$(AM_V_at)$(am__mv) $(DEPDIR)/libgstsharktracers_la-gstthreadmonitor.Tpo $(DEPDIR)/libgstsharktracers_la-gstthreadmonitor.Plo
+#	$(AM_V_CC)source='gstthreadmonitor.c' object='libgstsharktracers_la-gstthreadmonitor.lo' libtool=yes \
+#	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
+#	$(AM_V_CC_no)$(LIBTOOL) $(AM_V_lt) --tag=CC $(libgstsharktracers_la_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libgstsharktracers_la_CFLAGS) $(CFLAGS) -c -o libgstsharktracers_la-gstthreadmonitor.lo `test -f 'gstthreadmonitor.c' || echo '$(srcdir)/'`gstthreadmonitor.c
 
 libgstsharktracers_la-gstproctime.lo: gstproctime.c
 	$(AM_V_CC)$(LIBTOOL) $(AM_V_lt) --tag=CC $(libgstsharktracers_la_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libgstsharktracers_la_CFLAGS) $(CFLAGS) -MT libgstsharktracers_la-gstproctime.lo -MD -MP -MF $(DEPDIR)/libgstsharktracers_la-gstproctime.Tpo -c -o libgstsharktracers_la-gstproctime.lo `test -f 'gstproctime.c' || echo '$(srcdir)/'`gstproctime.c
