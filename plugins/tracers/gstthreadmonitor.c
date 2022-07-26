@@ -118,9 +118,7 @@ gst_thread_monitor_tracer_init(GstThreadMonitorTracer *self)
 
   GstThreadMonitor *thread_monitor;
   thread_monitor = &self->thread_monitor;
-  // self->pid = getpid();
   gst_thread_monitor_init(thread_monitor);
-  // cpu_usage->cpu_array_sel = FALSE;
 
   /* Register a dummy hook so that the tracer remains alive */
   gst_tracing_register_hook(GST_TRACER(self), "bin-add-post",

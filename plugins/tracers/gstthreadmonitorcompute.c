@@ -72,7 +72,6 @@ void gst_thread_monitor_init(GstThreadMonitor *thread_monitor)
       token = strtok(NULL, " ");
     }
   }
-  // printf("NUM COLUMNS: %d\n", num_columns);
   tokens = g_strsplit(columns, " ", num_columns);
 
   thread_name_loc = -1;
@@ -80,7 +79,6 @@ void gst_thread_monitor_init(GstThreadMonitor *thread_monitor)
   thread_memory_usage_loc = -1;
   for (int i = 0; i < num_columns; i++)
   {
-    // printf("TOKEN: %s\n", tokens[i]);
     if (strcmp(tokens[i], "COMMAND") == 0)
     {
       thread_name_loc = i;
