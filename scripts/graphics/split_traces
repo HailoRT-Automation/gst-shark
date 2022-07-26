@@ -2,9 +2,6 @@
 
 split_traces_dir=$1
 
-#get current directory
-current_dir=`pwd`
-
 mkdir -p $split_traces_dir
 
 awk '!/gsttracer.c|gsttracerrecord.c/' $GST_DEBUG_FILE > $split_traces_dir/filtered.txt
