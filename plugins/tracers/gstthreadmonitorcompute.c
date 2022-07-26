@@ -114,7 +114,6 @@ void gst_thread_monitor_compute(GstTracerRecord *tr_threadmonitor, GstThreadMoni
   gchar *command;
   char **tokens;
 
-  int counter;
   size_t len = 0;
   char *line = NULL;
   ssize_t read;
@@ -126,13 +125,9 @@ void gst_thread_monitor_compute(GstTracerRecord *tr_threadmonitor, GstThreadMoni
     GST_WARNING("Failed to run command");
     return;
   }
-  counter = 0;
 
   while ((read = getline(&line, &len, fp)) != -1)
   {
-    // printf("***PID %d\n", getpid());
-
-    counter++;
     tokens = g_strsplit(line, " ", 3);
     *thread_name = tokens[0];
     *thread_cpu_usage = tokens[1];
