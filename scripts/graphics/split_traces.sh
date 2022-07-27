@@ -17,7 +17,11 @@ do
         continue
     fi
     
-    cat $GST_DEBUG_FILE | awk '!/gsttracer.c|gsttracerrecord.c/' | grep $trace > $split_traces_dir/$trace.log
+    
+    cat $GST_DEBUG_FILE | awk '!/gsttracer.c|gsttracerrecord.c/' | grep $trace | tr -s ' ' > $split_traces_dir/$trace.log
+    
+    #replace any number of spaces with single space in every trace log file
+
     # cat $split_traces_dir/filtered.txt | grep $trace > $split_traces_dir/$trace.log
 done
 
