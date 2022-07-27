@@ -85,6 +85,7 @@ def plot_cpuusage(cpuusage_log):
     df = df.iloc[:, [0, 19, 20]]
     # rename columns
     df.columns = ['s_time', 'core', 's_cpu_usage']
+    print(df)
 
     df['core'] = df['core'].apply(
         lambda s: s.replace("number=(uint)", ""))
@@ -182,7 +183,7 @@ def main():
 
     with open(f"{traces_dir}/graphs.html", 'a') as f:
         for trace_log_file in trace_log_files:
-            if trace_log_file in tracer_to_plotter.keys:
+            if trace_log_file in tracer_to_plotter.keys():
                 f.write(tracer_to_plotter[trace_log_file](f"{traces_dir}/{trace_log_file}")).to_html(full_html=False, include_plotlyjs='cdn')
 
     # with open(f"{traces_dir}/graphs.html", 'a') as f:
