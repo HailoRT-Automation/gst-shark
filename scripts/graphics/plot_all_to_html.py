@@ -162,44 +162,57 @@ def plot_scheduletime(scheduletime_log):
 
 
 def main():
+    tracer_to_plotter = {
+        'queuelevel.log': plot_queuelevel,
+        'threadmonitor.log': plot_thread_cpuusage,
+        'framerate.log': plot_framerate,
+        'bitrate.log': plot_bitrate,
+        'cpuusage.log': plot_cpuusage,
+        'interlatency.log': plot_interlatency,
+        'proctime.log': plot_proctime,
+        'scheduletime.log': plot_scheduletime,
+    }
 
-    # use Argparser
     parser = argparse.ArgumentParser(description='Plot traces')
-    # add argument to hold path of traces dir
-    parser.add_argument('-p','--path', type=str, help='Path to traces dir')
-
+    parser.add_argument('-p', '--path', type=str, help='Path to traces dir')
     args = parser.parse_args()
     traces_dir = args.path
 
-    # get list of files in traces dir
     trace_log_files = os.listdir(traces_dir)
 
     with open(f"{traces_dir}/graphs.html", 'a') as f:
-        if 'threadmonitor.log' in trace_log_files:
-            f.write(plot_thread_cpuusage(
-                traces_dir + '/threadmonitor.log').to_html(full_html=False, include_plotlyjs='cdn'))
-        if 'queuelevel.log' in trace_log_files:
-            f.write(plot_queuelevel(
-                traces_dir + '/queuelevel.log').to_html(full_html=False, include_plotlyjs='cdn'))
-        if 'bitrate.log' in trace_log_files:
-            f.write(plot_bitrate(
-                traces_dir + '/bitrate.log').to_html(full_html=False, include_plotlyjs='cdn'))
-        if 'cpuusage.log' in trace_log_files:
-            f.write(plot_cpuusage(
-                traces_dir + '/cpuusage.log').to_html(full_html=False, include_plotlyjs='cdn'))
-        if 'interlatency.log' in trace_log_files:
-            f.write(plot_interlatency(
-                traces_dir + '/interlatency.log').to_html(full_html=False, include_plotlyjs='cdn'))
-        if 'proctime.log' in trace_log_files:
-            f.write(plot_proctime(
-                traces_dir + '/proctime.log').to_html(full_html=False, include_plotlyjs='cdn'))
-        if 'scheduletime.log' in trace_log_files:
-            f.write(plot_scheduletime(
-                traces_dir + '/scheduletime.log').to_html(full_html=False, include_plotlyjs='cdn'))
-        if 'framerate.log' in trace_log_files:
-            f.write(plot_framerate(
-                traces_dir + '/framerate.log').to_html(full_html=False, include_plotlyjs='cdn'))
+        for trace_log_file in trace_log_files:
+            if trace_log_file in tracer_to_plotter.keys:
+                f.write(tracer_to_plotter[trace_log_file](f"{traces_dir}/{trace_log_file}")).to_html(full_html=False, include_plotlyjs='cdn')
+
+    # with open(f"{traces_dir}/graphs.html", 'a') as f:
+    #     if 'threadmonitor.log' in trace_log_files:
+    #         f.write(plot_thread_cpuusage(
+    #             traces_dir + '/threadmonitor.log').to_html(full_html=False, include_plotlyjs='cdn'))
+    #     if 'queuelevel.log' in trace_log_files:
+    #         f.write(plot_queuelevel(
+    #             traces_dir + '/queuelevel.log').to_html(full_html=False, include_plotlyjs='cdn'))
+    #     if 'bitrate.log' in trace_log_files:
+    #         f.write(plot_bitrate(
+    #             traces_dir + '/bitrate.log').to_html(full_html=False, include_plotlyjs='cdn'))
+    #     if 'cpuusage.log' in trace_log_files:
+    #         f.write(plot_cpuusage(
+    #             traces_dir + '/cpuusage.log').to_html(full_html=False, include_plotlyjs='cdn'))
+    #     if 'interlatency.log' in trace_log_files:
+    #         f.write(plot_interlatency(
+    #             traces_dir + '/interlatency.log').to_html(full_html=False, include_plotlyjs='cdn'))
+    #     if 'proctime.log' in trace_log_files:
+    #         f.write(plot_proctime(
+    #             traces_dir + '/proctime.log').to_html(full_html=False, include_plotlyjs='cdn'))
+    #     if 'scheduletime.log' in trace_log_files:
+    #         f.write(plot_scheduletime(
+    #             traces_dir + '/scheduletime.log').to_html(full_html=False, include_plotlyjs='cdn'))
+    #     if 'framerate.log' in trace_log_files:
+    #         f.write(plot_framerate(
+    #             traces_dir + '/framerate.log').to_html(full_html=False, include_plotlyjs='cdn'))
 
     print(f"{traces_dir}/graphs.html created")
+
+
 if __name__ == "__main__":
     main()
