@@ -26,6 +26,7 @@
 
 #include "gstnumerator.h"
 #include "gstctf.h"
+#include <stdio.h>
 
 GST_DEBUG_CATEGORY_STATIC (gst_numerator_debug);
 #define GST_CAT_DEFAULT gst_numerator_debug
@@ -109,6 +110,7 @@ do_numerator (GstTracer * self, guint64 ts, GstPad * pad)
   if (!is_queue (element)) {
     goto out;
   }
+  printf("***********QUEUE***********\n");
 
   // element_name = GST_OBJECT_NAME (element);
 
@@ -153,7 +155,7 @@ do_numerator_list (GstTracer * tracer, guint64 ts, GstPad * pad,
 
 static gboolean
 is_queue (GstElement * element)
-{
+{ 
   static GstElementFactory *qfactory = NULL;
   GstElementFactory *efactory;
 
