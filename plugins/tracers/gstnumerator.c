@@ -30,7 +30,7 @@
 GST_DEBUG_CATEGORY_STATIC (gst_numerator_debug);
 #define GST_CAT_DEFAULT gst_numerator_debug
 
-struct _GstQueueLevelTracer
+struct _GstNumeratorTracer
 {
   GstSharkTracer parent;
 };
@@ -38,7 +38,7 @@ struct _GstQueueLevelTracer
 #define _do_init \
     GST_DEBUG_CATEGORY_INIT (gst_numerator_debug, "numerator", 0, "numerator tracer");
 
-G_DEFINE_TYPE_WITH_CODE (GstQueueLevelTracer, gst_numerator_tracer,
+G_DEFINE_TYPE_WITH_CODE (GstNumeratorTracer, gst_numerator_tracer,
     GST_SHARK_TYPE_TRACER, _do_init);
 
 static void do_numerator (GstTracer * tracer, guint64 ts, GstPad * pad);
@@ -168,7 +168,7 @@ is_queue (GstElement * element)
 
 /* tracer class */
 static void
-gst_numerator_tracer_class_init (GstQueueLevelTracerClass * klass)
+gst_numerator_tracer_class_init (GstNumeratorTracerClass * klass)
 {
   // gchar *metadata_event;
 
@@ -209,7 +209,7 @@ gst_numerator_tracer_class_init (GstQueueLevelTracerClass * klass)
 }
 
 static void
-gst_numerator_tracer_init (GstQueueLevelTracer * self)
+gst_numerator_tracer_init (GstNumeratorTracer * self)
 {
   GstSharkTracer *tracer = GST_SHARK_TRACER (self);
 
