@@ -48,6 +48,7 @@ static gboolean is_queue (GstElement * element);
 
 // static GstTracerRecord *tr_qlevel;
 
+/*
 static const gchar numerator_metadata_event[] = "event {\n\
     name = numerator;\n\
     id = %d;\n\
@@ -63,6 +64,7 @@ static const gchar numerator_metadata_event[] = "event {\n\
     };\n\
 };\n\
 \n";
+*/
 
 static GstElement *
 get_parent_element (GstPad * pad)
@@ -98,6 +100,8 @@ do_numerator (GstTracer * self, guint64 ts, GstPad * pad)
   // guint64 max_size_time;
   // gchar *size_time_string;
   // gchar *max_size_time_string;
+
+
   // const gchar *element_name;
 
   element = get_parent_element (pad);
@@ -106,7 +110,7 @@ do_numerator (GstTracer * self, guint64 ts, GstPad * pad)
     goto out;
   }
 
-  element_name = GST_OBJECT_NAME (element);
+  // element_name = GST_OBJECT_NAME (element);
 
   // g_object_get (element, "current-level-bytes", &size_bytes,
   //     "current-level-buffers", &size_buffers,
