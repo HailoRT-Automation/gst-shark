@@ -27,8 +27,12 @@
 #include "gstnumerator.h"
 #include "gstctf.h"
 #include <stdio.h>
+// include gst buffer
+#include <gst/gstbuffer.h>
+#include <gst/video/video.h>
 
-GST_DEBUG_CATEGORY_STATIC (gst_numerator_debug);
+
+GST_DEBUG_CATEGORY_STATIC(gst_numerator_debug);
 #define GST_CAT_DEFAULT gst_numerator_debug
 
 struct _GstNumeratorTracer
@@ -37,15 +41,15 @@ struct _GstNumeratorTracer
 };
 
 #define _do_init \
-    GST_DEBUG_CATEGORY_INIT (gst_numerator_debug, "numerator", 0, "numerator tracer");
+  GST_DEBUG_CATEGORY_INIT(gst_numerator_debug, "numerator", 0, "numerator tracer");
 
-G_DEFINE_TYPE_WITH_CODE (GstNumeratorTracer, gst_numerator_tracer,
-    GST_SHARK_TYPE_TRACER, _do_init);
+G_DEFINE_TYPE_WITH_CODE(GstNumeratorTracer, gst_numerator_tracer,
+                        GST_SHARK_TYPE_TRACER, _do_init);
 
-static void do_numerator (GstTracer * tracer, guint64 ts, GstPad * pad);
-static void do_numerator_list (GstTracer * tracer, guint64 ts, GstPad * pad,
-    GstBufferList * list);
-static gboolean is_queue (GstElement * element);
+static void do_numerator(GstTracer *tracer, guint64 ts, GstPad *pad, GstBuffer *buffer);
+// static void do_numerator_list (GstTracer * tracer, guint64 ts, GstPad * pad,
+// GstBufferList * list);
+static gboolean is_decoder(GstElement *element);
 
 // static GstTracerRecord *tr_qlevel;
 
@@ -68,29 +72,30 @@ static const gchar numerator_metadata_event[] = "event {\n\
 */
 
 static GstElement *
-get_parent_element (GstPad * pad)
+get_parent_element(GstPad *pad)
 {
   GstElement *element;
   GstObject *parent;
-  GstObject *child = GST_OBJECT (pad);
+  GstObject *child = GST_OBJECT(pad);
 
-  do {
-    parent = GST_OBJECT_PARENT (child);
+  do
+  {
+    parent = GST_OBJECT_PARENT(child);
 
-    if (GST_IS_ELEMENT (parent))
+    if (GST_IS_ELEMENT(parent))
       break;
 
     child = parent;
 
-  } while (GST_IS_OBJECT (child));
+  } while (GST_IS_OBJECT(child));
 
-  element = gst_pad_get_parent_element (GST_PAD (child));
+  element = gst_pad_get_parent_element(GST_PAD(child));
 
   return element;
 }
-
+int offset = 0;
 static void
-do_numerator (GstTracer * self, guint64 ts, GstPad * pad)
+do_numerator(GstTracer *tracer, guint64 ts, GstPad *pad, GstBuffer *buffer)
 {
   GstElement *element;
   // guint32 size_bytes;
@@ -102,15 +107,24 @@ do_numerator (GstTracer * self, guint64 ts, GstPad * pad)
   // gchar *size_time_string;
   // gchar *max_size_time_string;
 
-
   // const gchar *element_name;
 
-  element = get_parent_element (pad);
+  gint64 offset;
 
-  if (!is_queue (element)) {
+  element = get_parent_element(pad);
+
+  if (!is_decoder(element))
+  {
     goto out;
   }
-  printf("***********QUEUE***********\n");
+  if (buffer != NULL)
+  {
+    offset = GST_BUFFER_OFFSET (buffer);
+    //print buffer offset
+    printf("%d\n", (int)offset);
+    // GST_INFO("buffer pts: %" GST_TIME_FORMAT, GST_TIME_ARGS(GST_BUFFER_PTS(buffer)));
+  }
+  printf("***********DECODEBIN***********\n");
 
   // element_name = GST_OBJECT_NAME (element);
 
@@ -137,44 +151,45 @@ do_numerator (GstTracer * self, guint64 ts, GstPad * pad)
   //     max_size_bytes, size_buffers, max_size_buffers, size_time, max_size_time);
 
 out:
-  {
-    gst_object_unref (element);
-  }
-}
-
-static void
-do_numerator_list (GstTracer * tracer, guint64 ts, GstPad * pad,
-    GstBufferList * list)
 {
-  guint idx;
-
-  for (idx = 0; idx < gst_buffer_list_length (list); ++idx) {
-    do_numerator (tracer, ts, pad);
-  }
+  gst_object_unref(element);
 }
+}
+
+// static void
+// do_numerator_list (GstTracer * tracer, guint64 ts, GstPad * pad,
+//     GstBufferList * list)
+// {
+//   guint idx;
+
+//   for (idx = 0; idx < gst_buffer_list_length (list); ++idx) {
+//     do_numerator (tracer, ts, pad);
+//   }
+// }
 
 static gboolean
-is_queue (GstElement * element)
-{ 
+is_decoder(GstElement *element)
+{
   static GstElementFactory *qfactory = NULL;
   GstElementFactory *efactory;
 
-  g_return_val_if_fail (element, FALSE);
+  g_return_val_if_fail(element, FALSE);
 
   /* Find the queue factory that is going to be compared against
      the element under inspection to see if it is a queue */
-  if (NULL == qfactory) {
-    qfactory = gst_element_factory_find ("queue");
+  if (NULL == qfactory)
+  {
+    qfactory = gst_element_factory_find("decodebin");
   }
 
-  efactory = gst_element_get_factory (element);
+  efactory = gst_element_get_factory(element);
 
   return efactory == qfactory;
 }
 
 /* tracer class */
 static void
-gst_numerator_tracer_class_init (GstNumeratorTracerClass * klass)
+gst_numerator_tracer_class_init(GstNumeratorTracerClass *klass)
 {
   // gchar *metadata_event;
 
@@ -215,16 +230,16 @@ gst_numerator_tracer_class_init (GstNumeratorTracerClass * klass)
 }
 
 static void
-gst_numerator_tracer_init (GstNumeratorTracer * self)
+gst_numerator_tracer_init(GstNumeratorTracer *self)
 {
-  GstSharkTracer *tracer = GST_SHARK_TRACER (self);
+  GstSharkTracer *tracer = GST_SHARK_TRACER(self);
 
-  gst_shark_tracer_register_hook (tracer, "pad-push-pre",
-      G_CALLBACK (do_numerator));
+  gst_shark_tracer_register_hook(tracer, "pad-push-pre",
+                                 G_CALLBACK(do_numerator));
 
-  gst_shark_tracer_register_hook (tracer, "pad-push-list-pre",
-      G_CALLBACK (do_numerator_list));
+  // gst_shark_tracer_register_hook (tracer, "pad-push-list-pre",
+  //     G_CALLBACK (do_numerator_list));
 
-  gst_shark_tracer_register_hook (tracer, "pad-pull-range-pre",
-      G_CALLBACK (do_numerator));
+  gst_shark_tracer_register_hook(tracer, "pad-pull-range-pre",
+                                 G_CALLBACK(do_numerator));
 }
