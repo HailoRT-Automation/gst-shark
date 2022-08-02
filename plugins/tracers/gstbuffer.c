@@ -87,11 +87,11 @@ gst_buffer_buffer_pre (GObject * self, GstClockTime ts, GstPad * pad,
   gchar *sflags;
   guint refcount;
 
-  if(buffer == NULL)
-  {
+  pad_name = g_strdup_printf ("%s:%s", GST_DEBUG_PAD_NAME (pad));
+
+  if(buffer == NULL) {
     return;
   }
-  pad_name = g_strdup_printf ("%s:%s", GST_DEBUG_PAD_NAME (pad));
 
   pts = GST_BUFFER_PTS (buffer);
   spts = g_strdup_printf ("%" GST_TIME_FORMAT, GST_TIME_ARGS (pts));
