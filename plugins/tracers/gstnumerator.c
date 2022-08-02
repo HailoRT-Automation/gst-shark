@@ -29,6 +29,7 @@
 
 GST_DEBUG_CATEGORY_STATIC(gst_numerator_debug);
 #define GST_CAT_DEFAULT gst_numerator_debug
+#define MAX_STREAMS 256
 
 struct _GstNumeratorTracer
 {
@@ -88,14 +89,17 @@ is_decoder(GstElement *element)
 static void gst_numerator_buffer_pre(GObject *self, GstClockTime ts,
                                      GstPad *pad, GstBuffer *buffer);
 
-gint64 i = 0;
-static void
-gst_numerator_buffer_pre(GObject *self, GstClockTime ts, GstPad *pad,
-                         GstBuffer *buffer)
+gchar stream_ids[MAX_STREAMS][100];
+gint64 offsets[MAX_STREAMS] = {0};
+int stream_count = 0;
+static void gst_numerator_buffer_pre(GObject *self, GstClockTime ts, GstPad *pad, GstBuffer *buffer)
 {
     GstElement *element;
     gchar *stream_id;
+    gint found;
+    int j;
     element = get_parent_element(pad);
+    found = 0;
 
     if (!is_decoder(element))
     {
@@ -104,11 +108,37 @@ gst_numerator_buffer_pre(GObject *self, GstClockTime ts, GstPad *pad,
 
     stream_id = gst_pad_get_stream_id(pad);
 
-    printf("stream_id: %s\n", stream_id);
+    // find stream_id in stream_ids
+    for (j = 0; j < stream_count; j++)
+    {
+        if (strcmp(stream_ids[j], stream_id) == 0)
+        {
+            found = 1;
+            break;
+        }
+    }
 
-    buffer->offset = i;
-    i++;
+    if (found)
+    {
+        buffer->offset = offsets[j];
+        offsets[j]++;
+    }
+    else // new stream id
+    {
+        stream_count++;
+        if (stream_count == MAX_STREAMS)
+        {
+            GST_ERROR("Too many streams");
+            return;
+        }
+        strcpy(stream_ids[stream_count-1], stream_id);
+        buffer->offset = offsets[stream_count-1];
+        offsets[stream_count-1]++;
+    }
+
     g_free(stream_id);
+    gst_object_unref(element);
+
 }
 
 /* tracer class */
