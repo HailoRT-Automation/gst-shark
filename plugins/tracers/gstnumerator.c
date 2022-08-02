@@ -46,7 +46,8 @@ struct _GstNumeratorTracer
 G_DEFINE_TYPE_WITH_CODE(GstNumeratorTracer, gst_numerator_tracer,
                         GST_SHARK_TYPE_TRACER, _do_init);
 
-static void do_numerator(GstTracer *tracer, guint64 ts, GstPad *pad, GstBuffer *buffer);
+static void do_numerator (GObject * self, GstClockTime ts, GstPad * pad,
+    GstBuffer * buffer);
 // static void do_numerator_list (GstTracer * tracer, guint64 ts, GstPad * pad,
 // GstBufferList * list);
 static gboolean is_decoder(GstElement *element);
@@ -94,9 +95,15 @@ get_parent_element(GstPad *pad)
   return element;
 }
 int offset = 0;
+
 static void
-do_numerator(GstTracer *tracer, guint64 ts, GstPad *pad, GstBuffer *buffer)
+do_numerator (GObject * self, GstClockTime ts, GstPad * pad,
+    GstBuffer * buffer)
 {
+
+// static void
+// do_numerator(GstTracer *tracer, guint64 ts, GstPad *pad, GstBuffer *buffer)
+// {
   GstElement *element;
   // guint32 size_bytes;
   // guint32 max_size_bytes;

@@ -28,12 +28,11 @@
 #include "gstgraphic.h"
 #include "gstcpuusage.h"
 #include "gstthreadmonitor.h"
-#include "gstqueuelevel.h"
-#include "gstnumerator.h"
 #include "gstproctime.h"
 #include "gstinterlatency.h"
 #include "gstscheduletime.h"
 #include "gstframerate.h"
+#include "gstqueuelevel.h"
 #include "gstbitrate.h"
 #include "gstbuffer.h"
 #include "gstctf.h"
@@ -72,10 +71,6 @@ plugin_init (GstPlugin * plugin)
   }
   if (!gst_tracer_register (plugin, "queuelevel",
           gst_queue_level_tracer_get_type ())) {
-    return FALSE;
-  }
-  if (!gst_tracer_register (plugin, "numerator",
-          gst_numerator_tracer_get_type ())) {
     return FALSE;
   }
   if (!gst_tracer_register (plugin, "bitrate", gst_bitrate_tracer_get_type ())) {
