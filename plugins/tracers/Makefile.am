@@ -37,7 +37,6 @@ libgstsharktracers_la_SOURCES = \
 	gstqueuelevel.c \
 	gstbitrate.c \
 	gstbuffer.c \
-	gstnumerator.c \
 	gstperiodictracer.c
 
 libgstsharktracers_la_CFLAGS = \
@@ -73,7 +72,6 @@ noinst_HEADERS = \
 	gstqueuelevel.h \
 	gstbitrate.h \
 	gstbuffer.h \
-	gstnumerator.h \
 	gstsharktracer.h \
 	gstperiodictracer.h
 
