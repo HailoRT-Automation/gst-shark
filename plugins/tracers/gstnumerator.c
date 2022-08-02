@@ -26,6 +26,8 @@
 #include "gstnumerator.h"
 #include "gstctf.h"
 #include <stdio.h>
+#include <stdbool.h>
+
 
 GST_DEBUG_CATEGORY_STATIC(gst_numerator_debug);
 #define GST_CAT_DEFAULT gst_numerator_debug
@@ -68,8 +70,6 @@ get_parent_element(GstPad *pad)
 static gboolean
 is_decoder(GstElement *element)
 {
-    static GstElementFactory *decodebin_factory = NULL;
-    static GstElementFactory *uridecodebin3_factory = NULL;
     static GstElementFactory *avdec_factory = NULL;
     GstElementFactory *efactory;
 
@@ -77,13 +77,11 @@ is_decoder(GstElement *element)
 
     /* Find the decoder factory that is going to be compared against
        the element under inspection to see if it is a decoder */
-    decodebin_factory = gst_element_factory_find("decodebin");
-    uridecodebin3_factory = gst_element_factory_find("uridecodebin3");
     avdec_factory = gst_element_factory_find("avdec_h264");
 
     efactory = gst_element_get_factory(element);
 
-    return (efactory == uridecodebin3_factory || efactory == avdec_factory || efactory == decodebin_factory);
+    return (efactory == avdec_factory);
 }
 
 static void gst_numerator_buffer_pre(GObject *self, GstClockTime ts,
@@ -96,10 +94,10 @@ static void gst_numerator_buffer_pre(GObject *self, GstClockTime ts, GstPad *pad
 {
     GstElement *element;
     gchar *stream_id;
-    gint found;
+    bool found;
     int j;
     element = get_parent_element(pad);
-    found = 0;
+    found = false;
 
     if (!is_decoder(element))
     {
@@ -113,29 +111,29 @@ static void gst_numerator_buffer_pre(GObject *self, GstClockTime ts, GstPad *pad
     {
         if (strcmp(stream_ids[j], stream_id) == 0)
         {
-            found = 1;
+            found = true;
             break;
         }
     }
 
     if (found)
     {
-        buffer->offset = offsets[j];
         offsets[j]++;
+        buffer->offset = offsets[j];
     }
     else // new stream id
     {
         stream_count++;
+
         if (stream_count == MAX_STREAMS)
         {
             GST_ERROR("Too many streams");
             return;
         }
         strcpy(stream_ids[stream_count-1], stream_id);
-        buffer->offset = offsets[stream_count-1];
         offsets[stream_count-1]++;
+        buffer->offset = offsets[stream_count-1];
     }
-
     g_free(stream_id);
     gst_object_unref(element);
 
