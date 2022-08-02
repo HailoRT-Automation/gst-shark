@@ -29,5 +29,4 @@ G_BEGIN_DECLS
 G_DECLARE_FINAL_TYPE (GstNumeratorTracer, gst_numerator_tracer, GST, NUMERATOR_TRACER, GstSharkTracer)
 
 G_END_DECLS
-
 #endif /* __GST_NUMERATOR_TRACER_H__ */

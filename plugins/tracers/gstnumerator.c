@@ -19,234 +19,137 @@
  */
 /**
  * SECTION:gstnumerator
- * @short_description: log current queue level
+ * @short_description: log current idendity
  *
- * A tracing module that takes queue's current level
  */
 
 #include "gstnumerator.h"
 #include "gstctf.h"
 #include <stdio.h>
-// include gst buffer
-#include <gst/gstbuffer.h>
-#include <gst/video/video.h>
+#include <stdbool.h>
 
 
 GST_DEBUG_CATEGORY_STATIC(gst_numerator_debug);
 #define GST_CAT_DEFAULT gst_numerator_debug
+#define MAX_STREAMS 256
 
 struct _GstNumeratorTracer
 {
-  GstSharkTracer parent;
+    GstSharkTracer parent;
 };
 
 #define _do_init \
-  GST_DEBUG_CATEGORY_INIT(gst_numerator_debug, "numerator", 0, "numerator tracer");
+    GST_DEBUG_CATEGORY_INIT(gst_numerator_debug, "numerator", 0, "numerator tracer");
 
 G_DEFINE_TYPE_WITH_CODE(GstNumeratorTracer, gst_numerator_tracer,
                         GST_SHARK_TYPE_TRACER, _do_init);
 
-static void do_numerator (GObject * self, GstClockTime ts, GstPad * pad,
-    GstBuffer * buffer);
-// static void do_numerator_list (GstTracer * tracer, guint64 ts, GstPad * pad,
-// GstBufferList * list);
-static gboolean is_decoder(GstElement *element);
-
-// static GstTracerRecord *tr_qlevel;
-
-/*
-static const gchar numerator_metadata_event[] = "event {\n\
-    name = numerator;\n\
-    id = %d;\n\
-    stream_id = %d;\n\
-    fields := struct {\n\
-        string queue;\n\
-        integer { size = 32; align = 8; signed = 0; encoding = none; base = 10; } size_bytes;\n\
-        integer { size = 32; align = 8; signed = 0; encoding = none; base = 10; } max_size_bytes;\n \
-        integer { size = 32; align = 8; signed = 0; encoding = none; base = 10; } size_buffers;\n\
-        integer { size = 32; align = 8; signed = 0; encoding = none; base = 10; } max_size_buffers;\n\
-        integer { size = 64; align = 8; signed = 0; encoding = none; base = 10; } size_time;\n\
-        integer { size = 64; align = 8; signed = 0; encoding = none; base = 10; } max_size_time;\n\
-    };\n\
-};\n\
-\n";
-*/
-
 static GstElement *
 get_parent_element(GstPad *pad)
 {
-  GstElement *element;
-  GstObject *parent;
-  GstObject *child = GST_OBJECT(pad);
+    GstElement *element;
+    GstObject *parent;
+    GstObject *child = GST_OBJECT(pad);
 
-  do
-  {
-    parent = GST_OBJECT_PARENT(child);
+    do
+    {
+        parent = GST_OBJECT_PARENT(child);
 
-    if (GST_IS_ELEMENT(parent))
-      break;
+        if (GST_IS_ELEMENT(parent))
+            break;
 
-    child = parent;
+        child = parent;
 
-  } while (GST_IS_OBJECT(child));
+    } while (GST_IS_OBJECT(child));
 
-  element = gst_pad_get_parent_element(GST_PAD(child));
+    element = gst_pad_get_parent_element(GST_PAD(child));
 
-  return element;
+    return element;
 }
-int offset = 0;
-
-static void
-do_numerator (GObject * self, GstClockTime ts, GstPad * pad,
-    GstBuffer * buffer)
-{
-
-// static void
-// do_numerator(GstTracer *tracer, guint64 ts, GstPad *pad, GstBuffer *buffer)
-// {
-  GstElement *element;
-  // guint32 size_bytes;
-  // guint32 max_size_bytes;
-  // guint32 size_buffers;
-  // guint32 max_size_buffers;
-  // guint64 size_time;
-  // guint64 max_size_time;
-  // gchar *size_time_string;
-  // gchar *max_size_time_string;
-
-  // const gchar *element_name;
-
-  gint64 offset;
-
-  element = get_parent_element(pad);
-
-  if (!is_decoder(element))
-  {
-    goto out;
-  }
-  if (buffer != NULL)
-  {
-    offset = GST_BUFFER_OFFSET (buffer);
-    //print buffer offset
-    printf("%d\n", (int)offset);
-    // GST_INFO("buffer pts: %" GST_TIME_FORMAT, GST_TIME_ARGS(GST_BUFFER_PTS(buffer)));
-  }
-  printf("***********DECODEBIN***********\n");
-
-  // element_name = GST_OBJECT_NAME (element);
-
-  // g_object_get (element, "current-level-bytes", &size_bytes,
-  //     "current-level-buffers", &size_buffers,
-  //     "current-level-time", &size_time,
-  //     "max-size-bytes", &max_size_bytes,
-  //     "max-size-buffers", &max_size_buffers,
-  //     "max-size-time", &max_size_time, NULL);
-
-  // size_time_string =
-  //     g_strdup_printf ("%" GST_TIME_FORMAT, GST_TIME_ARGS (size_time));
-
-  // max_size_time_string =
-  //     g_strdup_printf ("%" GST_TIME_FORMAT, GST_TIME_ARGS (max_size_time));
-
-  // // gst_tracer_record_log (tr_qlevel, element_name, size_bytes, max_size_bytes,
-  // //     size_buffers, max_size_buffers, size_time_string, max_size_time_string);
-
-  // g_free (size_time_string);
-  // g_free (max_size_time_string);
-
-  // do_print_numerator_event (QUEUE_LEVEL_EVENT_ID, element_name, size_bytes,
-  //     max_size_bytes, size_buffers, max_size_buffers, size_time, max_size_time);
-
-out:
-{
-  gst_object_unref(element);
-}
-}
-
-// static void
-// do_numerator_list (GstTracer * tracer, guint64 ts, GstPad * pad,
-//     GstBufferList * list)
-// {
-//   guint idx;
-
-//   for (idx = 0; idx < gst_buffer_list_length (list); ++idx) {
-//     do_numerator (tracer, ts, pad);
-//   }
-// }
 
 static gboolean
 is_decoder(GstElement *element)
 {
-  static GstElementFactory *qfactory = NULL;
-  GstElementFactory *efactory;
+    static GstElementFactory *avdec_factory = NULL;
+    GstElementFactory *efactory;
 
-  g_return_val_if_fail(element, FALSE);
+    g_return_val_if_fail(element, FALSE);
 
-  /* Find the queue factory that is going to be compared against
-     the element under inspection to see if it is a queue */
-  if (NULL == qfactory)
-  {
-    qfactory = gst_element_factory_find("decodebin");
-  }
+    /* Find the decoder factory that is going to be compared against
+       the element under inspection to see if it is a decoder */
+    avdec_factory = gst_element_factory_find("avdec_h264");
 
-  efactory = gst_element_get_factory(element);
+    efactory = gst_element_get_factory(element);
 
-  return efactory == qfactory;
+    return (efactory == avdec_factory);
+}
+
+static void gst_numerator_buffer_pre(GObject *self, GstClockTime ts,
+                                     GstPad *pad, GstBuffer *buffer);
+
+gchar stream_ids[MAX_STREAMS][100];
+gint64 offsets[MAX_STREAMS] = {0};
+int stream_count = 0;
+static void gst_numerator_buffer_pre(GObject *self, GstClockTime ts, GstPad *pad, GstBuffer *buffer)
+{
+    GstElement *element;
+    gchar *stream_id;
+    bool found;
+    int j;
+    element = get_parent_element(pad);
+    found = false;
+
+    if (!is_decoder(element))
+    {
+        return;
+    }
+
+    stream_id = gst_pad_get_stream_id(pad);
+
+    // find stream_id in stream_ids
+    for (j = 0; j < stream_count; j++)
+    {
+        if (strcmp(stream_ids[j], stream_id) == 0)
+        {
+            found = true;
+            break;
+        }
+    }
+
+    if (found)
+    {
+        offsets[j]++;
+        buffer->offset = offsets[j];
+    }
+    else // new stream id
+    {
+        stream_count++;
+
+        if (stream_count == MAX_STREAMS)
+        {
+            GST_ERROR("Too many streams");
+            return;
+        }
+        strcpy(stream_ids[stream_count-1], stream_id);
+        offsets[stream_count-1]++;
+        buffer->offset = offsets[stream_count-1];
+    }
+    g_free(stream_id);
+    gst_object_unref(element);
+
 }
 
 /* tracer class */
 static void
 gst_numerator_tracer_class_init(GstNumeratorTracerClass *klass)
 {
-  // gchar *metadata_event;
-
-  // tr_qlevel = gst_tracer_record_new ("queuelevel.class", "queue",
-  //     GST_TYPE_STRUCTURE, gst_structure_new ("scope",
-  //         "type", G_TYPE_GTYPE, G_TYPE_STRING,
-  //         "related-to", GST_TYPE_TRACER_VALUE_SCOPE,
-  //         GST_TRACER_VALUE_SCOPE_ELEMENT, NULL), "size_bytes",
-  //     GST_TYPE_STRUCTURE, gst_structure_new ("scope",
-  //         "type", G_TYPE_GTYPE, G_TYPE_UINT,
-  //         "related-to", GST_TYPE_TRACER_VALUE_SCOPE,
-  //         GST_TRACER_VALUE_SCOPE_ELEMENT, NULL), "max_size_bytes",
-  //     GST_TYPE_STRUCTURE, gst_structure_new ("scope",
-  //         "type", G_TYPE_GTYPE, G_TYPE_UINT,
-  //         "related-to", GST_TYPE_TRACER_VALUE_SCOPE,
-  //         GST_TRACER_VALUE_SCOPE_ELEMENT, NULL), "size_buffers",
-  //     GST_TYPE_STRUCTURE, gst_structure_new ("scope",
-  //         "type", G_TYPE_GTYPE, G_TYPE_UINT,
-  //         "related-to", GST_TYPE_TRACER_VALUE_SCOPE,
-  //         GST_TRACER_VALUE_SCOPE_ELEMENT, NULL), "max_size_buffers",
-  //     GST_TYPE_STRUCTURE, gst_structure_new ("scope",
-  //         "type", G_TYPE_GTYPE, G_TYPE_UINT,
-  //         "related-to", GST_TYPE_TRACER_VALUE_SCOPE,
-  //         GST_TRACER_VALUE_SCOPE_ELEMENT, NULL), "size_time",
-  //     GST_TYPE_STRUCTURE, gst_structure_new ("scope",
-  //         "type", G_TYPE_GTYPE, G_TYPE_STRING,
-  //         "related-to", GST_TYPE_TRACER_VALUE_SCOPE,
-  //         GST_TRACER_VALUE_SCOPE_ELEMENT, NULL), "max_size_time",
-  //     GST_TYPE_STRUCTURE, gst_structure_new ("scope",
-  //         "type", G_TYPE_GTYPE, G_TYPE_STRING,
-  //         "related-to", GST_TYPE_TRACER_VALUE_SCOPE,
-  //         GST_TRACER_VALUE_SCOPE_ELEMENT, NULL), NULL);
-
-  // metadata_event =
-  //     g_strdup_printf (numerator_metadata_event, QUEUE_LEVEL_EVENT_ID, 0);
-  // add_metadata_event_struct (metadata_event);
-  // g_free (metadata_event);
 }
 
 static void
 gst_numerator_tracer_init(GstNumeratorTracer *self)
 {
-  GstSharkTracer *tracer = GST_SHARK_TRACER(self);
+    GstSharkTracer *tracer = GST_SHARK_TRACER(self);
 
-  gst_shark_tracer_register_hook(tracer, "pad-push-pre",
-                                 G_CALLBACK(do_numerator));
-
-  // gst_shark_tracer_register_hook (tracer, "pad-push-list-pre",
-  //     G_CALLBACK (do_numerator_list));
-
-  gst_shark_tracer_register_hook(tracer, "pad-pull-range-pre",
-                                 G_CALLBACK(do_numerator));
+    gst_shark_tracer_register_hook(tracer, "pad-push-pre",
+                                   G_CALLBACK(gst_numerator_buffer_pre));
 }
