@@ -89,7 +89,7 @@ gst_buffer_buffer_pre (GObject * self, GstClockTime ts, GstPad * pad,
 
   pad_name = g_strdup_printf ("%s:%s", GST_DEBUG_PAD_NAME (pad));
 
-    if (buffer == NULL) {
+    if (NULL == buffer) {
         return;
     }
   pts = GST_BUFFER_PTS (buffer);
