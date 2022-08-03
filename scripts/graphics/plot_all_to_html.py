@@ -11,7 +11,6 @@ def plot_queuelevel(queuelevel_log):
     df = pd.read_csv(queuelevel_log, sep=' ', header=None)
     df = df.iloc[:, [0, 7, 10]]
     df.columns = ['s_time', 'queue', 's_size_buffers']
-
     df['queue'] = df['queue'].apply(lambda s: s.replace("queue=(string)", ""))
     df['s_size_buffers'] = df['s_size_buffers'].apply(lambda s: s.replace(
         "size_buffers=(uint)", "")).apply(lambda s: s.replace(",", ""))
@@ -21,7 +20,6 @@ def plot_queuelevel(queuelevel_log):
     fig.update_layout(title_text="Queue Level")
     fig.update_xaxes(title_text="Time (s)", nticks=XTICKS)
     fig.update_yaxes(title_text="Queue Level (buffers)", nticks=YTICKS)
-
     return fig
 
 
@@ -30,7 +28,6 @@ def plot_thread_cpuusage(thread_cpuusage_log):
     df = df.iloc[:, [0, 7, 8]]
     # rename columns
     df.columns = ['s_time', 'thread_name', 's_cpu_usage']
-
     df['thread_name'] = df['thread_name'].apply(
         lambda s: s.replace("name=(string)", ""))
     df['s_cpu_usage'] = df['s_cpu_usage'].apply(lambda s: s.replace(
@@ -46,7 +43,6 @@ def plot_thread_cpuusage(thread_cpuusage_log):
 
 def plot_framerate(framerate_log):
     df = pd.read_csv(framerate_log, sep=' ', header=None)
-
     df = df.iloc[:, [0, 7, 8]]
     # rename columns
     df.columns = ['s_time', 'pad', 's_framerate']
@@ -64,7 +60,6 @@ def plot_framerate(framerate_log):
 
 def plot_bitrate(bitrate_log):
     df = pd.read_csv(bitrate_log, sep=' ', header=None)
-
     df = df.iloc[:, [0, 7, 8]]
     # rename columns
     df.columns = ['s_time', 'pad', 's_bitrate']
@@ -85,7 +80,6 @@ def plot_cpuusage(cpuusage_log):
     df = df.iloc[:, [0, 7, 8]]
     # rename columns
     df.columns = ['s_time', 'core', 's_cpu_usage']
-
     df['core'] = df['core'].apply(
         lambda s: s.replace("number=(uint)", ""))
     df['s_cpu_usage'] = df['s_cpu_usage'].apply(lambda s: s.replace(
@@ -104,12 +98,10 @@ def plot_interlatency(interlatency_log):
     df = df.iloc[:, [0, 8, 9]]
     # rename columns
     df.columns = ['s_time', 'destination_pad', 's_proctime']
-
     df['destination_pad'] = df['destination_pad'].apply(
         lambda s: s.replace("to_pad=(string)", ""))
     df['s_proctime'] = df['s_proctime'].apply(lambda s: s.replace(
         "time=(string)", "")).apply(lambda s: s.replace(";", ""))
-
     df['proctime'] = pd.to_datetime(df['s_proctime'])
     df['time'] = pd.to_datetime(df['s_time'])
     fig = px.line(df, x="time", y="proctime", color="destination_pad")
@@ -124,12 +116,10 @@ def plot_proctime(proctime_log):
     df = df.iloc[:, [0, 7, 8]]
     # rename columns
     df.columns = ['s_time', 'element', 's_proctime']
-
     df['element'] = df['element'].apply(
         lambda s: s.replace("element=(string)", ""))
     df['s_proctime'] = df['s_proctime'].apply(lambda s: s.replace(
         "time=(string)", "")).apply(lambda s: s.replace(";", ""))
-
     df['proctime'] = pd.to_datetime(df['s_proctime'])
     df['time'] = pd.to_datetime(df['s_time'])
     fig = px.line(df, x="time", y="proctime", color="element")
@@ -145,12 +135,10 @@ def plot_scheduletime(scheduletime_log):
     df = df.iloc[:, [0, 7, 8]]
     # rename columns
     df.columns = ['s_time', 'pad', 's_scheduletime']
-
     df['pad'] = df['pad'].apply(
         lambda s: s.replace("pad=(string)", ""))
     df['s_scheduletime'] = df['s_scheduletime'].apply(lambda s: s.replace(
         "time=(string)", "")).apply(lambda s: s.replace(";", ""))
-
     df['scheduletime'] = pd.to_datetime(df['s_scheduletime'])
     df['time'] = pd.to_datetime(df['s_time'])
     fig = px.line(df, x="time", y="scheduletime", color="pad")
@@ -183,33 +171,8 @@ def main():
     with open(f"{traces_dir}/graphs.html", 'a') as f:
         for trace_log_file in trace_log_files:
             if trace_log_file in tracer_to_plotter.keys():
-                f.write(tracer_to_plotter[trace_log_file](f"{traces_dir}/{trace_log_file}").to_html(full_html=False, include_plotlyjs='cdn'))
-
-    # with open(f"{traces_dir}/graphs.html", 'a') as f:
-    #     if 'threadmonitor.log' in trace_log_files:
-    #         f.write(plot_thread_cpuusage(
-    #             traces_dir + '/threadmonitor.log').to_html(full_html=False, include_plotlyjs='cdn'))
-    #     if 'queuelevel.log' in trace_log_files:
-    #         f.write(plot_queuelevel(
-    #             traces_dir + '/queuelevel.log').to_html(full_html=False, include_plotlyjs='cdn'))
-    #     if 'bitrate.log' in trace_log_files:
-    #         f.write(plot_bitrate(
-    #             traces_dir + '/bitrate.log').to_html(full_html=False, include_plotlyjs='cdn'))
-    #     if 'cpuusage.log' in trace_log_files:
-    #         f.write(plot_cpuusage(
-    #             traces_dir + '/cpuusage.log').to_html(full_html=False, include_plotlyjs='cdn'))
-    #     if 'interlatency.log' in trace_log_files:
-    #         f.write(plot_interlatency(
-    #             traces_dir + '/interlatency.log').to_html(full_html=False, include_plotlyjs='cdn'))
-    #     if 'proctime.log' in trace_log_files:
-    #         f.write(plot_proctime(
-    #             traces_dir + '/proctime.log').to_html(full_html=False, include_plotlyjs='cdn'))
-    #     if 'scheduletime.log' in trace_log_files:
-    #         f.write(plot_scheduletime(
-    #             traces_dir + '/scheduletime.log').to_html(full_html=False, include_plotlyjs='cdn'))
-    #     if 'framerate.log' in trace_log_files:
-    #         f.write(plot_framerate(
-    #             traces_dir + '/framerate.log').to_html(full_html=False, include_plotlyjs='cdn'))
+                f.write(tracer_to_plotter[trace_log_file](
+                    f"{traces_dir}/{trace_log_file}").to_html(full_html=False, include_plotlyjs='cdn'))
 
     print(f"{traces_dir}/graphs.html created")
 
