@@ -1,7 +1,7 @@
 import argparse
-import os
 import pandas as pd
 import plotly.express as px
+from pathlib import Path
 
 XTICKS = 40
 YTICKS = 20
@@ -168,13 +168,12 @@ def main():
     args = parser.parse_args()
     traces_dir = args.path
 
-    trace_log_files = os.listdir(traces_dir)
-
+    trace_log_files = list(Path(traces_dir).rglob('*.log'))
     with open(f"{traces_dir}/graphs.html", 'a') as f:
         for trace_log_file in trace_log_files:
-            if trace_log_file in tracer_to_plotter.keys():
-                f.write(tracer_to_plotter[trace_log_file](
-                    f"{traces_dir}/{trace_log_file}").to_html(full_html=False, include_plotlyjs='cdn'))
+            if trace_log_file.name in tracer_to_plotter.keys():
+                f.write(tracer_to_plotter[trace_log_file.name](
+                    f"{traces_dir}/{trace_log_file.name}").to_html(full_html=False, include_plotlyjs='cdn'))
 
     print(f"{traces_dir}/graphs.html created")
 
