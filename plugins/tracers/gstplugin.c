@@ -29,6 +29,7 @@
 #include "gstcpuusage.h"
 #include "gstthreadmonitor.h"
 #include "gstnumerator.h"
+#include "gstdetections.h"
 #include "gstproctime.h"
 #include "gstinterlatency.h"
 #include "gstscheduletime.h"
@@ -81,6 +82,9 @@ plugin_init (GstPlugin * plugin)
     return FALSE;
   }
   if (!gst_tracer_register (plugin, "numerator", gst_numerator_tracer_get_type ())) {
+    return FALSE;
+  }
+  if (!gst_tracer_register (plugin, "detections", gst_detections_tracer_get_type ())) {
     return FALSE;
   }
   if (!gst_ctf_init ()) {
