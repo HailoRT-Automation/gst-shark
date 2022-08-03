@@ -100,7 +100,6 @@ static void gst_numerator_buffer_pre(GObject *self, GstClockTime ts, GstPad *pad
 
     stream_id = gst_pad_get_stream_id(pad);
 
-    // find stream_id in stream_ids
     for (stream_index = 0; stream_index < stream_count; stream_index++)
     {
         if (strcmp(stream_ids[stream_index], stream_id) == 0)
