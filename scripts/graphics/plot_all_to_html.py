@@ -9,13 +9,15 @@ YTICKS = 20
 
 def plot_queuelevel(queuelevel_log):
     df = pd.read_csv(queuelevel_log, sep=' ', header=None)
-    df = df.iloc[:, [0, 7, 10]]
-    df.columns = ['s_time', 'queue', 's_size_buffers']
+    df = df.iloc[:, [0, 7, 10]]  # only relevant columns
+    df.columns = ['s_time', 'queue', 's_size_buffers']  # rename columns
+    # clean data
     df['queue'] = df['queue'].apply(lambda s: s.replace("queue=(string)", ""))
     df['s_size_buffers'] = df['s_size_buffers'].apply(lambda s: s.replace(
         "size_buffers=(uint)", "")).apply(lambda s: s.replace(",", ""))
-    df['size_buffers'] = pd.to_numeric(df['s_size_buffers'])
-    df['time'] = pd.to_datetime(df['s_time'])
+    df['size_buffers'] = pd.to_numeric(
+        df['s_size_buffers'])  # convert to numeric format
+    df['time'] = pd.to_datetime(df['s_time'])  # convert to datetime format
     fig = px.line(df, x="time", y="size_buffers", color="queue")
     fig.update_layout(title_text="Queue Level")
     fig.update_xaxes(title_text="Time (s)", nticks=XTICKS)
