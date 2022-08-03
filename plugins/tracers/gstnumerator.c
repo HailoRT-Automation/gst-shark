@@ -89,7 +89,7 @@ static void gst_numerator_buffer_pre(GObject *self, GstClockTime ts, GstPad *pad
     GstElement *element;
     gchar *stream_id;
     bool found;
-    int j;
+    int stream_index;
     element = get_parent_element(pad);
     found = false;
 
@@ -101,9 +101,9 @@ static void gst_numerator_buffer_pre(GObject *self, GstClockTime ts, GstPad *pad
     stream_id = gst_pad_get_stream_id(pad);
 
     // find stream_id in stream_ids
-    for (j = 0; j < stream_count; j++)
+    for (stream_index = 0; stream_index < stream_count; stream_index++)
     {
-        if (strcmp(stream_ids[j], stream_id) == 0)
+        if (strcmp(stream_ids[stream_index], stream_id) == 0)
         {
             found = true;
             break;
@@ -112,8 +112,8 @@ static void gst_numerator_buffer_pre(GObject *self, GstClockTime ts, GstPad *pad
 
     if (found)
     {
-        offsets[j]++;
-        buffer->offset = offsets[j];
+        offsets[stream_index]++;
+        buffer->offset = offsets[stream_index];
     }
     else // new stream id
     {
