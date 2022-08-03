@@ -67,8 +67,9 @@ get_parent_element(GstPad *pad)
     return element;
 }
 
-static gboolean
-is_decoder(GstElement *element)
+static gboolean is_decoder(GstElement * element);
+
+static gboolean is_decoder(GstElement *element)
 {
     static GstElementFactory *avdec_factory = NULL;
     GstElementFactory *efactory;
@@ -141,9 +142,7 @@ static void gst_numerator_buffer_pre(GObject *self, GstClockTime ts, GstPad *pad
 
 /* tracer class */
 static void
-gst_numerator_tracer_class_init(GstNumeratorTracerClass *klass)
-{
-}
+gst_numerator_tracer_class_init(GstNumeratorTracerClass *klass){}
 
 static void
 gst_numerator_tracer_init(GstNumeratorTracer *self)
