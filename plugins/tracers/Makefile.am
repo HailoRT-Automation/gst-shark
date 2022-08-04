@@ -5,6 +5,7 @@ libgstshark_la_SOURCES = \
 	gstcpuusagecompute.c \
 	gstthreadmonitorcompute.c \
 	gstproctimecompute.c \
+	../../../../core/hailo/gstreamer/metadata/gst_hailo_meta.cpp \
 	gstctf.c \
 	gstparser.c
 
@@ -77,7 +78,9 @@ noinst_HEADERS = \
 	gstnumerator.h \
 	gstdetections.h \
 	gstsharktracer.h \
+	../../../../core/hailo/gstreamer/metadata/gst_hailo_meta.hpp \
 	gstperiodictracer.h
+
 
 CLEANFILES = *.gcno *.gcda *.gcov *.gcov.out
 
