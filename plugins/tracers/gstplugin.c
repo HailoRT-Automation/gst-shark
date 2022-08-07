@@ -23,6 +23,7 @@
 #endif
 
 #include <gst/gst.h>
+#include "../../config.h"
 #include <glib/gstdio.h>
 #include <unistd.h>
 #include "gstgraphic.h"
@@ -42,6 +43,7 @@
 static gboolean
 plugin_init (GstPlugin * plugin)
 {
+  /*
 #ifdef GST_CPUUSAGE_ENABLE
   if (!gst_tracer_register (plugin, "cpuusage",
           gst_cpu_usage_tracer_get_type ())) {
@@ -71,10 +73,12 @@ plugin_init (GstPlugin * plugin)
           gst_framerate_tracer_get_type ())) {
     return FALSE;
   }
+  */
   if (!gst_tracer_register (plugin, "queuelevel",
           gst_queue_level_tracer_get_type ())) {
     return FALSE;
   }
+  /*
   if (!gst_tracer_register (plugin, "bitrate", gst_bitrate_tracer_get_type ())) {
     return FALSE;
   }
@@ -89,11 +93,11 @@ plugin_init (GstPlugin * plugin)
   }
   if (!gst_ctf_init ()) {
     return FALSE;
-  }
+  }*/
 
   return TRUE;
 }
 
 GST_PLUGIN_DEFINE (GST_VERSION_MAJOR, GST_VERSION_MINOR,
-    sharktracers, "GstShark tracers", plugin_init, VERSION,
+    sharktracers, "GstShark tracers", plugin_init, "0.7.5.1",
     GST_SHARK_LICENSE, PACKAGE_NAME, PACKAGE_URL);

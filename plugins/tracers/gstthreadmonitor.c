@@ -40,7 +40,7 @@ struct _GstThreadMonitorTracer
 {
   GstPeriodicTracer parent;
   GstThreadMonitor thread_monitor;
-  uint pid;
+  int pid;
 };
 
 #define _do_init \
