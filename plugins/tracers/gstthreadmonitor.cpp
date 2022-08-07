@@ -29,9 +29,9 @@
 #include <string.h>
 #include <sys/types.h>
 
-#include "gstthreadmonitor.h"
-#include "gstthreadmonitorcompute.h"
-#include "gstctf.h"
+#include "gstthreadmonitor.hpp"
+#include "gstthreadmonitorcompute.hpp"
+#include "gstctf.hpp"
 
 GST_DEBUG_CATEGORY_STATIC(gst_thread_monitor_debug);
 #define GST_CAT_DEFAULT gst_thread_monitor_debug

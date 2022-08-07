@@ -24,8 +24,8 @@
  * A tracing module that take scheduletime() snapshots and logs them.
  */
 
-#include "gstscheduletime.h"
-#include "gstctf.h"
+#include "gstscheduletime.hpp"
+#include "gstctf.hpp"
 
 GST_DEBUG_CATEGORY_STATIC (gst_scheduletime_debug);
 #define GST_CAT_DEFAULT gst_scheduletime_debug

@@ -18,7 +18,7 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-#include "gstperiodictracer.h"
+#include "gstperiodictracer.hpp"
 
 GST_DEBUG_CATEGORY_STATIC (gst_periodic_debug);
 #define GST_CAT_DEFAULT gst_periodic_debug

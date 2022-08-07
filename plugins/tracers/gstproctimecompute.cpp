@@ -18,7 +18,7 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-#include "gstproctimecompute.h"
+#include "gstproctimecompute.hpp"
 
 typedef struct _GstProcTimeElement GstProcTimeElement;
 struct _GstProcTimeElement

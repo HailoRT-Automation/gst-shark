@@ -24,9 +24,9 @@
  * A tracing module that prints detections info at every sink pad
  */
 
-#include "gstdetections.h"
-#include "gstctf.h"
-// #include "gst_hailo_meta.hpp"
+#include "gstdetections.hpp"
+#include "gstctf.hpp"
+#include "../../../core/hailo/gstreamer/metadata/gst_hailo_meta.hpp"
 
 GST_DEBUG_CATEGORY_STATIC(gst_detections_debug);
 #define GST_CAT_DEFAULT gst_detections_debug
@@ -108,7 +108,7 @@ gst_detections_buffer_pre(GObject *self, GstClockTime ts, GstPad *pad,
 
     size = gst_buffer_get_size(buffer);
 
-    flags = GST_BUFFER_FLAGS(buffer);
+    // flags = GST_BUFFER_FLAGS(buffer);
     g_value_init(&vflags, GST_TYPE_BUFFER_FLAGS);
     g_value_set_flags(&vflags, flags);
     sflags = gst_value_serialize(&vflags);

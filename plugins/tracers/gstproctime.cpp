@@ -24,9 +24,9 @@
  * A tracing module that take proctime() snapshots and logs them.
  */
 
-#include "gstproctimecompute.h"
-#include "gstproctime.h"
-#include "gstctf.h"
+#include "gstproctimecompute.hpp"
+#include "gstproctime.hpp"
+#include "gstctf.hpp"
 
 GST_DEBUG_CATEGORY_STATIC (gst_proc_time_debug);
 #define GST_CAT_DEFAULT gst_proc_time_debug

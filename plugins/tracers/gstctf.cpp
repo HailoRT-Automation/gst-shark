@@ -31,7 +31,7 @@
 #include <string.h>
 
 
-#include "gstctf.h"
+#include "gstctf.hpp"
 #include "gstparser.h"
 
 #define MAX_DIRNAME_LEN (30)

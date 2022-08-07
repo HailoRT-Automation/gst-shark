@@ -25,19 +25,19 @@
 #include <gst/gst.h>
 #include <glib/gstdio.h>
 #include <unistd.h>
-#include "gstgraphic.h"
-#include "gstcpuusage.h"
-#include "gstthreadmonitor.h"
-#include "gstnumerator.h"
-#include "gstdetections.h"
-#include "gstproctime.h"
-#include "gstinterlatency.h"
-#include "gstscheduletime.h"
-#include "gstframerate.h"
-#include "gstqueuelevel.h"
-#include "gstbitrate.h"
-#include "gstbuffer.h"
-#include "gstctf.h"
+#include "gstgraphic.hpp"
+#include "gstcpuusage.hpp"
+#include "gstthreadmonitor.hpp"
+#include "gstnumerator.hpp"
+#include "gstdetections.hpp"
+#include "gstproctime.hpp"
+#include "gstinterlatency.hpp"
+#include "gstscheduletime.hpp"
+#include "gstframerate.hpp"
+#include "gstqueuelevel.hpp"
+#include "gstbitrate.hpp"
+#include "gstbuffer.hpp"
+#include "gstctf.hpp"
 
 static gboolean
 plugin_init (GstPlugin * plugin)

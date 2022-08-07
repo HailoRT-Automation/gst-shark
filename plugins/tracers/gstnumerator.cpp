@@ -23,8 +23,8 @@
  *
  */
 
-#include "gstnumerator.h"
-#include "gstctf.h"
+#include "gstnumerator.hpp"
+#include "gstctf.hpp"
 #include <stdio.h>
 #include <stdbool.h>
 

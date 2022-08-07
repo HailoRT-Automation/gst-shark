@@ -24,8 +24,8 @@
  * A tracing module that prints buffer info at every sink pad
  */
 
-#include "gstbuffer.h"
-#include "gstctf.h"
+#include "gstbuffer.hpp"
+#include "gstctf.hpp"
 
 GST_DEBUG_CATEGORY_STATIC (gst_buffer_debug);
 #define GST_CAT_DEFAULT gst_buffer_debug

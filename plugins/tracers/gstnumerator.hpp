@@ -18,15 +18,15 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-#ifndef __GST_BUFFER_TRACER_H__
-#define __GST_BUFFER_TRACER_H__
+#ifndef __GST_NUMERATOR_TRACER_H__
+#define __GST_NUMERATOR_TRACER_H__
 
-#include "gstsharktracer.h"
+#include "gstsharktracer.hpp"
 
 G_BEGIN_DECLS
 
-#define GST_TYPE_BUFFER_TRACER (gst_buffer_tracer_get_type ())
-G_DECLARE_FINAL_TYPE (GstBufferTracer, gst_buffer_tracer, GST, BUFFER_TRACER, GstSharkTracer)
+#define GST_TYPE_NUMERATOR_TRACER (gst_numerator_tracer_get_type ())
+G_DECLARE_FINAL_TYPE (GstNumeratorTracer, gst_numerator_tracer, GST, NUMERATOR_TRACER, GstSharkTracer)
 
 G_END_DECLS
-#endif /* __GST_BUFFER_TRACER_H__ */
+#endif /* __GST_NUMERATOR_TRACER_H__ */

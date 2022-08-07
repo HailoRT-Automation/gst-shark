@@ -1,5 +1,5 @@
 /* GstShark - A Front End for GstTracer
- * Copyright (C) 2016-2018 RidgeRun Engineering <carlos.rodriguez@ridgerun.com>
+ * Copyright (C) 2016-2018 RidgeRun Engineering <manuel.leiva@ridgerun.com>
  *
  * This file is part of GstShark.
  *
@@ -18,16 +18,16 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-#ifndef __GST_QUEUE_LEVEL_TRACER_H__
-#define __GST_QUEUE_LEVEL_TRACER_H__
+#ifndef __GST_PROC_TIME_TRACER_H__
+#define __GST_PROC_TIME_TRACER_H__
 
-#include "gstsharktracer.h"
+#include "gstsharktracer.hpp"
 
 G_BEGIN_DECLS
 
-#define GST_TYPE_QUEUE_LEVEL_TRACER (gst_queue_level_tracer_get_type ())
-G_DECLARE_FINAL_TYPE (GstQueueLevelTracer, gst_queue_level_tracer, GST, QUEUE_LEVEL_TRACER, GstSharkTracer)
+#define GST_TYPE_PROC_TIME_TRACER (gst_proc_time_tracer_get_type())
+G_DECLARE_FINAL_TYPE (GstProcTimeTracer, gst_proc_time_tracer, GST, PROC_TIME_TRACER, GstSharkTracer)
 
 G_END_DECLS
 
-#endif /* __GST_QUEUE_LEVEL_TRACER_H__ */
+#endif /* __GST_PROC_TIME_TRACER_H__ */

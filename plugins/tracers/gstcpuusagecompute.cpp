@@ -24,8 +24,8 @@
 
 #include <gst/gst.h>
 #include <glib/gstdio.h>
-#include "gstcpuusage.h"
-#include "gstcpuusagecompute.h"
+#include "gstcpuusage.hpp"
+#include "gstcpuusagecompute.hpp"
 
 #include <unistd.h>
 #include <string.h>

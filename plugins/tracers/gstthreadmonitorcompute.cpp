@@ -24,9 +24,9 @@
 
 #include <gst/gst.h>
 #include <glib/gstdio.h>
-#include "gstthreadmonitor.h"
-#include "gstthreadmonitorcompute.h"
-#include "gstctf.h"
+#include "gstthreadmonitor.hpp"
+#include "gstthreadmonitorcompute.hpp"
+#include "gstctf.hpp"
 
 #include <unistd.h>
 #include <string.h>

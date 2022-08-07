@@ -25,7 +25,7 @@
  * A tracing module that uses the DOT libraries in order to show the pipeline executed graphically
  */
 
-#include "gstgraphic.h"
+#include "gstgraphic.hpp"
 #include "gstdot.h"
 
 GST_DEBUG_CATEGORY_STATIC (gst_graphic_debug);

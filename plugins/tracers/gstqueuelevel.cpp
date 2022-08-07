@@ -24,8 +24,8 @@
  * A tracing module that takes queue's current level
  */
 
-#include "gstqueuelevel.h"
-#include "gstctf.h"
+#include "gstqueuelevel.hpp"
+#include "gstctf.hpp"
 
 GST_DEBUG_CATEGORY_STATIC (gst_queue_level_debug);
 #define GST_CAT_DEFAULT gst_queue_level_debug
