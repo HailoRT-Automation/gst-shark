@@ -18,12 +18,11 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-#ifdef HAVE_CONFIG_H
-#  include "config.h"
-#endif
+// #ifdef HAVE_CONFIG_H
+#  include "../../config.h"
+// #endif
 
 #include <gst/gst.h>
-#include "../../config.h"
 #include <glib/gstdio.h>
 #include <unistd.h>
 #include "gstgraphic.h"
@@ -43,7 +42,6 @@
 static gboolean
 plugin_init (GstPlugin * plugin)
 {
-  /*
 #ifdef GST_CPUUSAGE_ENABLE
   if (!gst_tracer_register (plugin, "cpuusage",
           gst_cpu_usage_tracer_get_type ())) {
@@ -73,31 +71,29 @@ plugin_init (GstPlugin * plugin)
           gst_framerate_tracer_get_type ())) {
     return FALSE;
   }
-  */
   if (!gst_tracer_register (plugin, "queuelevel",
           gst_queue_level_tracer_get_type ())) {
     return FALSE;
   }
-  /*
   if (!gst_tracer_register (plugin, "bitrate", gst_bitrate_tracer_get_type ())) {
     return FALSE;
   }
   if (!gst_tracer_register (plugin, "buffer", gst_buffer_tracer_get_type ())) {
     return FALSE;
   }
-  if (!gst_tracer_register (plugin, "numerator", gst_numerator_tracer_get_type ())) {
-    return FALSE;
-  }
-  if (!gst_tracer_register (plugin, "detections", gst_detections_tracer_get_type ())) {
-    return FALSE;
-  }
+  // if (!gst_tracer_register (plugin, "numerator", gst_numerator_tracer_get_type ())) {
+  //   return FALSE;
+  // }
+  // if (!gst_tracer_register (plugin, "detections", gst_detections_tracer_get_type ())) {
+  //   return FALSE;
+  // }
   if (!gst_ctf_init ()) {
     return FALSE;
-  }*/
+  }
 
   return TRUE;
 }
 
 GST_PLUGIN_DEFINE (GST_VERSION_MAJOR, GST_VERSION_MINOR,
-    sharktracers, "GstShark tracers", plugin_init, "0.7.5.1",
+    sharktracers, "GstShark tracers", plugin_init, VERSION,
     GST_SHARK_LICENSE, PACKAGE_NAME, PACKAGE_URL);

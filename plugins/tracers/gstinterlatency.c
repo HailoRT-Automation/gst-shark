@@ -296,6 +296,7 @@ gst_interlatency_tracer_class_init (GstInterLatencyTracerClass * klass)
           "related-to", GST_TYPE_TRACER_VALUE_SCOPE, GST_TRACER_VALUE_SCOPE_PROCESS,
           NULL),
       NULL);
+
 // #else
 //   gst_tracer_log_trace (gst_structure_new ("interlatency.class",
 //       "from_pad", GST_TYPE_STRUCTURE, gst_structure_new ("scope",
@@ -309,6 +310,7 @@ gst_interlatency_tracer_class_init (GstInterLatencyTracerClass * klass)
 //           NULL),
 //       NULL));
 // #endif
+
   /* *INDENT-ON* */
 
   oclass->dispose = gst_interlatency_tracer_dispose;

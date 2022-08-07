@@ -1,9 +1,11 @@
 ################################################
 # BUFFER TRACE SOURCES 
 ################################################
-gst_tracers_sources = [
+gst_buffer_tracer_sources = [
+
 	'gstdot.c',
 	'gstcpuusagecompute.c',
+	'gstthreadmonitorcompute.c',
 	'gstproctimecompute.c',
 	'gstctf.c',
 	'gstparser.c',
@@ -11,6 +13,7 @@ gst_tracers_sources = [
 	'gstsharktracer.c',
 	'gstgraphic.c',
 	'gstcpuusage.c',
+	'gstthreadmonitor.c',
 	'gstproctime.c',
 	'gstinterlatency.c',
 	'gstscheduletime.c',
@@ -18,19 +21,17 @@ gst_tracers_sources = [
 	'gstqueuelevel.c',
 	'gstbitrate.c',
 	'gstbuffer.c',
-	'gstnumerator.c',
-	'gstdetections.c',
 	'gstperiodictracer.c',
 ]
 
 glib_dep = dependency('glib-2.0')
 gio_dep = dependency('gio-2.0')
 
-shared_library('gsttracers',
-    gst_tracers_sources,
+shared_library('gstsharktracers',
+    gst_buffer_tracer_sources,
     cpp_args : hailo_lib_args,
     include_directories: [hailo_general_inc, include_directories('./')],
-    dependencies : plugin_deps + [opencv_dep,glib_dep,gio_dep],
+    dependencies : plugin_deps+[glib_dep, gio_dep],
     gnu_symbol_visibility : 'default',
     install: true,
 	c_args : '-DGST_USE_UNSTABLE_API',
