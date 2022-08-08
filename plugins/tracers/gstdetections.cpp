@@ -78,12 +78,13 @@ gst_detections_buffer_pre(GObject *self, GstClockTime ts, GstPad *pad,
         printf("BUFFER IS NULL\n");
         return;
     }
-    hailo_roi = get_hailo_main_roi(buffer, true);
-
-    if (hailo_roi==NULL)
+    hailo_roi = get_hailo_main_roi(buffer, false);
+    if (NULL == hailo_roi)
     {
-        printf("hailo_roi is null!!!!!!!!!!!!!!!!!!\n");
+        printf("HAILO ROI IS NULL\n");
+        return;
     }
+
     // for (auto obj : hailo_roi->get_objects())
     // {
     //     if (obj->get_type() == HAILO_DETECTION)

@@ -18,8 +18,8 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-#ifndef __GST_DETECTIONS_TRACER_H__
-#define __GST_DETECTIONS_TRACER_H__
+#ifndef __GST_DETECTIONS_TRACER_HPP__
+#define __GST_DETECTIONS_TRACER_HPP__
 
 #include "gstsharktracer.hpp"
 
@@ -29,4 +29,4 @@ G_BEGIN_DECLS
 G_DECLARE_FINAL_TYPE (GstDetectionsTracer, gst_detections_tracer, GST, DETECTIONS_TRACER, GstSharkTracer)
 
 G_END_DECLS
-#endif /* __GST_DETECTIONS_TRACER_H__ */
+#endif /* __GST_DETECTIONS_TRACER_HPP__ */

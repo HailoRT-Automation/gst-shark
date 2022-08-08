@@ -35,6 +35,6 @@ shared_library('gstsharktracers',
     dependencies : plugin_deps+[glib_dep, gio_dep, meta_dep],
     gnu_symbol_visibility : 'default',
     install: true,
-	c_args : '-DGST_USE_UNSTABLE_API',
+	c_args : ['-DGST_USE_UNSTABLE_API','-g', '-O0'],
     install_dir: get_option('libdir') + '/gstreamer-1.0/',
 )
