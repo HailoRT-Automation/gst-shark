@@ -43,6 +43,9 @@ gst_app_dep = dependency('gstreamer-app-1.0', version : gst_req,
 gstvideo_dep = dependency('gstreamer-video-1.0', version : gst_req,
   fallback : ['gst-plugins-base', 'video_dep'])
 
+meta_dep = dependency('gsthailometa', version : meson.project_version(), method : 'pkg-config')
+
+
 # Opencv Dependencies
 opencv_dep = dependency('opencv4', version : '>= 4.0', method : 'pkg-config')
 

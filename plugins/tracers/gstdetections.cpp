@@ -71,65 +71,30 @@ static void
 gst_detections_buffer_pre(GObject *self, GstClockTime ts, GstPad *pad,
                           GstBuffer *buffer)
 {
-
-    gchar *pad_name;
-    GstClockTime pts;
-    gchar *spts;
-    GstClockTime dts;
-    gchar *sdts;
-    GstClockTime duration;
-    gchar *sduration;
-    guint64 offset;
-    guint64 offset_end;
-    guint64 size;
-    GstBufferFlags flags;
-    GValue vflags = G_VALUE_INIT;
-    gchar *sflags;
-    guint refcount;
-
-    // HailoROIPtr hailo_roi;
-
-    pad_name = g_strdup_printf("%s:%s", GST_DEBUG_PAD_NAME(pad));
+    HailoROIPtr hailo_roi;
 
     if (NULL == buffer)
     {
         return;
     }
-    pts = GST_BUFFER_PTS(buffer);
-    spts = g_strdup_printf("%" GST_TIME_FORMAT, GST_TIME_ARGS(pts));
+    
+    hailo_roi = get_hailo_main_roi(buffer, true);
+    // for (auto obj : hailo_roi->get_objects())
+    // {
+    //     if (obj->get_type() == HAILO_DETECTION)
+    //     {
+    //         HailoDetectionPtr detection = std::dynamic_pointer_cast<HailoDetection>(obj);
+    //         auto detection_bbox = detection->get_bbox();
+    //         std::string label = detection->get_label();
+    //         // printf("%s\n", label.c_str());
+    //     }
+    // }
 
-    dts = GST_BUFFER_DTS(buffer);
-    sdts = g_strdup_printf("%" GST_TIME_FORMAT, GST_TIME_ARGS(dts));
-
-    duration = GST_BUFFER_DURATION(buffer);
-    sduration = g_strdup_printf("%" GST_TIME_FORMAT, GST_TIME_ARGS(duration));
-
-    offset = GST_BUFFER_OFFSET(buffer);
-    offset_end = GST_BUFFER_OFFSET_END(buffer);
-
-    size = gst_buffer_get_size(buffer);
-
-    flags = (GstBufferFlags)GST_BUFFER_FLAGS(buffer);
-    g_value_init(&vflags, GST_TYPE_BUFFER_FLAGS);
-    g_value_set_flags(&vflags, flags);
-    sflags = gst_value_serialize(&vflags);
-
-    refcount = GST_MINI_OBJECT_REFCOUNT_VALUE(buffer);
-
-    gst_tracer_record_log(tr_detections, pad_name, spts, sdts, sduration, offset,
-                          offset_end, size, sflags, refcount);
+    // gst_tracer_record_log(tr_detections, pad_name, spts, sdts, sduration, offset,
+    //                       offset_end, size, sflags, refcount);
 
     //   do_print_detections_event (BUFFER_EVENT_ID, pad_name, pts, dts, duration,
     //       offset, offset_end, size, flags, refcount);
-
-    // hailo_roi = get_hailo_main_roi(buffer, true);
-
-    g_value_unset(&vflags);
-    g_free(spts);
-    g_free(sdts);
-    g_free(sduration);
-    g_free(sflags);
-    g_free(pad_name);
 }
 
 /* tracer class */
