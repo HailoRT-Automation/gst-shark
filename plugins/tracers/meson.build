@@ -30,11 +30,11 @@ gio_dep = dependency('gio-2.0')
 
 shared_library('gstsharktracers',
     gst_tracer_sources,
-    cpp_args : hailo_lib_args+['-DGST_USE_UNSTABLE_API']+['-g', '-O0'],
+    cpp_args : hailo_lib_args+['-DGST_USE_UNSTABLE_API'],
     include_directories: [hailo_general_inc, include_directories('./')],
     dependencies : plugin_deps+[glib_dep, gio_dep, meta_dep],
     gnu_symbol_visibility : 'default',
     install: true,
-	c_args : ['-DGST_USE_UNSTABLE_API','-g', '-O0'],
+	c_args : ['-DGST_USE_UNSTABLE_API'],
     install_dir: get_option('libdir') + '/gstreamer-1.0/',
 )

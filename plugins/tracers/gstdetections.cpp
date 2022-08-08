@@ -27,6 +27,7 @@
 #include "gstdetections.hpp"
 #include "gstctf.hpp"
 #include "../../../core/hailo/gstreamer/metadata/gst_hailo_meta.hpp"
+#include "../../../core/hailo/general/hailo_common.hpp"
 
 GST_DEBUG_CATEGORY_STATIC(gst_detections_debug);
 #define GST_CAT_DEFAULT gst_detections_debug
@@ -72,35 +73,27 @@ gst_detections_buffer_pre(GObject *self, GstClockTime ts, GstPad *pad,
                           GstBuffer *buffer)
 {
     HailoROIPtr hailo_roi;
-
     if (NULL == buffer)
     {
-        printf("BUFFER IS NULL\n");
         return;
     }
     hailo_roi = get_hailo_main_roi(buffer, false);
     if (NULL == hailo_roi)
     {
-        printf("HAILO ROI IS NULL\n");
         return;
     }
 
-    // for (auto obj : hailo_roi->get_objects())
-    // {
-    //     if (obj->get_type() == HAILO_DETECTION)
-    //     {
-    //         HailoDetectionPtr detection = std::dynamic_pointer_cast<HailoDetection>(obj);
-    //         auto detection_bbox = detection->get_bbox();
-    //         std::string label = detection->get_label();
-    //         // printf("%s\n", label.c_str());
-    //     }
-    // }
-
-    // gst_tracer_record_log(tr_detections, pad_name, spts, sdts, sduration, offset,
-    //                       offset_end, size, sflags, refcount);
-
-    //   do_print_detections_event (BUFFER_EVENT_ID, pad_name, pts, dts, duration,
-    //       offset, offset_end, size, flags, refcount);
+    for (auto obj : hailo_roi->get_objects())
+    {
+        if (obj->get_type() == HAILO_DETECTION)
+        {
+            HailoDetectionPtr detection = std::dynamic_pointer_cast<HailoDetection>(obj);
+            auto detection_bbox = detection->get_bbox();
+            gst_tracer_record_log(tr_detections, detection->get_label().c_str(),
+                                  detection_bbox.xmin(),
+                                  detection_bbox.ymin());
+        }
+    }
 }
 
 /* tracer class */
@@ -110,20 +103,13 @@ gst_detections_tracer_class_init(GstDetectionsTracerClass *klass)
     //   gchar *metadata_event;
 
     tr_detections = gst_tracer_record_new("detections.class",
-                                          "pad", GST_TYPE_STRUCTURE, gst_structure_new("value", "type", G_TYPE_GTYPE, G_TYPE_STRING, "description", G_TYPE_STRING, "The pad which the buffer is going through", NULL), "pts",
-                                          GST_TYPE_STRUCTURE, gst_structure_new("value", "type", G_TYPE_GTYPE, G_TYPE_STRING, "description", G_TYPE_STRING, "Presentation Timestamp", NULL), "dts", GST_TYPE_STRUCTURE, gst_structure_new("value", "type", G_TYPE_GTYPE, G_TYPE_STRING, "description", G_TYPE_STRING, "Decoding Timestamp", NULL), "duration", GST_TYPE_STRUCTURE,
-                                          gst_structure_new("value", "type", G_TYPE_GTYPE, G_TYPE_STRING,
-                                                            "description", G_TYPE_STRING, "Duration", NULL),
-                                          "offset",
-                                          GST_TYPE_STRUCTURE, gst_structure_new("value", "type", G_TYPE_GTYPE, G_TYPE_UINT64, "description", G_TYPE_STRING, "Offset", "min", G_TYPE_UINT64, G_GUINT64_CONSTANT(0), "max", G_TYPE_UINT64, G_MAXUINT64, NULL), "offset_end", GST_TYPE_STRUCTURE,
-                                          gst_structure_new("value", "type", G_TYPE_GTYPE, G_TYPE_UINT64,
-                                                            "description", G_TYPE_STRING, "Offset End", "min", G_TYPE_UINT64,
-                                                            G_GUINT64_CONSTANT(0), "max", G_TYPE_UINT64, G_MAXUINT64, NULL),
-                                          "size", GST_TYPE_STRUCTURE, gst_structure_new("value", "type", G_TYPE_GTYPE, G_TYPE_UINT64, "description", G_TYPE_STRING, "Data Size", "min", G_TYPE_UINT64, G_GUINT64_CONSTANT(0), "max", G_TYPE_UINT64, G_MAXUINT64, NULL), "flags", GST_TYPE_STRUCTURE,
-                                          gst_structure_new("value", "type", G_TYPE_GTYPE, G_TYPE_STRING,
-                                                            "description", G_TYPE_STRING, "Flags", NULL),
-                                          "refcount",
-                                          GST_TYPE_STRUCTURE, gst_structure_new("value", "type", G_TYPE_GTYPE, G_TYPE_UINT, "description", G_TYPE_STRING, "Ref Count", "min", G_TYPE_UINT, 0, "max", G_TYPE_UINT, G_MAXUINT32, NULL), NULL);
+                                          "label",
+                                          GST_TYPE_STRUCTURE, gst_structure_new("value", "type", G_TYPE_GTYPE, G_TYPE_STRING, "description", G_TYPE_STRING, "The detection's label", NULL),
+                                          "xmin",
+                                          GST_TYPE_STRUCTURE, gst_structure_new("value", "type", G_TYPE_GTYPE, G_TYPE_FLOAT, "description", G_TYPE_STRING, "the minimum x value of the bounding box", NULL),
+                                          "ymin",
+                                          GST_TYPE_STRUCTURE, gst_structure_new("value", "type", G_TYPE_GTYPE, G_TYPE_FLOAT, "description", G_TYPE_STRING, "the minimum y value of the bounding box", NULL),
+                                          NULL);
 
     //   metadata_event = g_strdup_printf (detections_metadata_event, BUFFER_EVENT_ID, 0);
     //   add_metadata_event_struct (metadata_event);
