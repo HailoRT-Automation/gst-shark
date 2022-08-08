@@ -5,7 +5,6 @@ libgstshark_la_SOURCES = \
 	gstcpuusagecompute.c \
 	gstthreadmonitorcompute.c \
 	gstproctimecompute.c \
-	../../../../core/hailo/gstreamer/metadata/gst_hailo_meta.cpp \
 	gstctf.c \
 	gstparser.c
 
