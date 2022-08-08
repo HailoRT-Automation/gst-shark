@@ -74,11 +74,8 @@ noinst_HEADERS = \
 	gstbitrate.h \
 	gstbuffer.h \
 	gstnumerator.h \
-	gstdetections.h \
 	gstsharktracer.h \
-	../../../../core/hailo/gstreamer/metadata/gst_hailo_meta.hpp \
 	gstperiodictracer.h
-
 
 CLEANFILES = *.gcno *.gcda *.gcov *.gcov.out
 
