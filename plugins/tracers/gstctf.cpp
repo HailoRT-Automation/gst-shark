@@ -251,12 +251,12 @@ static GstCtfDescriptor *
 ctf_create_struct (void)
 {
   gchar UUID[] =
-      { 0xd1, 0x8e, 0x63, 0x74, 0x35, 0xa1, 0xcd, 0x42, 0x8e, 0x70, 0xa9, 0xcf,
-    0xfa, 0x71, 0x27, 0x93
+      { static_cast<gchar>(0xd1), static_cast<gchar>(0x8e), static_cast<gchar>(0x63), static_cast<gchar>(0x74), static_cast<gchar>(0x35), static_cast<gchar>(0xa1), static_cast<gchar>(0xcd), static_cast<gchar>(0x42), static_cast<gchar>(0x8e), static_cast<gchar>(0x70), static_cast<gchar>(0xa9), static_cast<gchar>(0xcf),
+    static_cast<gchar>(0xfa), static_cast<gchar>(0x71), static_cast<gchar>(0x27), static_cast<gchar>(0x93)
   };
   GstCtfDescriptor *ctf;
 
-  ctf = g_malloc (sizeof (GstCtfDescriptor));
+  ctf = (GstCtfDescriptor*)g_malloc (sizeof (GstCtfDescriptor));
   if (NULL == ctf) {
     GST_ERROR ("CTF descriptor could not be created.");
     return NULL;
@@ -458,7 +458,7 @@ tcp_parser_handler (gchar * line)
   if (*line_end == '\0') {
     str_len = strlen (host_name);
 
-    ctf_descriptor->host_name = g_malloc (str_len + 1);
+    ctf_descriptor->host_name = (gchar*)g_malloc (str_len + 1);
 
     strcpy (ctf_descriptor->host_name, host_name);
     /* End of the line, finish parser process */
@@ -470,7 +470,7 @@ tcp_parser_handler (gchar * line)
 
     str_len = strlen (host_name);
 
-    ctf_descriptor->host_name = g_malloc (str_len + 1);
+    ctf_descriptor->host_name = (gchar*)g_malloc (str_len + 1);
 
     strcpy (ctf_descriptor->host_name, host_name);
 
@@ -497,7 +497,7 @@ file_parser_handler (gchar * line)
   gsize str_len;
 
   str_len = strlen (line);
-  ctf_descriptor->env_dir_name = g_malloc (str_len + 1);
+  ctf_descriptor->env_dir_name = (gchar*)g_malloc (str_len + 1);
   strcpy (ctf_descriptor->env_dir_name, line);
 }
 
@@ -528,7 +528,7 @@ ctf_process_env_var (void)
 
     str_len = strlen (env_loc_value);
 
-    env_line = g_malloc (str_len + 1);
+    env_line = (gchar*)g_malloc (str_len + 1);
 
     strcpy (env_line, env_loc_value);
 
@@ -562,11 +562,11 @@ ctf_process_env_var (void)
   if (G_LIKELY (env_dir_name == NULL)) {
     /* Creating the output folder for the CTF output files. */
     strftime (dir_name, MAX_DIRNAME_LEN, "gstshark_%F_%T", localtime (&now));
-    ctf_descriptor->dir_name = g_malloc (MAX_DIRNAME_LEN + 1);
+    ctf_descriptor->dir_name = (gchar*)g_malloc (MAX_DIRNAME_LEN + 1);
     g_stpcpy (ctf_descriptor->dir_name, dir_name);
   } else {
     size_env_path = strlen (env_dir_name);
-    ctf_descriptor->dir_name = g_malloc (size_env_path + 1);
+    ctf_descriptor->dir_name = (gchar*)g_malloc (size_env_path + 1);
     g_stpcpy (ctf_descriptor->dir_name, env_dir_name);
   }
 }
@@ -765,7 +765,7 @@ do_print_cpuusage_event (event_id id, guint32 cpu_num, gfloat * cpuload)
   guint8 *mem;
   guint8 *event_mem;
   gsize event_size;
-  gint cpu_idx;
+  guint cpu_idx;
 
   event_size = cpu_num * sizeof (gfloat) + CTF_HEADER_SIZE;
 

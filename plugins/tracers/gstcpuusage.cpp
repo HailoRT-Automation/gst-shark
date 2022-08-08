@@ -140,7 +140,7 @@ create_metadata_event (GstPeriodicTracer * tracer)
   mem_size =
       str_size + cpu_num * sizeof (floating_point_event_field) +
       sizeof (cpuusage_metadata_event_footer);
-  mem_start = g_malloc (mem_size);
+  mem_start = (gchar*)g_malloc (mem_size);
   mem = mem_start;
 
   /* Add event header */

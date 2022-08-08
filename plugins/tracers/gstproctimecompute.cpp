@@ -58,7 +58,7 @@ gst_proctime_new (void)
 {
   GstProcTime *self;
 
-  self = g_malloc (sizeof (GstProcTime));
+  self = (GstProcTime*)g_malloc (sizeof (GstProcTime));
 
   g_return_val_if_fail (self, NULL);
 
@@ -90,11 +90,11 @@ gst_proctime_add_in_list (GstProcTime * proc_time, GstPad * sink_pad,
   g_return_if_fail (sink_pad);
   g_return_if_fail (src_pad);
 
-  new_element = g_malloc0 (sizeof (GstProcTimeElement));
+  new_element = (GstProcTimeElement*)g_malloc0 (sizeof (GstProcTimeElement));
   new_element->start_time = GST_CLOCK_TIME_NONE;
 
-  new_element->sink_pad = gst_object_ref (sink_pad);
-  new_element->src_pad = gst_object_ref (src_pad);
+  new_element->sink_pad = (GstPad*)gst_object_ref (sink_pad);
+  new_element->src_pad = (GstPad*)gst_object_ref (src_pad);
 
   proc_time->elements = g_list_append (proc_time->elements, new_element);
 }
@@ -162,7 +162,7 @@ gst_proctime_proc_time (GstProcTime * proc_time, GstClockTime * time,
   GstProcTimeElement *element;
   GstClockTime stop_time;
   guint elem_num;
-  gint elem_idx;
+  guint elem_idx;
   gboolean found = FALSE;
 
   g_return_val_if_fail (proc_time, FALSE);
@@ -176,7 +176,7 @@ gst_proctime_proc_time (GstProcTime * proc_time, GstClockTime * time,
    * buffer is received.
    */
   for (elem_idx = 0; elem_idx < elem_num; ++elem_idx) {
-    element = g_list_nth_data (proc_time->elements, elem_idx);
+    element = (GstProcTimeElement*)g_list_nth_data (proc_time->elements, elem_idx);
     if (element->sink_pad == peer_pad) {
       element->start_time = ts;
     }
@@ -192,7 +192,7 @@ gst_proctime_proc_time (GstProcTime * proc_time, GstClockTime * time,
    * precessing time is not computed
    */
   for (elem_idx = 0; elem_idx < elem_num; ++elem_idx) {
-    element = g_list_nth_data (proc_time->elements, elem_idx);
+    element = (GstProcTimeElement*)g_list_nth_data (proc_time->elements, elem_idx);
     if (element->src_pad == src_pad) {
       stop_time = ts;
       if (stop_time > element->start_time) {

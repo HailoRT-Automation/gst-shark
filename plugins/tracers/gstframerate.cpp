@@ -230,7 +230,7 @@ consider_frames (GstFramerateTracer * self, GstPad * pad, guint amount)
     fullname = g_strdup_printf ("%s_%s", GST_DEBUG_PAD_NAME (pad));
     fullname = make_char_array_valid (fullname);
 
-    pad_frames = g_malloc (sizeof (GstFramerateHash));
+    pad_frames = (GstFramerateHash*)g_malloc (sizeof (GstFramerateHash));
     pad_frames->fullname = fullname;
     pad_frames->counter = amount;
 

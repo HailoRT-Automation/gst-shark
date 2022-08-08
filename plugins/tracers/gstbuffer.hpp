@@ -21,7 +21,7 @@
 #ifndef __GST_BUFFER_TRACER_H__
 #define __GST_BUFFER_TRACER_H__
 
-#include "gstsharktracer.h"
+#include "gstsharktracer.hpp"
 
 G_BEGIN_DECLS
 

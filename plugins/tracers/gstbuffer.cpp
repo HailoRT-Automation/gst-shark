@@ -106,7 +106,7 @@ gst_buffer_buffer_pre (GObject * self, GstClockTime ts, GstPad * pad,
 
   size = gst_buffer_get_size (buffer);
 
-  flags = GST_BUFFER_FLAGS (buffer);
+  flags = (GstBufferFlags)GST_BUFFER_FLAGS (buffer);
   g_value_init (&vflags, GST_TYPE_BUFFER_FLAGS);
   g_value_set_flags (&vflags, flags);
   sflags = gst_value_serialize (&vflags);

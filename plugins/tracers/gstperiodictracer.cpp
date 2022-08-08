@@ -34,7 +34,7 @@ static void write_header_internal (GstPeriodicTracer * self);
 static gint set_period (GstPeriodicTracer * self);
 
 #define GST_PERIODIC_TRACER_PRIVATE(o) \
-  gst_periodic_tracer_get_instance_private(GST_PERIODIC_TRACER(o))
+  (GstPeriodicTracerPrivate*)gst_periodic_tracer_get_instance_private(GST_PERIODIC_TRACER(o))
 
 #define DEFAULT_TIMEOUT_INTERVAL 1
 
@@ -245,7 +245,7 @@ set_period (GstPeriodicTracer * self)
   } else {
     GST_INFO_OBJECT (self, "Attempting to parse provided period \"%s\"",
         (gchar *) list->data);
-    period = g_ascii_strtoull (list->data, NULL, 0);
+    period = g_ascii_strtoull ((const gchar*)list->data, NULL, 0);
     /* On error, 0 is set */
     if (0 == period) {
       period = DEFAULT_TIMEOUT_INTERVAL;

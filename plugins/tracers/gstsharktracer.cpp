@@ -24,7 +24,7 @@ GST_DEBUG_CATEGORY_STATIC (gst_shark_debug);
 #define GST_CAT_DEFAULT gst_shark_debug
 
 #define GST_SHARK_TRACER_PRIVATE(o) \
-  gst_shark_tracer_get_instance_private(GST_SHARK_TRACER(o))
+  (GstSharkTracerPrivate*)gst_shark_tracer_get_instance_private(GST_SHARK_TRACER(o))
 
 typedef struct _GstSharkTracerPrivate GstSharkTracerPrivate;
 struct _GstSharkTracerPrivate
@@ -146,75 +146,75 @@ static void
 gst_shark_tracer_fill_hooks (GstSharkTracerPrivate * priv)
 {
   g_hash_table_insert (priv->myhooks, (gpointer) "pad-push-pre",
-      gst_shark_tracer_hook_pad_push_pre);
+      (void*)gst_shark_tracer_hook_pad_push_pre);
   g_hash_table_insert (priv->myhooks, (gpointer) "pad-push-post",
-      gst_shark_tracer_hook_pad_push_post);
+      (void*)gst_shark_tracer_hook_pad_push_post);
   g_hash_table_insert (priv->myhooks, (gpointer) "pad-push-list-pre",
-      gst_shark_tracer_hook_pad_push_list_pre);
+      (void*)gst_shark_tracer_hook_pad_push_list_pre);
   g_hash_table_insert (priv->myhooks, (gpointer) "pad-push-list-post",
-      gst_shark_tracer_hook_pad_push_list_post);
+      (void*)gst_shark_tracer_hook_pad_push_list_post);
   g_hash_table_insert (priv->myhooks, (gpointer) "pad-pull-range-pre",
-      gst_shark_tracer_hook_pad_pull_range_pre);
+      (void*)gst_shark_tracer_hook_pad_pull_range_pre);
   g_hash_table_insert (priv->myhooks, (gpointer) "pad-pull-range-post",
-      gst_shark_tracer_hook_pad_pull_range_post);
+      (void*)gst_shark_tracer_hook_pad_pull_range_post);
   g_hash_table_insert (priv->myhooks, (gpointer) "pad-push-event-pre",
-      gst_shark_tracer_hook_pad_push_event_pre);
+      (void*)gst_shark_tracer_hook_pad_push_event_pre);
   g_hash_table_insert (priv->myhooks, (gpointer) "pad-push-event-post",
-      gst_shark_tracer_hook_pad_push_event_post);
+      (void*)gst_shark_tracer_hook_pad_push_event_post);
   g_hash_table_insert (priv->myhooks, (gpointer) "pad-query-pre",
-      gst_shark_tracer_hook_pad_query_pre);
+      (void*)gst_shark_tracer_hook_pad_query_pre);
   g_hash_table_insert (priv->myhooks, (gpointer) "pad-query-post",
-      gst_shark_tracer_hook_pad_query_post);
+      (void*)gst_shark_tracer_hook_pad_query_post);
   g_hash_table_insert (priv->myhooks, (gpointer) "element-post-message-pre",
-      gst_shark_tracer_hook_element_post_message_pre);
+      (void*)gst_shark_tracer_hook_element_post_message_pre);
   g_hash_table_insert (priv->myhooks, (gpointer) "element-post-message-post",
-      gst_shark_tracer_hook_element_post_message_post);
+      (void*)gst_shark_tracer_hook_element_post_message_post);
   g_hash_table_insert (priv->myhooks, (gpointer) "element-query-pre",
-      gst_shark_tracer_hook_element_query_pre);
+      (void*)gst_shark_tracer_hook_element_query_pre);
   g_hash_table_insert (priv->myhooks, (gpointer) "element-query-post",
-      gst_shark_tracer_hook_element_query_post);
+      (void*)gst_shark_tracer_hook_element_query_post);
   g_hash_table_insert (priv->myhooks, (gpointer) "element-new",
-      gst_shark_tracer_hook_element_new);
+      (void*)gst_shark_tracer_hook_element_new);
   g_hash_table_insert (priv->myhooks, (gpointer) "element-add-pad",
-      gst_shark_tracer_hook_element_add_pad);
+      (void*)gst_shark_tracer_hook_element_add_pad);
   g_hash_table_insert (priv->myhooks, (gpointer) "element-remove-pad",
-      gst_shark_tracer_hook_element_remove_pad);
+      (void*)gst_shark_tracer_hook_element_remove_pad);
   g_hash_table_insert (priv->myhooks, (gpointer) "bin-add-pre",
-      gst_shark_tracer_hook_bin_add_pre);
+      (void*)gst_shark_tracer_hook_bin_add_pre);
   g_hash_table_insert (priv->myhooks, (gpointer) "bin-add-post",
-      gst_shark_tracer_hook_bin_add_post);
+      (void*)gst_shark_tracer_hook_bin_add_post);
   g_hash_table_insert (priv->myhooks, (gpointer) "bin-remove-pre",
-      gst_shark_tracer_hook_bin_remove_pre);
+      (void*)gst_shark_tracer_hook_bin_remove_pre);
   g_hash_table_insert (priv->myhooks, (gpointer) "bin-remove-post",
-      gst_shark_tracer_hook_bin_remove_post);
+      (void*)gst_shark_tracer_hook_bin_remove_post);
   g_hash_table_insert (priv->myhooks, (gpointer) "pad-link-pre",
-      gst_shark_tracer_hook_pad_link_pre);
+      (void*)gst_shark_tracer_hook_pad_link_pre);
   g_hash_table_insert (priv->myhooks, (gpointer) "pad-link-post",
-      gst_shark_tracer_hook_pad_link_post);
+      (void*)gst_shark_tracer_hook_pad_link_post);
   g_hash_table_insert (priv->myhooks, (gpointer) "pad-unlink-pre",
-      gst_shark_tracer_hook_pad_unlink_pre);
+      (void*)gst_shark_tracer_hook_pad_unlink_pre);
   g_hash_table_insert (priv->myhooks, (gpointer) "pad-unlink-post",
-      gst_shark_tracer_hook_pad_unlink_post);
+      (void*)gst_shark_tracer_hook_pad_unlink_post);
   g_hash_table_insert (priv->myhooks, (gpointer) "element-change-state-pre",
-      gst_shark_tracer_hook_element_change_state_pre);
+      (void*)gst_shark_tracer_hook_element_change_state_pre);
   g_hash_table_insert (priv->myhooks, (gpointer) "element-change-state-post",
-      gst_shark_tracer_hook_element_change_state_post);
+      (void*)gst_shark_tracer_hook_element_change_state_post);
   g_hash_table_insert (priv->myhooks, (gpointer) "mini-object-created",
-      gst_shark_tracer_hook_mini_object_created);
+      (void*)gst_shark_tracer_hook_mini_object_created);
   g_hash_table_insert (priv->myhooks, (gpointer) "mini-object-destroyed",
-      gst_shark_tracer_hook_mini_object_destroyed);
+      (void*)gst_shark_tracer_hook_mini_object_destroyed);
   g_hash_table_insert (priv->myhooks, (gpointer) "object-created",
-      gst_shark_tracer_hook_object_created);
+      (void*)gst_shark_tracer_hook_object_created);
   g_hash_table_insert (priv->myhooks, (gpointer) "object-destroyed",
-      gst_shark_tracer_hook_object_destroyed);
+      (void*)gst_shark_tracer_hook_object_destroyed);
   g_hash_table_insert (priv->myhooks, (gpointer) "mini-object-reffed",
-      gst_shark_tracer_hook_mini_object_reffed);
+      (void*)gst_shark_tracer_hook_mini_object_reffed);
   g_hash_table_insert (priv->myhooks, (gpointer) "mini-object-unreffed",
-      gst_shark_tracer_hook_mini_object_unreffed);
+      (void*)gst_shark_tracer_hook_mini_object_unreffed);
   g_hash_table_insert (priv->myhooks, (gpointer) "object-reffed",
-      gst_shark_tracer_hook_object_reffed);
+      (void*)gst_shark_tracer_hook_object_reffed);
   g_hash_table_insert (priv->myhooks, (gpointer) "object-unreffed",
-      gst_shark_tracer_hook_object_unreffed);
+      (void*)gst_shark_tracer_hook_object_unreffed);
 }
 
 static void
@@ -234,7 +234,7 @@ gst_shark_tracer_free_params (GstSharkTracerPrivate * priv)
   g_hash_table_iter_init (&iter, priv->params);
   while (g_hash_table_iter_next (&iter, &key, &value)) {
     g_free (key);
-    g_list_free_full (value, g_free);
+    g_list_free_full ((GList*)value, g_free);
   }
 }
 
@@ -283,7 +283,7 @@ gst_shark_tracer_save_params (GstSharkTracer * self)
        return NULL. NULL is a valid value for prepend, in which case a
        new list will be started.
      */
-    param = g_hash_table_lookup (priv->params, keyvalue[0]);
+    param = (GList*)g_hash_table_lookup (priv->params, keyvalue[0]);
     param = g_list_append (param, g_strdup (keyvalue[1]));
     g_hash_table_replace (priv->params, g_strdup (keyvalue[0]), param);
 
@@ -313,7 +313,7 @@ gst_shark_tracer_dump_params (GstSharkTracer * self)
   keys = g_hash_table_get_keys (priv->params);
 
   for (key = keys; NULL != key; key = g_list_next (key)) {
-    GList *values = g_hash_table_lookup (priv->params, key->data);
+    GList *values = (GList*)g_hash_table_lookup (priv->params, key->data);
     GList *value;
 
     GST_INFO_OBJECT (self, "\t- %s (%d)", (gchar *) key->data,
@@ -343,7 +343,7 @@ gst_shark_tracer_element_is_filtered (GstSharkTracer * self,
 
   GST_LOG_OBJECT (self, "Looking if user has filtered %s", element);
 
-  filters = g_hash_table_lookup (priv->params, filter_tag);
+  filters = (GList*)g_hash_table_lookup (priv->params, filter_tag);
   if (NULL == filters) {
     GST_LOG_OBJECT (self, "There are no filters specified");
     return TRUE;
@@ -353,7 +353,7 @@ gst_shark_tracer_element_is_filtered (GstSharkTracer * self,
   for (filter = filters; NULL != filter; filter = g_list_next (filters)) {
     const gchar *pattern = (const gchar *) filter->data;
 
-    is_filtered = g_regex_match_simple (pattern, element, 0, 0);
+    is_filtered = g_regex_match_simple (pattern, element, (GRegexCompileFlags)0, (GRegexMatchFlags)0);
     if (is_filtered) {
       break;
     }
@@ -375,7 +375,7 @@ gst_shark_tracer_get_param (GstSharkTracer * self, const gchar * param)
 
   priv = GST_SHARK_TRACER_PRIVATE (self);
 
-  return g_hash_table_lookup (priv->params, param);
+  return (GList*)g_hash_table_lookup (priv->params, param);
 }
 
 void
@@ -385,12 +385,12 @@ gst_shark_tracer_register_hook (GstSharkTracer * self, const gchar * detail,
   GstSharkTracerPrivate *priv = GST_SHARK_TRACER_PRIVATE (self);
 
   if (!g_hash_table_contains (priv->hooks, detail)) {
-    GCallback myhook = g_hash_table_lookup (priv->myhooks, detail);
+    GCallback myhook = (GCallback)g_hash_table_lookup (priv->myhooks, detail);
 
     GST_INFO_OBJECT (self, "Registering new shark hook for %s", detail);
 
     /* Save child's hook */
-    g_hash_table_insert (priv->hooks, g_strdup (detail), func);
+    g_hash_table_insert (priv->hooks, g_strdup (detail), (void*)func);
 
     /* Register our hook */
     gst_tracing_register_hook (GST_TRACER (self), detail, myhook);
@@ -412,7 +412,7 @@ gst_shark_tracer_hook_pad_push_pre (GObject * object, GstClockTime ts,
     return;
   }
 
-  hook = g_hash_table_lookup (priv->hooks, "pad-push-pre");
+  hook = (GCallback)g_hash_table_lookup (priv->hooks, "pad-push-pre");
   g_return_if_fail (hook);
 
   ((void (*)(GObject *, GstClockTime, GstPad *, GstBuffer *)) hook) (object, ts,
@@ -433,7 +433,7 @@ gst_shark_tracer_hook_pad_push_post (GObject * object, GstClockTime ts,
     return;
   }
 
-  hook = g_hash_table_lookup (priv->hooks, "pad-push-post");
+  hook = (GCallback)g_hash_table_lookup (priv->hooks, "pad-push-post");
   g_return_if_fail (hook);
 
   ((void (*)(GObject *, GstClockTime, GstPad *, GstFlowReturn)) hook) (object,
@@ -454,7 +454,7 @@ gst_shark_tracer_hook_pad_push_list_pre (GObject * object, GstClockTime ts,
     return;
   }
 
-  hook = g_hash_table_lookup (priv->hooks, "pad-push-pre");
+  hook = (GCallback)g_hash_table_lookup (priv->hooks, "pad-push-pre");
   g_return_if_fail (hook);
 
   ((void (*)(GObject *, GstClockTime, GstPad *, GstBufferList *)) hook) (object,
@@ -475,7 +475,7 @@ gst_shark_tracer_hook_pad_push_list_post (GObject * object, GstClockTime ts,
     return;
   }
 
-  hook = g_hash_table_lookup (priv->hooks, "pad-push-list-post");
+  hook = (GCallback)g_hash_table_lookup (priv->hooks, "pad-push-list-post");
   g_return_if_fail (hook);
 
   ((void (*)(GObject *, GstClockTime, GstPad *, GstFlowReturn)) hook) (object,
@@ -496,7 +496,7 @@ gst_shark_tracer_hook_pad_pull_range_pre (GObject * object, GstClockTime ts,
     return;
   }
 
-  hook = g_hash_table_lookup (priv->hooks, "pad-pull-range-pre");
+  hook = (GCallback)g_hash_table_lookup (priv->hooks, "pad-pull-range-pre");
   g_return_if_fail (hook);
 
   ((void (*)(GObject *, GstClockTime, GstPad *, guint64, guint)) hook) (object,
@@ -517,7 +517,7 @@ gst_shark_tracer_hook_pad_pull_range_post (GObject * object, GstClockTime ts,
     return;
   }
 
-  hook = g_hash_table_lookup (priv->hooks, "pad-pull-range-post");
+  hook = (GCallback)g_hash_table_lookup (priv->hooks, "pad-pull-range-post");
   g_return_if_fail (hook);
 
   ((void (*)(GObject *, GstClockTime, GstPad *, GstBuffer *,
@@ -538,7 +538,7 @@ gst_shark_tracer_hook_pad_push_event_pre (GObject * object, GstClockTime ts,
     return;
   }
 
-  hook = g_hash_table_lookup (priv->hooks, "pad-push-event-pre");
+  hook = (GCallback)g_hash_table_lookup (priv->hooks, "pad-push-event-pre");
   g_return_if_fail (hook);
 
   ((void (*)(GObject *, GstClockTime, GstPad *, GstEvent *)) hook) (object, ts,
@@ -559,7 +559,7 @@ gst_shark_tracer_hook_pad_push_event_post (GObject * object, GstClockTime ts,
     return;
   }
 
-  hook = g_hash_table_lookup (priv->hooks, "pad-push-event-post");
+  hook = (GCallback)g_hash_table_lookup (priv->hooks, "pad-push-event-post");
   g_return_if_fail (hook);
 
   ((void (*)(GObject *, GstClockTime, GstPad *, gboolean)) hook) (object, ts,
@@ -580,7 +580,7 @@ gst_shark_tracer_hook_pad_query_pre (GObject * object, GstClockTime ts,
     return;
   }
 
-  hook = g_hash_table_lookup (priv->hooks, "pad-query-pre");
+  hook = (GCallback)g_hash_table_lookup (priv->hooks, "pad-query-pre");
   g_return_if_fail (hook);
 
   ((void (*)(GObject *, GstClockTime, GstPad *, GstQuery *)) hook) (object, ts,
@@ -601,7 +601,7 @@ gst_shark_tracer_hook_pad_query_post (GObject * object, GstClockTime ts,
     return;
   }
 
-  hook = g_hash_table_lookup (priv->hooks, "pad-query-post");
+  hook = (GCallback)g_hash_table_lookup (priv->hooks, "pad-query-post");
   g_return_if_fail (hook);
 
   ((void (*)(GObject *, GstClockTime, GstPad *, GstQuery *,
@@ -622,7 +622,7 @@ gst_shark_tracer_hook_element_post_message_pre (GObject * object,
     return;
   }
 
-  hook = g_hash_table_lookup (priv->hooks, "element-post-message-pre");
+  hook = (GCallback)g_hash_table_lookup (priv->hooks, "element-post-message-pre");
   g_return_if_fail (hook);
 
   ((void (*)(GObject *,
@@ -644,7 +644,7 @@ gst_shark_tracer_hook_element_post_message_post (GObject * object,
     return;
   }
 
-  hook = g_hash_table_lookup (priv->hooks, "element-post-message-post");
+  hook = (GCallback)g_hash_table_lookup (priv->hooks, "element-post-message-post");
   g_return_if_fail (hook);
 
   ((void (*)(GObject *,
@@ -666,7 +666,7 @@ gst_shark_tracer_hook_element_query_pre (GObject * object, GstClockTime ts,
     return;
   }
 
-  hook = g_hash_table_lookup (priv->hooks, "element-query-pre");
+  hook = (GCallback)g_hash_table_lookup (priv->hooks, "element-query-pre");
   g_return_if_fail (hook);
 
   ((void (*)(GObject *, GstClockTime,
@@ -687,7 +687,7 @@ gst_shark_tracer_hook_element_query_post (GObject * object, GstClockTime ts,
     return;
   }
 
-  hook = g_hash_table_lookup (priv->hooks, "element-query-post");
+  hook = (GCallback)g_hash_table_lookup (priv->hooks, "element-query-post");
   g_return_if_fail (hook);
 
   ((void (*)(GObject *, GstClockTime,
@@ -709,7 +709,7 @@ gst_shark_tracer_hook_element_new (GObject * object, GstClockTime ts,
     return;
   }
 
-  hook = g_hash_table_lookup (priv->hooks, "element-new");
+  hook = (GCallback)g_hash_table_lookup (priv->hooks, "element-new");
   g_return_if_fail (hook);
 
   ((void (*)(GObject *, GstClockTime,
@@ -730,7 +730,7 @@ gst_shark_tracer_hook_element_add_pad (GObject * object, GstClockTime ts,
     return;
   }
 
-  hook = g_hash_table_lookup (priv->hooks, "element-add-pad");
+  hook = (GCallback)g_hash_table_lookup (priv->hooks, "element-add-pad");
   g_return_if_fail (hook);
 
   ((void (*)(GObject *, GstClockTime,
@@ -751,7 +751,7 @@ gst_shark_tracer_hook_element_remove_pad (GObject * object, GstClockTime ts,
     return;
   }
 
-  hook = g_hash_table_lookup (priv->hooks, "element-remove-pad");
+  hook = (GCallback)g_hash_table_lookup (priv->hooks, "element-remove-pad");
   g_return_if_fail (hook);
 
   ((void (*)(GObject *, GstClockTime,
@@ -772,7 +772,7 @@ gst_shark_tracer_hook_element_change_state_pre (GObject * object,
     return;
   }
 
-  hook = g_hash_table_lookup (priv->hooks, "element-change-state-pre");
+  hook = (GCallback)g_hash_table_lookup (priv->hooks, "element-change-state-pre");
   g_return_if_fail (hook);
 
   ((void (*)(GObject *,
@@ -795,7 +795,7 @@ gst_shark_tracer_hook_element_change_state_post (GObject * object,
     return;
   }
 
-  hook = g_hash_table_lookup (priv->hooks, "element-change-state-post");
+  hook = (GCallback)g_hash_table_lookup (priv->hooks, "element-change-state-post");
   g_return_if_fail (hook);
 
   ((void (*)(GObject *,
@@ -818,7 +818,7 @@ gst_shark_tracer_hook_bin_add_pre (GObject * object, GstClockTime ts,
     return;
   }
 
-  hook = g_hash_table_lookup (priv->hooks, "bin-add-pre");
+  hook = (GCallback)g_hash_table_lookup (priv->hooks, "bin-add-pre");
   g_return_if_fail (hook);
 
   ((void (*)(GObject *, GstClockTime,
@@ -839,7 +839,7 @@ gst_shark_tracer_hook_bin_add_post (GObject * object, GstClockTime ts,
     return;
   }
 
-  hook = g_hash_table_lookup (priv->hooks, "bin-add-post");
+  hook = (GCallback)g_hash_table_lookup (priv->hooks, "bin-add-post");
   g_return_if_fail (hook);
 
   ((void (*)(GObject *, GstClockTime,
@@ -861,7 +861,7 @@ gst_shark_tracer_hook_bin_remove_pre (GObject * object, GstClockTime ts,
     return;
   }
 
-  hook = g_hash_table_lookup (priv->hooks, "bin-remove-pre");
+  hook = (GCallback)g_hash_table_lookup (priv->hooks, "bin-remove-pre");
   g_return_if_fail (hook);
 
   ((void (*)(GObject *, GstClockTime,
@@ -882,7 +882,7 @@ gst_shark_tracer_hook_bin_remove_post (GObject * object, GstClockTime ts,
     return;
   }
 
-  hook = g_hash_table_lookup (priv->hooks, "bin-remove-post");
+  hook = (GCallback)g_hash_table_lookup (priv->hooks, "bin-remove-post");
   g_return_if_fail (hook);
 
   ((void (*)(GObject *, GstClockTime,
@@ -903,7 +903,7 @@ gst_shark_tracer_hook_pad_link_pre (GObject * object, GstClockTime ts,
     return;
   }
 
-  hook = g_hash_table_lookup (priv->hooks, "pad-link-pre");
+  hook = (GCallback)g_hash_table_lookup (priv->hooks, "pad-link-pre");
   g_return_if_fail (hook);
 
   ((void (*)(GObject *, GstClockTime,
@@ -924,7 +924,7 @@ gst_shark_tracer_hook_pad_link_post (GObject * object, GstClockTime ts,
     return;
   }
 
-  hook = g_hash_table_lookup (priv->hooks, "pad-link-post");
+  hook = (GCallback)g_hash_table_lookup (priv->hooks, "pad-link-post");
   g_return_if_fail (hook);
 
   ((void (*)(GObject *, GstClockTime,
@@ -946,7 +946,7 @@ gst_shark_tracer_hook_pad_unlink_pre (GObject * object, GstClockTime ts,
     return;
   }
 
-  hook = g_hash_table_lookup (priv->hooks, "pad-unlink-pre");
+  hook = (GCallback)g_hash_table_lookup (priv->hooks, "pad-unlink-pre");
   g_return_if_fail (hook);
 
   ((void (*)(GObject *, GstClockTime,
@@ -967,7 +967,7 @@ gst_shark_tracer_hook_pad_unlink_post (GObject * object, GstClockTime ts,
     return;
   }
 
-  hook = g_hash_table_lookup (priv->hooks, "pad-unlink-post");
+  hook = (GCallback)g_hash_table_lookup (priv->hooks, "pad-unlink-post");
   g_return_if_fail (hook);
 
   ((void (*)(GObject *, GstClockTime,
@@ -983,7 +983,7 @@ gst_shark_tracer_hook_mini_object_created (GObject * object, GstClockTime ts,
   GstSharkTracerPrivate *priv = GST_SHARK_TRACER_PRIVATE (self);
   GCallback hook;
 
-  hook = g_hash_table_lookup (priv->hooks, "mini-object-created");
+  hook = (GCallback)g_hash_table_lookup (priv->hooks, "mini-object-created");
   g_return_if_fail (hook);
 
   ((void (*)(GObject *, GstClockTime,
@@ -998,7 +998,7 @@ gst_shark_tracer_hook_mini_object_destroyed (GObject * object, GstClockTime ts,
   GstSharkTracerPrivate *priv = GST_SHARK_TRACER_PRIVATE (self);
   GCallback hook;
 
-  hook = g_hash_table_lookup (priv->hooks, "mini-object-destroyed");
+  hook = (GCallback)g_hash_table_lookup (priv->hooks, "mini-object-destroyed");
   g_return_if_fail (hook);
 
   ((void (*)(GObject *, GstClockTime,
@@ -1013,7 +1013,7 @@ gst_shark_tracer_hook_object_unreffed (GObject * object, GstClockTime ts,
   GstSharkTracerPrivate *priv = GST_SHARK_TRACER_PRIVATE (self);
   GCallback hook;
 
-  hook = g_hash_table_lookup (priv->hooks, "object-unreffed");
+  hook = (GCallback)g_hash_table_lookup (priv->hooks, "object-unreffed");
   g_return_if_fail (hook);
 
   ((void (*)(GObject *, GstClockTime,
@@ -1028,7 +1028,7 @@ gst_shark_tracer_hook_object_reffed (GObject * object, GstClockTime ts,
   GstSharkTracerPrivate *priv = GST_SHARK_TRACER_PRIVATE (self);
   GCallback hook;
 
-  hook = g_hash_table_lookup (priv->hooks, "object-reffed");
+  hook = (GCallback)g_hash_table_lookup (priv->hooks, "object-reffed");
   g_return_if_fail (hook);
 
   ((void (*)(GObject *, GstClockTime,
@@ -1043,7 +1043,7 @@ gst_shark_tracer_hook_mini_object_unreffed (GObject * object, GstClockTime ts,
   GstSharkTracerPrivate *priv = GST_SHARK_TRACER_PRIVATE (self);
   GCallback hook;
 
-  hook = g_hash_table_lookup (priv->hooks, "mini-object-unreffed");
+  hook = (GCallback)g_hash_table_lookup (priv->hooks, "mini-object-unreffed");
   g_return_if_fail (hook);
 
   ((void (*)(GObject *, GstClockTime,
@@ -1058,7 +1058,7 @@ gst_shark_tracer_hook_mini_object_reffed (GObject * object, GstClockTime ts,
   GstSharkTracerPrivate *priv = GST_SHARK_TRACER_PRIVATE (self);
   GCallback hook;
 
-  hook = g_hash_table_lookup (priv->hooks, "mini-object-reffed");
+  hook = (GCallback)g_hash_table_lookup (priv->hooks, "mini-object-reffed");
   g_return_if_fail (hook);
 
   ((void (*)(GObject *, GstClockTime,
@@ -1073,7 +1073,7 @@ gst_shark_tracer_hook_object_created (GObject * object, GstClockTime ts,
   GstSharkTracerPrivate *priv = GST_SHARK_TRACER_PRIVATE (self);
   GCallback hook;
 
-  hook = g_hash_table_lookup (priv->hooks, "object-created");
+  hook = (GCallback)g_hash_table_lookup (priv->hooks, "object-created");
   g_return_if_fail (hook);
 
   ((void (*)(GObject *, GstClockTime, GstObject *)) hook) (object, ts, obj);
@@ -1087,7 +1087,7 @@ gst_shark_tracer_hook_object_destroyed (GObject * object, GstClockTime ts,
   GstSharkTracerPrivate *priv = GST_SHARK_TRACER_PRIVATE (self);
   GCallback hook;
 
-  hook = g_hash_table_lookup (priv->hooks, "object-destroyed");
+  hook =(GCallback) g_hash_table_lookup (priv->hooks, "object-destroyed");
   g_return_if_fail (hook);
 
   ((void (*)(GObject *, GstClockTime, GstObject *)) hook) (object, ts, obj);

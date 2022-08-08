@@ -127,7 +127,7 @@ add_bytes (GstBitrateTracer * self, GstClockTime ts, GstPad * pad,
   gchar *fullname;
   GstBitrateHash *pad_frames;
 
-  pad_frames = g_hash_table_lookup (self->bitrate_counters, pad);
+  pad_frames = (GstBitrateHash*)g_hash_table_lookup (self->bitrate_counters, pad);
 
   if (NULL == pad_frames) {
     /* The full name of every pad has the format elementName.padName and it is going 
@@ -137,7 +137,7 @@ add_bytes (GstBitrateTracer * self, GstClockTime ts, GstPad * pad,
 
     GST_INFO_OBJECT (self, "The %s key was added to the Hash Table", fullname);
 
-    pad_frames = g_malloc0 (sizeof (GstBitrateHash));
+    pad_frames = (GstBitrateHash*)g_malloc0 (sizeof (GstBitrateHash));
     pad_frames->fullname = fullname;
     g_hash_table_insert (self->bitrate_counters, gst_object_ref (pad),
         (gpointer) pad_frames);
