@@ -38,7 +38,6 @@ libgstsharktracers_la_SOURCES = \
 	gstbitrate.c \
 	gstbuffer.c \
 	gstnumerator.c \
-	gstdetections.c \
 	gstperiodictracer.c
 
 libgstsharktracers_la_CFLAGS = \
