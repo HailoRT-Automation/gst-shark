@@ -31,7 +31,7 @@
 #  include <gvc.h>
 #endif
 
-#include "gstctf.h"
+#include "gstctf.hpp"
 #include "gstdot.h"
 
 typedef struct _GstDotRenderThread GstDotRenderThread;
