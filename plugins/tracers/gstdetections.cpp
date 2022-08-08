@@ -86,7 +86,6 @@ gst_detections_buffer_pre(GObject *self, GstClockTime ts, GstPad *pad,
     GValue vflags = G_VALUE_INIT;
     gchar *sflags;
     guint refcount;
-    printf("####################################################################\n");
 
     // HailoROIPtr hailo_roi;
 

@@ -81,12 +81,12 @@ plugin_init (GstPlugin * plugin)
   if (!gst_tracer_register (plugin, "buffer", gst_buffer_tracer_get_type ())) {
     return FALSE;
   }
-  // if (!gst_tracer_register (plugin, "numerator", gst_numerator_tracer_get_type ())) {
-  //   return FALSE;
-  // }
-  // if (!gst_tracer_register (plugin, "detections", gst_detections_tracer_get_type ())) {
-  //   return FALSE;
-  // }
+  if (!gst_tracer_register (plugin, "numerator", gst_numerator_tracer_get_type ())) {
+    return FALSE;
+  }
+  if (!gst_tracer_register (plugin, "detections", gst_detections_tracer_get_type ())) {
+    return FALSE;
+  }
   if (!gst_ctf_init ()) {
     return FALSE;
   }
