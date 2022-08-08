@@ -30,7 +30,7 @@ gio_dep = dependency('gio-2.0')
 
 shared_library('gstsharktracers',
     gst_tracer_sources,
-    cpp_args : hailo_lib_args+['-DGST_USE_UNSTABLE_API'],
+    cpp_args : hailo_lib_args+['-DGST_USE_UNSTABLE_API']+['-g', '-O0'],
     include_directories: [hailo_general_inc, include_directories('./')],
     dependencies : plugin_deps+[glib_dep, gio_dep, meta_dep],
     gnu_symbol_visibility : 'default',
