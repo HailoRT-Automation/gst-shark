@@ -37,9 +37,9 @@
  * latency.
  */
 
-#ifdef HAVE_CONFIG_H
-#  include "config.h"
-#endif
+// #ifdef HAVE_CONFIG_H
+// #  include "config.h"
+// #endif
 
 #include "gstinterlatency.hpp"
 #include "gstctf.hpp"
@@ -47,8 +47,7 @@
 GST_DEBUG_CATEGORY_STATIC (gst_interlatency_debug);
 #define GST_CAT_DEFAULT gst_interlatency_debug
 
-#define _do_init \
-    GST_DEBUG_CATEGORY_INIT (gst_interlatency_debug, "interlatency", 0, "interlatency tracer");
+#define _do_init GST_DEBUG_CATEGORY_INIT (gst_interlatency_debug, "interlatency", 0, "interlatency tracer");
 #define gst_interlatency_tracer_parent_class parent_class
 G_DEFINE_TYPE_WITH_CODE (GstInterLatencyTracer, gst_interlatency_tracer,
     GST_SHARK_TYPE_TRACER, _do_init);
@@ -57,9 +56,7 @@ static GQuark latency_probe_id;
 static GQuark latency_probe_pad;
 static GQuark latency_probe_ts;
 
-// #ifdef GST_STABLE_RELEASE
 static GstTracerRecord *tr_interlatency;
-// #endif
 
 static const gchar interlatency_metadata_event[] = "event {\n\
     name = interlatency;\n\
@@ -135,15 +132,8 @@ log_latency (GstInterLatencyTracer * interlatency_tracer,
   time_string = g_string_new ("");
   g_string_printf (time_string, "%" GST_TIME_FORMAT, GST_TIME_ARGS (time));
 
-// #ifdef GST_STABLE_RELEASE
   gst_tracer_record_log (tr_interlatency, src, sink, time_string->str);
-// #else
-//   /* TODO(ensonic): report format is still unstable */
-//   gst_tracer_log_trace (gst_structure_new ("interlatency",
-//           "from_pad", G_TYPE_STRING, src,
-//           "to_pad", G_TYPE_STRING, sink,
-//           "time", G_TYPE_STRING, time_string->str, NULL));
-// #endif
+
   do_print_interlatency_event (INTERLATENCY_EVENT_ID, src, sink, time);
 
   g_string_free (time_string, TRUE);
@@ -280,8 +270,6 @@ gst_interlatency_tracer_class_init (GstInterLatencyTracerClass * klass)
   latency_probe_ts = g_quark_from_static_string ("latency_probe.ts");
 
   /* announce trace formats */
-  /* *INDENT-OFF* */
-// #ifdef GST_STABLE_RELEASE
   tr_interlatency = gst_tracer_record_new ("interlatency.class",
       "from_pad", GST_TYPE_STRUCTURE, gst_structure_new ("scope",
           "type", G_TYPE_GTYPE, G_TYPE_STRING,
@@ -297,21 +285,6 @@ gst_interlatency_tracer_class_init (GstInterLatencyTracerClass * klass)
           NULL),
       NULL);
 
-// #else
-//   gst_tracer_log_trace (gst_structure_new ("interlatency.class",
-//       "from_pad", GST_TYPE_STRUCTURE, gst_structure_new ("scope",
-//           "related-to", G_TYPE_STRING, "pad", /* TODO: use genum */
-//           NULL),
-//       "to_pad", GST_TYPE_STRUCTURE, gst_structure_new ("scope",
-//           "related-to", G_TYPE_STRING, "pad", /* TODO: use genum */
-//           NULL),
-//       "time", GST_TYPE_STRUCTURE, gst_structure_new ("scope",
-//           "related-to", G_TYPE_STRING, "process", /* TODO: use genum */
-//           NULL),
-//       NULL));
-// #endif
-
-  /* *INDENT-ON* */
 
   oclass->dispose = gst_interlatency_tracer_dispose;
 
