@@ -18,8 +18,8 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-#ifndef __GST_PROC_TIME_TRACER_H__
-#define __GST_PROC_TIME_TRACER_H__
+#ifndef __GST_PROC_TIME_TRACER_HPP__
+#define __GST_PROC_TIME_TRACER_HPP__
 
 #include "gstsharktracer.hpp"
 
@@ -30,4 +30,4 @@ G_DECLARE_FINAL_TYPE (GstProcTimeTracer, gst_proc_time_tracer, GST, PROC_TIME_TR
 
 G_END_DECLS
 
-#endif /* __GST_PROC_TIME_TRACER_H__ */
+#endif /* __GST_PROC_TIME_TRACER_HPP__ */

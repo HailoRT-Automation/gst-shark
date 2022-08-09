@@ -18,8 +18,8 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-#ifndef __GST_SHARK_TRACER_H__
-#define __GST_SHARK_TRACER_H__
+#ifndef __GST_SHARK_TRACER_HPP__
+#define __GST_SHARK_TRACER_HPP__
 
 #include <gst/gst.h>
 #include <gst/gsttracer.h>
@@ -42,4 +42,4 @@ void gst_shark_tracer_register_hook (GstSharkTracer *self, const gchar *detail,
 
 G_END_DECLS
 
-#endif /* __GST_SHARK_TRACER_H__ */
+#endif /* __GST_SHARK_TRACER_HPP__ */

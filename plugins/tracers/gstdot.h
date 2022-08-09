@@ -18,8 +18,8 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-#ifndef __GST_DOT_H__
-#define __GST_DOT_H__
+#ifndef __GST_DOT_HPP__
+#define __GST_DOT_HPP__
 
 #include <gst/gst.h>
 G_BEGIN_DECLS

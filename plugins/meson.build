@@ -20,7 +20,12 @@ endif
 # Include Directories
 hailo_general_inc = [include_directories(get_option('libgeneral_path'))]
 
+# gst_hailo_meta Include Directories
+gst_hailo_meta_inc = [include_directories(get_option('libgst_hailo_meta'), is_system: true)]
+
+
 # Extra Compiler Arguments
+xtensor_args = []  # '-mavx2', '-ffast-math' --> TODO: Causes arm issues
 debug_args = ['-g', '-O0']
 
 # Gstreamer Dependencies
@@ -35,6 +40,10 @@ gstvideo_dep = dependency('gstreamer-video-1.0', version : gst_req,
   fallback : ['gst-plugins-base', 'video_dep'])
 
 meta_dep = dependency('gsthailometa', version : meson.project_version(), method : 'pkg-config')
+
+
+# Opencv Dependencies
+opencv_dep = dependency('opencv4', version : '>= 4.0', method : 'pkg-config')
 
 
 # Plugin Dependencies

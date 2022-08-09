@@ -18,8 +18,8 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-#ifndef __GST_CPU_USAGE_COMPUTE_H__
-#define __GST_CPU_USAGE_COMPUTE_H__
+#ifndef __GST_CPU_USAGE_COMPUTE_HPP__
+#define __GST_CPU_USAGE_COMPUTE_HPP__
 
 #include <gst/gst.h>
 
@@ -52,4 +52,4 @@ void gst_cpu_usage_init (GstCPUUsage * cpu_usage);
 void gst_cpu_usage_compute (GstCPUUsage * cpu_usage);
 
 G_END_DECLS
-#endif //__GST_CPU_USAGE_COMPUTE_H__
+#endif //__GST_CPU_USAGE_COMPUTE_HPP__

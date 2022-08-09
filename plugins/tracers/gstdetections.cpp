@@ -26,7 +26,8 @@
 
 #include "gstdetections.hpp"
 #include "gstctf.hpp"
-#include "../../../core/hailo/gstreamer/metadata/gst_hailo_meta.hpp"
+// #include "../../../core/hailo/gstreamer/metadata/gst_hailo_meta.hpp"
+#include "gst_hailo_meta.hpp"
 
 GST_DEBUG_CATEGORY_STATIC(gst_detections_debug);
 #define GST_CAT_DEFAULT gst_detections_debug

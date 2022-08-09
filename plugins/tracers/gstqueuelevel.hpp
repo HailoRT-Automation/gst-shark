@@ -18,8 +18,8 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-#ifndef __GST_QUEUE_LEVEL_TRACER_H__
-#define __GST_QUEUE_LEVEL_TRACER_H__
+#ifndef __GST_QUEUE_LEVEL_TRACER_HPP__
+#define __GST_QUEUE_LEVEL_TRACER_HPP__
 
 #include "gstsharktracer.hpp"
 
@@ -30,4 +30,4 @@ G_DECLARE_FINAL_TYPE (GstQueueLevelTracer, gst_queue_level_tracer, GST, QUEUE_LE
 
 G_END_DECLS
 
-#endif /* __GST_QUEUE_LEVEL_TRACER_H__ */
+#endif /* __GST_QUEUE_LEVEL_TRACER_HPP__ */

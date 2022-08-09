@@ -20,3 +20,6 @@ option('libcatch2', type : 'string', value : '../../../open_source/catch2')
 # APPS
 option('apps_install_dir', type : 'string', value : '')
 option('libcxxopts', type : 'string', value : '../../open_source/cxxopts')
+
+# MetaData
+option('libgst_hailo_meta', type : 'string', value : '../../../core/hailo/gstreamer/metadata')

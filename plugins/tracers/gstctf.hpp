@@ -18,8 +18,8 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-#ifndef __GST_CTF_H__
-#define __GST_CTF_H__
+#ifndef __GST_CTF_HPP__
+#define __GST_CTF_HPP__
 
 #include <gst/gst.h>
 G_BEGIN_DECLS typedef struct _GstCtfDescriptor GstCtfDescriptor;
@@ -56,4 +56,4 @@ void do_print_buffer_event (event_id id, const gchar * pad, GstClockTime pts,
     guint32 refcount);
 void do_print_ctf_init (event_id id);
 G_END_DECLS
-#endif /*__GST_CTF_H__*/
+#endif /*__GST_CTF_HPP__*/

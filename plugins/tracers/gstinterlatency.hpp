@@ -21,8 +21,8 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef __GST_INTERLATENCY_TRACER_H__
-#define __GST_INTERLATENCY_TRACER_H__
+#ifndef __GST_INTERLATENCY_TRACER_HPP__
+#define __GST_INTERLATENCY_TRACER_HPP__
 
 #include "gstsharktracer.hpp"
 
@@ -62,4 +62,4 @@ struct _GstInterLatencyTracerClass
 G_GNUC_INTERNAL GType gst_interlatency_tracer_get_type (void);
 
 G_END_DECLS
-#endif /* __GST_INTERLATENCY_TRACER_H__ */
+#endif /* __GST_INTERLATENCY_TRACER_HPP__ */
