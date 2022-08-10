@@ -27,6 +27,7 @@
 #include "gstctf.hpp"
 #include <stdio.h>
 #include <stdbool.h>
+#include <map>
 
 GST_DEBUG_CATEGORY_STATIC(gst_numerator_debug);
 #define GST_CAT_DEFAULT gst_numerator_debug
@@ -81,17 +82,12 @@ static gboolean is_decoder(GstElement *element)
 static void gst_numerator_buffer_pre(GObject *self, GstClockTime ts,
                                      GstPad *pad, GstBuffer *buffer);
 
-gchar stream_ids[MAX_STREAMS][100];
-gint64 offsets[MAX_STREAMS] = {0};
-int stream_count = 0;
+std::map<gchar *, int> map_stream_ids_offsets; // stream_id, offset
 static void gst_numerator_buffer_pre(GObject *self, GstClockTime ts, GstPad *pad, GstBuffer *buffer)
 {
     GstElement *element;
     gchar *stream_id;
-    bool found;
-    int stream_index;
     element = get_parent_element(pad);
-    found = false;
 
     if (!is_decoder(element))
     {
@@ -100,33 +96,18 @@ static void gst_numerator_buffer_pre(GObject *self, GstClockTime ts, GstPad *pad
 
     stream_id = gst_pad_get_stream_id(pad);
 
-    for (stream_index = 0; stream_index < stream_count; stream_index++)
+    auto pair = map_stream_ids_offsets.find(stream_id);
+    if (pair != map_stream_ids_offsets.end())
     {
-        if (strcmp(stream_ids[stream_index], stream_id) == 0)
-        {
-            found = true;
-            break;
-        }
+        pair->second++; // increment offset
+        buffer->offset = pair->second;
+    }
+    else
+    {
+        map_stream_ids_offsets.insert(std::pair<gchar *, int>(stream_id, 1));
+        buffer->offset = 1;
     }
 
-    if (found)
-    {
-        offsets[stream_index]++;
-        buffer->offset = offsets[stream_index];
-    }
-    else // new stream id
-    {
-        stream_count++;
-
-        if (stream_count == MAX_STREAMS)
-        {
-            GST_ERROR("Too many streams");
-            return;
-        }
-        strcpy(stream_ids[stream_count - 1], stream_id);
-        offsets[stream_count - 1]++;
-        buffer->offset = offsets[stream_count - 1];
-    }
     g_free(stream_id);
     gst_object_unref(element);
 }
