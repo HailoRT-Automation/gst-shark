@@ -26,7 +26,6 @@
 
 #include "gstdetections.hpp"
 #include "gstctf.hpp"
-// #include "../../../core/hailo/gstreamer/metadata/gst_hailo_meta.hpp"
 #include "gst_hailo_meta.hpp"
 
 GST_DEBUG_CATEGORY_STATIC(gst_detections_debug);
@@ -56,8 +55,6 @@ gst_detections_buffer_pre(GObject *self, GstClockTime ts, GstPad *pad,
     gchar *pad_name;
     guint64 offset;
 
-    pad_name = g_strdup_printf("%s:%s", GST_DEBUG_PAD_NAME(pad));
-    offset = GST_BUFFER_OFFSET(buffer);
     if (NULL == buffer)
     {
         return;
@@ -67,6 +64,9 @@ gst_detections_buffer_pre(GObject *self, GstClockTime ts, GstPad *pad,
     {
         return;
     }
+    
+    pad_name = g_strdup_printf("%s:%s", GST_DEBUG_PAD_NAME(pad));
+    offset = GST_BUFFER_OFFSET(buffer);
 
     for (auto obj : hailo_roi->get_objects())
     {
@@ -81,8 +81,7 @@ gst_detections_buffer_pre(GObject *self, GstClockTime ts, GstPad *pad,
                                   detection_bbox.xmin(),
                                   detection_bbox.ymin(),
                                   detection_bbox.xmax(),
-                                  detection_bbox.ymax()
-                                  );
+                                  detection_bbox.ymax());
         }
     }
 }
