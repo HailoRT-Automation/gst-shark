@@ -117,7 +117,7 @@ void gst_thread_monitor_compute(GstTracerRecord *tr_threadmonitor, GstThreadMoni
   char *line = NULL;
   ssize_t read;
 
-  command = g_strdup_printf("top -H -b -p %d -n 1 | sed -n '/PID/,/^$/p' | tail -n +2 | tr -s ' ' | grep src | sed -e 's/\x1b\[[0-9;]*m//g' | awk '{print $%d,$%d,$%d}'", getpid(), thread_monitor->thread_name_loc, thread_monitor->thread_cpu_usage_loc, thread_monitor->thread_memory_usage_loc);
+  command = g_strdup_printf("top -H -b -p %d -n 1 | sed -n '/PID/,/^$/p' | tail -n +2 | tr -s ' ' | grep -E 'src|multiqueue' | sed -e 's/\x1b\[[0-9;]*m//g' | awk '{print $%d,$%d,$%d}'", getpid(), thread_monitor->thread_name_loc, thread_monitor->thread_cpu_usage_loc, thread_monitor->thread_memory_usage_loc);
   fp = popen(command, "r");
   if (fp == NULL)
   {
