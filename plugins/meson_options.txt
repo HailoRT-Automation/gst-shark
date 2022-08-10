@@ -1,25 +1,3 @@
 option('libargs', type : 'array', value : [])
 option('libgeneral_path', type : 'string', value : '../../../core/hailo/general')
-option('target', type : 'string', value : 'all')
-option('target_platform', type : 'string', value : 'x86')
-
-# External requirements (default values under)
-option('include_blas', type : 'boolean', value : false)
-option('libblas', type : 'string', value : '../../../core/open_source/xtensor_stack/blas')
-option('libxtensor', type : 'string', value : '../../../core/open_source/xtensor_stack/base')
-
-# Python requirements
-option('include_python', type : 'boolean', value : false)
-option('pybind11', type : 'string', value : '../../../core/open_source/pybind11/')
-option('python_version', type : 'string', value : '3.6')
-
-# Unit tests
-option('include_unit_tests', type : 'boolean', value : false)
-option('libcatch2', type : 'string', value : '../../../open_source/catch2')
-
-# APPS
-option('apps_install_dir', type : 'string', value : '')
-option('libcxxopts', type : 'string', value : '../../open_source/cxxopts')
-
-# MetaData
 option('libgst_hailo_meta', type : 'string', value : '../../../core/hailo/gstreamer/metadata')
