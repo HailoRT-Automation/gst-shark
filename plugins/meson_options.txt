@@ -1,0 +1,3 @@
+option('libargs', type : 'array', value : [])
+option('libgeneral_path', type : 'string', value : '../../../core/hailo/general')
+option('libgst_hailo_meta', type : 'string', value : '../../../core/hailo/gstreamer/metadata')
