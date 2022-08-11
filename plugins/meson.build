@@ -18,6 +18,7 @@ if compiler_version >= 9
 endif
 
 # Include Directories
+message('**************pwd: ' + current_source_dir)
 hailo_general_inc = [include_directories(get_option('libgeneral_path'))]
 
 # gst_hailo_meta Include Directories
